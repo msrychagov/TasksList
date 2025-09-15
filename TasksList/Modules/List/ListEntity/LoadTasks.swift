@@ -7,18 +7,27 @@
 
 import Foundation
 
-extension ListEntity {
+extension ListModels {
     enum LoadTasks {
         struct Request {}
         
-        struct Response {}
+        struct Response {
+            let result: Result<[TaskItem], LoadTasksError>
+        }
         
         struct ViewModel {
-            let id: UUID
-            let title: String
-            let subTitle: String
-            let isDone: Bool
-            let date: String
+            let state: State<[ListItemViewModel]>
+            struct ListItemViewModel {
+                let id: UUID
+                let title: String
+                let subTitle: String
+                let isDone: Bool
+                let date: String
+            }
         }
+    }
+    
+    enum LoadTasksError: Error {
+        
     }
 }
