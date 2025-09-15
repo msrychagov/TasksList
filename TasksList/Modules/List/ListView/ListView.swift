@@ -26,4 +26,25 @@ final class ListViewController: UIViewController, ListViewInput {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
+    // MARK: ListViewInput methods
+    func show(_ list: ListModels.LoadTasks.ViewModel) {
+        <#code#>
+    }
+    
+    func showCell(_ viewModel: ListModels.LoadTasks.ViewModel.ListItemViewModel) {
+        <#code#>
+    }
+    
+    func showPopup(for id: UUID) {
+        <#code#>
+    }
+    
+    func showIsLoading() {
+        <#code#>
+    }
+    
+    func showError() {
+        <#code#>
+    }
 }

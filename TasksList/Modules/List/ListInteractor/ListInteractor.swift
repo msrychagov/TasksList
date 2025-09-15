@@ -14,4 +14,25 @@ final class ListInteractor: ListInteractorInput {
     init(worker: ListWorkerInput) {
         self.worker = worker
     }
+    
+    // MARK: ListInteractor InputMethods
+    func loadItems(request: ListModels.LoadTasks.Request) {
+        <#code#>
+    }
+    
+    func createItem(request: ListModels.LoadTasks.Request) {
+        <#code#>
+    }
+    
+    func deleteItem(request: ListModels.LoadTasks.Request) {
+        <#code#>
+    }
+    
+    func editItem(request: ListModels.LoadTasks.Request) {
+        <#code#>
+    }
+    
+    func shareItem(request: ListModels.LoadTasks.Request) {
+        <#code#>
+    }
 }
