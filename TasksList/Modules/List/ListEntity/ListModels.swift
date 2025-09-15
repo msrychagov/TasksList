@@ -7,4 +7,4 @@
 
 import Foundation
 
-enum ListEntity {}
+enum ListModels {}
