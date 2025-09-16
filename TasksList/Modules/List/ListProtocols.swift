@@ -42,7 +42,7 @@ protocol ListInteractorOutput: AnyObject {
 }
 
 protocol ListWorkerInput {
-    func fetchItems()
+    func fetchItems(completion: @escaping (Result<[TaskItem], Error>) -> Void)
     func createItem()
     func deleteItem(with id: UUID)
     func editItem(with id: UUID)

@@ -25,26 +25,27 @@ final class ListViewController: UIViewController, ListViewInput {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        output.viewDidLoad()
     }
     
     // MARK: ListViewInput methods
     func show(_ list: ListModels.LoadTasks.ViewModel) {
-        <#code#>
+        print(list.tasks)
     }
     
     func showCell(_ viewModel: ListModels.LoadTasks.ViewModel.ListItemViewModel) {
-        <#code#>
+        print("hui")
     }
     
     func showPopup(for id: UUID) {
-        <#code#>
+        print("hui")
     }
     
     func showIsLoading() {
-        <#code#>
+        print("hui")
     }
     
     func showError() {
-        <#code#>
+        print("hui")
     }
 }

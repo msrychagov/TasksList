@@ -7,12 +7,14 @@
 
 import Foundation
 
-final class ListPresenter: ListViewOutput, ListInteractorOutput {
-    // MARK: Properties
+final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewModelMapper {
+    // MARK: ListInteractorOutput Properties
     private let interactor: ListInteractorInput
     private let router: ListRouterInput
     weak var view: ListViewInput?
     
+    // MARK: Properties
+    private let mappingQueue = DispatchQueue(label: "list.presenter.mapping", qos: .userInitiated)
     // MARK: Lyfecycle
     init(
         interactor: ListInteractorInput,
@@ -24,51 +26,65 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput {
     
     // MARK: - ListInteractorOutput methods
     func viewDidLoad() {
-        <#code#>
+        interactor.loadItems(request: .init())
     }
     
     func didTapAddButton() {
-        <#code#>
+        print("hui")
     }
     
     func didSelectItem(with id: UUID) {
-        <#code#>
+        print("hui")
     }
     
     func didTapEditButton(for id: UUID) {
-        <#code#>
+        print("hui")
     }
     
     func didTapShareButton(for id: UUID) {
-        <#code#>
+        print("hui")
     }
     
     func didTapDeleteButton(for id: UUID) {
-        <#code#>
+        print("hui")
     }
     
     func didHoldTaskCell(for id: UUID) {
-        <#code#>
+        print("hui")
     }
     
     // MARK: - ListInteractorOutput methods
     func didLoadItems(response: ListModels.LoadTasks.Response) {
-        <#code#>
+        switch response {
+        case .success(let items):
+            mappingQueue.async { [weak self] in
+                guard let self = self else { return }
+                let vms = items.map{ self.make(from: $0) }
+                let vm = ListModels.LoadTasks.ViewModel(tasks: vms)
+                DispatchQueue.main.async {
+                    self.view?.show(vm)
+                }
+            }
+        case .empty:
+            print("пусто")
+        case .failure(let error):
+            print(error.localizedDescription)
+        }
     }
     
     func didCreateItem(response: ListModels.CreateTask.Response) {
-        <#code#>
+        print("hui")
     }
     
     func didDeleteItem(response: ListModels.DeleteTask.Response) {
-        <#code#>
+        print("hui")
     }
     
     func didEditItem(response: ListModels.EditTask.Response) {
-        <#code#>
+        print("hui")
     }
     
     func didShareItem(response: ListModels.ShareTask.Response) {
-        <#code#>
+        print("hui")
     }
 }

@@ -8,8 +8,9 @@ import UIKit
 
 enum ListAssembly {
     static func build() -> UIViewController {
+        let storage = InMemoryStorage()
         let router = ListRouter()
-        let worker = ListWorker()
+        let worker = ListWorker(storage: storage)
         let interactor = ListInteractor(worker: worker)
         let presenter = ListPresenter(interactor: interactor, router: router)
         let view = ListViewController(output: presenter)

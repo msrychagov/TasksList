@@ -11,12 +11,14 @@ extension ListModels {
     enum LoadTasks {
         struct Request {}
         
-        struct Response {
-            let result: Result<[TaskItem], LoadTasksError>
+        enum Response {
+            case success([TaskItem])
+            case empty
+            case failure(Error)
         }
         
         struct ViewModel {
-            let state: State<[ListItemViewModel]>
+            let tasks: [ListItemViewModel]
             struct ListItemViewModel {
                 let id: UUID
                 let title: String

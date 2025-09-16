@@ -11,18 +11,18 @@ final class ListRouter: ListRouterInput {
     
     // MARK: - ListRouterInput methods
     func routeToCreate() {
-        <#code#>
+        print("hui")
     }
     
     func routeToEdit() {
-        <#code#>
+        print("hui")
     }
     
     func routeToShare() {
-        <#code#>
+        print("hui")
     }
     
     func routeToDelete() {
-        <#code#>
+        print("hui")
     }
 }
