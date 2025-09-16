@@ -1,0 +1,68 @@
+//
+//  ListTableAdapter.swift
+//  TasksList
+//
+//  Created by Михаил Рычагов on 16.09.2025.
+//
+import Foundation
+import UIKit
+final class ListTableAdapter: NSObject {
+    enum Section { case main }
+    struct Item: Hashable {
+            let id: UUID
+            let title: String
+            let subtitle: String
+            let isDone: Bool
+            let date: String
+    }
+    // MARK: Properties
+    private weak var tableView: UITableView?
+    private var dataSource: UITableViewDiffableDataSource<Section, Item>!
+    var onSelect: ((UUID) -> Void)?
+    
+    func bind(tableView: UITableView) {
+        self.tableView = tableView
+        tableView.register(ListTaskCell.self, forCellReuseIdentifier: ListTaskCell.reuseId)
+        dataSource = .init(tableView: tableView) {
+            tableView,
+            indexPath,
+            item in
+            let cell = tableView.dequeueReusableCell(withIdentifier: ListTaskCell.reuseId, for: indexPath) as! ListTaskCell
+            cell.configure(
+                title: item.title,
+                subtitle: item.subtitle,
+                isDone: item.isDone,
+                date: item.date
+            )
+            return cell
+        }
+        tableView.delegate = self
+    }
+    
+    func apply(cellVM: ListModels.LoadTasks.ViewModel) {
+        let items = cellVM.tasks.map {
+            Item(
+                id: $0.id,
+                title: $0.title,
+                subtitle: $0.subTitle,
+                isDone: $0.isDone,
+                date: $0.date
+            )
+        }
+        
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(items, toSection: .main)
+        DispatchQueue.main.async { [weak self] in
+            self?.dataSource.apply(snapshot, animatingDifferences: false)
+        }
+    }
+}
+
+extension ListTableAdapter: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
+            onSelect?(item.id)
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
+}

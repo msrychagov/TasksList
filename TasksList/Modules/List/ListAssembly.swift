@@ -13,7 +13,8 @@ enum ListAssembly {
         let worker = ListWorker(storage: storage)
         let interactor = ListInteractor(worker: worker)
         let presenter = ListPresenter(interactor: interactor, router: router)
-        let view = ListViewController(output: presenter)
+        let tableAdapter = ListTableAdapter()
+        let view = ListViewController(output: presenter, tableAdapter: tableAdapter)
         
         interactor.output = presenter
         presenter.view = view
