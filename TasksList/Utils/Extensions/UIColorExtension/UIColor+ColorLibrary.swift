@@ -21,8 +21,8 @@ extension UIColor {
         static let tintColor: UIColor = UIColor.secondaryLabel
     }
     enum SummaryView {
-        static let background: UIColor = UIColor.adaptiveColor(lightHex: "#F6F6F6", darkHex: "#272729")
-        static let border: UIColor = UIColor.adaptiveColor(lightHex: "#E0E0E0", darkHex: "#A0A0A0")
+        static let background: UIColor = UIColor.adaptiveColor(lightHex: "#DFDFDF", darkHex: "#272729")
+        static let border: UIColor = UIColor.adaptiveColor(lightHex: "#E0E0E0", darkHex: "#4D555E")
         static let text: UIColor = UIColor.adaptiveColor(lightHex: "#040404", darkHex: "#F4F4F4")
         static let createButton: UIColor = UIColor.adaptiveColor(lightHex: "#FED702", darkHex: "#FED702")
     }

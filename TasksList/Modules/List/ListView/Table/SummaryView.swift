@@ -53,8 +53,8 @@ final class SummaryView: UIView {
         summaryLabel.tintColor = .SummaryView.text
         self.addSubview(summaryLabel)
         summaryLabel.pinTop(to: border.bottomAnchor, 20)
-        summaryLabel.pinBottom(to: self.bottomAnchor, 34)
         summaryLabel.pinCenterX(to: self.centerXAnchor)
+        summaryLabel.setHeight(13)
     }
     
     private func configureCreateTaskButton() {
