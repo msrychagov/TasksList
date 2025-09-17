@@ -9,11 +9,11 @@ import UIKit
 final class ListTableAdapter: NSObject {
     enum Section { case main }
     struct Item: Hashable {
-            let id: UUID
-            let title: String
-            let subtitle: String
-            let isDone: Bool
-            let date: String
+        let id: UUID
+        let title: String
+        let subtitle: String
+        let isDone: Bool
+        let date: String
     }
     
     // MARK: Properties
@@ -64,9 +64,14 @@ final class ListTableAdapter: NSObject {
 }
 
 extension ListTableAdapter: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
-            onSelect?(item.id)
-            tableView.deselectRow(at: indexPath, animated: true)
+    func tableView(_ tableView: UITableView,
+                   contextMenuConfigurationForRowAt indexPath: IndexPath,
+                   point: CGPoint) -> UIContextMenuConfiguration? {
+        UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let edit = UIAction(title: "Редактировать", image: UIImage(systemName: "pencil")) { _ in }
+            let delete = UIAction(title: "Удалить", image: UIImage(systemName: "trash"), attributes: .destructive) { _ in }
+            return UIMenu(title: "", children: [edit, delete])
         }
+    }
 }
+

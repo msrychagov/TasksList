@@ -90,6 +90,8 @@ final class ListViewController: UIViewController, ListViewInput {
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        tableView.allowsSelection = true
+        tableView.allowsMultipleSelection = false
         
         /// Added header to hide up separator for first row
         let header = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 1))

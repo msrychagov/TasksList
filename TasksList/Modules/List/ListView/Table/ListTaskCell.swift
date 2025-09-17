@@ -73,7 +73,6 @@ final class ListTaskCell: UITableViewCell {
         subtitleLabel.pinTop(to: titleLabel.bottomAnchor, 6)
         subtitleLabel.pinLeft(to: titleLabel.leadingAnchor)
         subtitleLabel.pinRight(to: contentView.layoutMarginsGuide.trailingAnchor)
-        //        subtitleLabel.setHeight(32)
     }
     
     private func configureDate() {
@@ -86,7 +85,6 @@ final class ListTaskCell: UITableViewCell {
         dateLabel.pinRight(to: contentView.layoutMarginsGuide.trailingAnchor)
         dateLabel.setHeight(16)
         dateLabel.pinBottom(to: contentView.bottomAnchor, 12)
-        
     }
 }
 
