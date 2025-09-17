@@ -41,12 +41,49 @@ final class ListViewController: UIViewController, ListViewInput {
     
     // MARK: - ConfigureUI
     private func configureUI() {
-        view.backgroundColor = .systemPink
-        configureTable()
+        view.backgroundColor = .General.primary
+        configureNavigationTitle()
+        configureSearch()
+//                configureTable()
+    }
+    
+    private func configureNavigationTitle() {
+        navigationItem.title = "Задачи"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.largeTitleTextAttributes = [
+            .foregroundColor: UIColor.General.secondary
+        ]
+    }
+    
+    private func configureSearch() {
+        let search = UISearchController(searchResultsController: nil)
+        search.obscuresBackgroundDuringPresentation = false
+        search.hidesNavigationBarDuringPresentation = false
+        
+        let textField = search.searchBar.searchTextField
+        let tintColor: UIColor = .SearchBar.tintColor
+        textField.backgroundColor = .SearchBar.background
+        textField.textColor = tintColor
+        textField.tintColor = tintColor
+        textField.leftView?.tintColor = tintColor
+        textField.attributedPlaceholder = NSAttributedString(
+            string: "Search",
+            attributes: [
+                .foregroundColor: tintColor,
+            ]
+        )
+        search.searchBar.tintColor = tintColor
+        
+        search.searchBar.showsBookmarkButton = true
+        search.searchBar.setImage(UIImage(systemName: "mic.fill"), for: .bookmark, state: .normal)
+        search.searchBar.tintColor = tintColor
+        
+        navigationItem.searchController = search
+        definesPresentationContext = true
     }
     
     private func configureTable() {
-        tableView.backgroundColor = .black
+        tableView.backgroundColor = .blue
         tableView.separatorColor = .systemGray
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -58,7 +95,7 @@ final class ListViewController: UIViewController, ListViewInput {
     }
     // MARK: - ListViewInput methods
     func show(_ list: ListModels.LoadTasks.ViewModel) {
-        tableAdapter.apply(cellVM: list)
+        //        tableAdapter.apply(cellVM: list)
     }
     
     func showCell(_ viewModel: ListModels.LoadTasks.ViewModel.ListItemViewModel) {
