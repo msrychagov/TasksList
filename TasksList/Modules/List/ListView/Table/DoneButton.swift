@@ -21,8 +21,8 @@ final class DoneButton: UIButton {
     
     // MARK: - Configure
     private func configure() {
-        setImage(UIImage(systemName: "circle"), for: .normal)
-        setImage(UIImage(systemName: "checkmark.circle"), for: .selected)
+        setImage(UIImage(named: "List/DoneButton/normal"), for: .normal)
+        setImage(UIImage(named: "List/DoneButton/selected"), for: .selected)
         
         addTarget(self, action: #selector(toggleSelected), for: .touchUpInside)
     }

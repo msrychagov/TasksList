@@ -39,12 +39,12 @@ final class ListViewController: UIViewController, ListViewInput {
         configureUI()
     }
     
-    // MARK: - ConfigureUI
+    // MARK: - Configure UI
     private func configureUI() {
         view.backgroundColor = .General.primary
         configureNavigationTitle()
         configureSearch()
-//                configureTable()
+        configureTable()
     }
     
     private func configureNavigationTitle() {
@@ -83,19 +83,32 @@ final class ListViewController: UIViewController, ListViewInput {
     }
     
     private func configureTable() {
-        tableView.backgroundColor = .blue
+        tableView.backgroundColor = .clear
         tableView.separatorColor = .systemGray
+        tableView.cellLayoutMarginsFollowReadableWidth = false
+        tableView.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        
+        /// Add header to hide up separator for first row
+        let header = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 1))
+        header.backgroundColor = .clear
+        tableView.tableHeaderView = header
+        
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.pin(to: view, 10)
+        tableView.pinTop(to: view.safeAreaLayoutGuide.topAnchor)
+        tableView.pinLeft(to: view.safeAreaLayoutGuide.leadingAnchor)
+        tableView.pinRight(to: view.safeAreaLayoutGuide.trailingAnchor)
+        tableView.pinBottom(to: view.safeAreaLayoutGuide.bottomAnchor, 1)
         tableAdapter.bind(tableView: tableView)
         tableAdapter.onSelect = { [weak self] id in
             self?.onItemTap?(id)
         }
     }
+    
     // MARK: - ListViewInput methods
     func show(_ list: ListModels.LoadTasks.ViewModel) {
-        //        tableAdapter.apply(cellVM: list)
+        tableAdapter.apply(cellVM: list)
     }
     
     func showCell(_ viewModel: ListModels.LoadTasks.ViewModel.ListItemViewModel) {

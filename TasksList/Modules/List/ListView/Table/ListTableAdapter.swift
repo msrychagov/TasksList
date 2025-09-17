@@ -15,10 +15,14 @@ final class ListTableAdapter: NSObject {
             let isDone: Bool
             let date: String
     }
+    
     // MARK: Properties
     private weak var tableView: UITableView?
     private var dataSource: UITableViewDiffableDataSource<Section, Item>!
     var onSelect: ((UUID) -> Void)?
+    
+    // MARK: Table Settings Properties
+    private let normalSeparatorInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
     
     func bind(tableView: UITableView) {
         self.tableView = tableView
