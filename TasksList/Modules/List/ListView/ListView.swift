@@ -17,6 +17,7 @@ final class ListViewController: UIViewController, ListViewInput {
     
     // MARK: - UIProperties
     private let tableView: UITableView = UITableView(frame: .zero, style: .plain)
+    private let summaryView: SummaryView = SummaryView(tasksCount: 5, frame: .zero)
     
     // MARK: - Lyfecycle
     init(
@@ -44,6 +45,7 @@ final class ListViewController: UIViewController, ListViewInput {
         view.backgroundColor = .General.primary
         configureNavigationTitle()
         configureSearch()
+        configureSummaryView()
         configureTable()
     }
     
@@ -89,7 +91,7 @@ final class ListViewController: UIViewController, ListViewInput {
         tableView.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         
-        /// Add header to hide up separator for first row
+        /// Added header to hide up separator for first row
         let header = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 1))
         header.backgroundColor = .clear
         tableView.tableHeaderView = header
@@ -99,11 +101,20 @@ final class ListViewController: UIViewController, ListViewInput {
         tableView.pinTop(to: view.safeAreaLayoutGuide.topAnchor)
         tableView.pinLeft(to: view.safeAreaLayoutGuide.leadingAnchor)
         tableView.pinRight(to: view.safeAreaLayoutGuide.trailingAnchor)
-        tableView.pinBottom(to: view.safeAreaLayoutGuide.bottomAnchor, 1)
+        tableView.pinBottom(to: summaryView.topAnchor)
         tableAdapter.bind(tableView: tableView)
         tableAdapter.onSelect = { [weak self] id in
             self?.onItemTap?(id)
         }
+    }
+    
+    func configureSummaryView() {
+        summaryView.backgroundColor = .SummaryView.background
+        view.addSubview(summaryView)
+        summaryView.translatesAutoresizingMaskIntoConstraints = false
+        summaryView.pinBottom(to: view.bottomAnchor)
+        summaryView.pinHorizontal(to: view)
+        summaryView.setHeight(83)
     }
     
     // MARK: - ListViewInput methods

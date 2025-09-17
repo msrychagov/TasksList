@@ -44,7 +44,7 @@ final class ListTaskCell: UITableViewCell {
     }
     
     private func configureDoneButton() {
-        doneButton.tintColor = .systemYellow
+        doneButton.tintColor = .DoneButton.selected
         contentView.addSubview(doneButton)
         doneButton.translatesAutoresizingMaskIntoConstraints = false
         doneButton.pinTop(to: contentView.topAnchor)
