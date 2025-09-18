@@ -90,6 +90,7 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
         case .empty:
             DispatchQueue.main.async {
                 self.view?.show(viewModel: .init(items: []))
+                self.view?.showEmpty()
             }
         }
     }

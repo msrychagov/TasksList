@@ -19,6 +19,7 @@ final class ListViewController: UIViewController, ListViewInput {
     private let tableView: UITableView = UITableView(frame: .zero, style: .plain)
     private let summaryView: SummaryView = SummaryView(tasksCount: 5, frame: .zero)
     private let searchBarController = UISearchController(searchResultsController: nil)
+    private let emptySearchResultView: EmptySearchResultView = EmptySearchResultView()
     
     // MARK: - Lyfecycle
     init(
@@ -40,6 +41,7 @@ final class ListViewController: UIViewController, ListViewInput {
         output.viewDidLoad()
         configureUI()
     }
+    
     
     // MARK: - Configure UI
     private func configureUI() {
@@ -122,11 +124,14 @@ final class ListViewController: UIViewController, ListViewInput {
     
     // MARK: - ListViewInput methods
     func show(viewModel: ListModels.LoadTasks.ViewModel) {
+        tableView.backgroundView = nil
+        tableView.separatorStyle = .singleLine
         tableAdapter.apply(cellVM: viewModel)
     }
     
-    func showCell(_ viewModel: ListModels.ListItemViewModel) {
-        print("hui")
+    func showEmpty() {
+        tableView.backgroundView = emptySearchResultView
+        tableView.separatorStyle = .none
     }
     
     func showPopup(for id: UUID) {

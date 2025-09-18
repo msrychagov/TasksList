@@ -9,7 +9,7 @@ import Foundation
 
 protocol ListViewInput: AnyObject {
     func show(viewModel: ListModels.LoadTasks.ViewModel)
-    func showCell(_ viewModel: ListModels.ListItemViewModel)
+    func showEmpty()
     func showPopup(for id: UUID)
     func showIsLoading()
     func showError()
