@@ -9,6 +9,7 @@ import Foundation
 
 protocol ListViewInput: AnyObject {
     func show(viewModel: ListModels.LoadTasks.ViewModel)
+    func removeItem(viewModel: ListModels.DeleteTask.ViewModel)
     func showEmpty()
     func showPopup(for id: UUID)
     func showIsLoading()
@@ -28,11 +29,11 @@ protocol ListViewOutput {
 
 protocol ListInteractorInput {
     func filterItems(request: ListModels.FilterTasks.Request)
-    func loadItems(request: ListModels.LoadTasks.Request)
-    func createItem(request: ListModels.LoadTasks.Request)
-    func deleteItem(request: ListModels.LoadTasks.Request)
-    func editItem(request: ListModels.LoadTasks.Request)
-    func shareItem(request: ListModels.LoadTasks.Request)
+    func fetchItems(request: ListModels.LoadTasks.Request)
+    func createItem(request: ListModels.CreateTask.Request)
+    func deleteItem(request: ListModels.DeleteTask.Request)
+    func editItem(request: ListModels.EditTask.Request)
+    func shareItem(request: ListModels.ShareTask.Request)
 }
 
 protocol ListInteractorOutput: AnyObject {
@@ -47,7 +48,7 @@ protocol ListInteractorOutput: AnyObject {
 protocol ListWorkerInput {
     func fetchItems(completion: @escaping (Result<[TaskItem], Error>) -> Void)
     func createItem()
-    func deleteItem(with id: UUID)
+    func deleteItem(with id: UUID, completion: @escaping (Result<Void, Error>) -> Void)
     func editItem(with id: UUID)
     func shareItem(with id: UUID)
 }

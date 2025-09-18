@@ -24,8 +24,8 @@ final class ListWorker: ListWorkerInput {
         print("hui")
     }
     
-    func deleteItem(with id: UUID) {
-        print("hui")
+    func deleteItem(with id: UUID, completion: @escaping (Result<Void, Error>) -> Void) {
+        storage.delete(id, completion: completion)
     }
     
     func editItem(with id: UUID) {

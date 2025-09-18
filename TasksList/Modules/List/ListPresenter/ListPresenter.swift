@@ -26,7 +26,7 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
     
     // MARK: - ListViewOutput methods
     func viewDidLoad() {
-        interactor.loadItems(request: .init())
+        interactor.fetchItems(request: .init())
     }
     
     func searchChanged(query: String) {
@@ -50,7 +50,7 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
     }
     
     func didTapDeleteButton(for id: UUID) {
-        print("hui")
+        interactor.deleteItem(request: .init(id: id))
     }
     
     func didHoldTaskCell(for id: UUID) {
@@ -100,7 +100,12 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
     }
     
     func didDeleteItem(response: ListModels.DeleteTask.Response) {
-        print("hui")
+        switch response {
+        case .success(let id):
+            view?.removeItem(viewModel: .init(id: id))
+        case .failure(let error):
+            print(error.localizedDescription)
+        }
     }
     
     func didEditItem(response: ListModels.EditTask.Response) {

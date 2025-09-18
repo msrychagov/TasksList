@@ -6,6 +6,7 @@
 //
 
 final class ListInteractor: ListInteractorInput {
+    
     // MARK: - Properties
     private let worker: ListWorkerInput
     weak var output: ListInteractorOutput?
@@ -19,7 +20,7 @@ final class ListInteractor: ListInteractorInput {
     }
     
     // MARK: ListInteractor InputMethods
-    func loadItems(request: ListModels.LoadTasks.Request) {
+    func fetchItems(request: ListModels.LoadTasks.Request) {
         worker.fetchItems { [weak self] result in
             switch result {
             case .success(let items):
@@ -46,19 +47,25 @@ final class ListInteractor: ListInteractorInput {
         }
     }
     
-    func createItem(request: ListModels.LoadTasks.Request) {
+    func createItem(request: ListModels.CreateTask.Request) {
         print("hui")
     }
     
-    func deleteItem(request: ListModels.LoadTasks.Request) {
+    func deleteItem(request: ListModels.DeleteTask.Request) {
+        let id = request.id
+        worker.deleteItem(with: id) { [weak self] result in
+            switch result {
+            case .success: self?.output?.didDeleteItem(response: .success(id))
+            case .failure(let error): self?.output?.didDeleteItem(response: .failure(error))
+            }
+        }
+    }
+    
+    func editItem(request: ListModels.EditTask.Request) {
         print("hui")
     }
     
-    func editItem(request: ListModels.LoadTasks.Request) {
-        print("hui")
-    }
-    
-    func shareItem(request: ListModels.LoadTasks.Request) {
+    func shareItem(request: ListModels.ShareTask.Request) {
         print("hui")
     }
 }

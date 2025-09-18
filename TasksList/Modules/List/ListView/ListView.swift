@@ -111,6 +111,9 @@ final class ListViewController: UIViewController, ListViewInput {
         tableAdapter.onSelect = { [weak self] id in
             self?.onItemTap?(id)
         }
+        tableAdapter.onDelete = { [weak self] id in
+            self?.output.didTapDeleteButton(for: id)
+        }
     }
     
     func configureSummaryView() {
@@ -132,6 +135,10 @@ final class ListViewController: UIViewController, ListViewInput {
     func showEmpty() {
         tableView.backgroundView = emptySearchResultView
         tableView.separatorStyle = .none
+    }
+    
+    func removeItem(viewModel: ListModels.DeleteTask.ViewModel) {
+        tableAdapter.deleteItem(viewModel: viewModel)
     }
     
     func showPopup(for id: UUID) {

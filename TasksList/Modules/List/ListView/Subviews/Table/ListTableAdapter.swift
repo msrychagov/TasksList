@@ -20,6 +20,7 @@ final class ListTableAdapter: NSObject {
     private weak var tableView: UITableView?
     private var dataSource: UITableViewDiffableDataSource<Section, Item>!
     var onSelect: ((UUID) -> Void)?
+    var onDelete: ((UUID) -> Void)?
     
     // MARK: Table Settings Properties
     private let normalSeparatorInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
@@ -61,18 +62,38 @@ final class ListTableAdapter: NSObject {
             self?.dataSource.apply(snapshot, animatingDifferences: false)
         }
     }
+    
+    func deleteItem(viewModel: ListModels.DeleteTask.ViewModel) {
+        let id = viewModel.id
+        var snapshot = dataSource.snapshot()
+        if let item = snapshot.itemIdentifiers.first(where: { $0.id == id }) {
+            snapshot.deleteItems([item])
+            DispatchQueue.main.async { [weak self] in
+                self?.dataSource.apply(snapshot, animatingDifferences: true)
+            }
+        }
+    }
 }
 
 extension ListTableAdapter: UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                    contextMenuConfigurationForRowAt indexPath: IndexPath,
                    point: CGPoint) -> UIContextMenuConfiguration? {
-        UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
+        let id = item.id
+        let menu = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
             let share = UIAction(title: "Поделиться", image: UIImage(systemName: "square.and.arrow.up")) { _ in }
             let edit = UIAction(title: "Редактировать", image: UIImage(systemName: "pencil")) { _ in }
-            let delete = UIAction(title: "Удалить", image: UIImage(systemName: "trash"), attributes: .destructive) { _ in }
+            let delete = UIAction(
+                title: "Удалить",
+                image: UIImage(systemName: "trash"),
+                attributes: .destructive) { [weak self] _ in
+                    self?.onDelete?(id)
+                }
             return UIMenu(title: "", children: [share, edit, delete])
         }
+        
+        return menu
     }
 }
 
