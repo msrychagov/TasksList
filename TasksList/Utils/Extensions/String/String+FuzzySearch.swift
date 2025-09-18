@@ -12,8 +12,8 @@ extension String {
         return levenshteinDistance(to: target) <= 2 || self.contains(target)
     }
     func contains(_ target: String) -> Bool {
-        let sourceArray = Array(self)
-        let targetArray = Array(target)
+        let sourceArray = Array(self.lowercased())
+        let targetArray = Array(target.lowercased())
         let sourceCount = sourceArray.count
         let targetCount = targetArray.count
         var sIdx = 0

@@ -88,7 +88,9 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
                 }
             }
         case .empty:
-            print("пусто")
+            DispatchQueue.main.async {
+                self.view?.show(viewModel: .init(items: []))
+            }
         }
     }
     
