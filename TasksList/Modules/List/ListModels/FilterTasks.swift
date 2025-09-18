@@ -1,28 +1,23 @@
 //
-//  LoadTasks.swift
+//  FilterTasks.swift
 //  TasksList
 //
-//  Created by Михаил Рычагов on 15.09.2025.
+//  Created by Михаил Рычагов on 18.09.2025.
 //
 
-import Foundation
-
 extension ListModels {
-    enum LoadTasks {
-        struct Request {}
+    enum FilterTasks {
+        struct Request {
+            let query: String
+        }
         
         enum Response {
             case success([TaskItem])
             case empty
-            case failure(Error)
         }
         
         struct ViewModel {
             let items: [ListItemViewModel]
         }
-    }
-    
-    enum LoadTasksError: Error {
-        
     }
 }

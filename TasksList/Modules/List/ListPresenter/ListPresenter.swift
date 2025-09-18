@@ -29,6 +29,10 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
         interactor.loadItems(request: .init())
     }
     
+    func searchChanged(query: String) {
+        interactor.filterItems(request: .init(query: query))
+    }
+    
     func didTapAddButton() {
         print("hui")
     }
@@ -60,15 +64,31 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
             mappingQueue.async { [weak self] in
                 guard let self = self else { return }
                 let vms = items.map{ self.make(from: $0) }
-                let vm = ListModels.LoadTasks.ViewModel(tasks: vms)
+                let vm = ListModels.LoadTasks.ViewModel(items: vms)
                 DispatchQueue.main.async {
-                    self.view?.show(vm)
+                    self.view?.show(viewModel: vm)
                 }
             }
         case .empty:
             print("пусто")
         case .failure(let error):
             print(error.localizedDescription)
+        }
+    }
+    
+    func didFilteredItems(response: ListModels.FilterTasks.Response) {
+        switch response {
+        case .success(let items):
+            mappingQueue.async { [weak self] in
+                guard let self = self else { return }
+                let vms = items.map{ self.make(from: $0) }
+                let vm = ListModels.LoadTasks.ViewModel(items: vms)
+                DispatchQueue.main.async {
+                    self.view?.show(viewModel: vm)
+                }
+            }
+        case .empty:
+            print("пусто")
         }
     }
     

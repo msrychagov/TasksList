@@ -44,7 +44,7 @@ final class ListTableAdapter: NSObject {
     }
     
     func apply(cellVM: ListModels.LoadTasks.ViewModel) {
-        let items = cellVM.tasks.map {
+        let items = cellVM.items.map {
             Item(
                 id: $0.id,
                 title: $0.title,

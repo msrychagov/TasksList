@@ -7,4 +7,12 @@
 
 import Foundation
 
-enum ListModels {}
+enum ListModels {
+    struct ListItemViewModel {
+        let id: UUID
+        let title: String
+        let subTitle: String
+        let isDone: Bool
+        let date: String
+    }
+}

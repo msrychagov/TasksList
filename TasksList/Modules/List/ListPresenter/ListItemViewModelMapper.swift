@@ -8,13 +8,13 @@
 import Foundation
 
 protocol ListItemViewModelMapper {
-    func make(from item: TaskItem) -> ListModels.LoadTasks.ViewModel.ListItemViewModel
+    func make(from item: TaskItem) -> ListModels.ListItemViewModel
 }
 
 // MARK: - Default Implementation
 extension ListItemViewModelMapper {
-    func make(from item: TaskItem) -> ListModels.LoadTasks.ViewModel.ListItemViewModel {
-        return ListModels.LoadTasks.ViewModel.ListItemViewModel(
+    func make(from item: TaskItem) -> ListModels.ListItemViewModel {
+        return ListModels.ListItemViewModel(
             id: item.id,
             title: item.title,
             subTitle: item.description ?? "",

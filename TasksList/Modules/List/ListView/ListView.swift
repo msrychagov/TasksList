@@ -18,6 +18,7 @@ final class ListViewController: UIViewController, ListViewInput {
     // MARK: - UIProperties
     private let tableView: UITableView = UITableView(frame: .zero, style: .plain)
     private let summaryView: SummaryView = SummaryView(tasksCount: 5, frame: .zero)
+    private let searchBarController = UISearchController(searchResultsController: nil)
     
     // MARK: - Lyfecycle
     init(
@@ -58,8 +59,7 @@ final class ListViewController: UIViewController, ListViewInput {
     }
     
     private func configureSearch() {
-        let search = UISearchController(searchResultsController: nil)
-        let textField = search.searchBar.searchTextField
+        let textField = searchBarController.searchBar.searchTextField
         
         /// Color setup
         let tintColor: UIColor = .SearchBar.tintColor
@@ -73,14 +73,15 @@ final class ListViewController: UIViewController, ListViewInput {
                 .foregroundColor: tintColor,
             ]
         )
-        search.searchBar.tintColor = tintColor
+        searchBarController.searchBar.tintColor = tintColor
         
-        search.searchBar.scopeButtonTitles = ["Все", "Активные", "Завершенные"]
-        search.searchBar.showsBookmarkButton = true
-        search.searchBar.setImage(UIImage(systemName: "mic.fill"), for: .bookmark, state: .normal)
-        search.obscuresBackgroundDuringPresentation = false
-        search.hidesNavigationBarDuringPresentation = false
-        navigationItem.searchController = search
+//        searchBarController.searchBar.scopeButtonTitles = ["Все", "Активные", "Завершенные"]
+        searchBarController.searchBar.showsBookmarkButton = true
+        searchBarController.searchBar.setImage(UIImage(systemName: "mic.fill"), for: .bookmark, state: .normal)
+        searchBarController.obscuresBackgroundDuringPresentation = false
+        searchBarController.hidesNavigationBarDuringPresentation = false
+        searchBarController.searchResultsUpdater = self  // UISearchResultsUpdating
+        navigationItem.searchController = searchBarController
         definesPresentationContext = true
     }
     
@@ -120,11 +121,11 @@ final class ListViewController: UIViewController, ListViewInput {
     }
     
     // MARK: - ListViewInput methods
-    func show(_ list: ListModels.LoadTasks.ViewModel) {
-        tableAdapter.apply(cellVM: list)
+    func show(viewModel: ListModels.LoadTasks.ViewModel) {
+        tableAdapter.apply(cellVM: viewModel)
     }
     
-    func showCell(_ viewModel: ListModels.LoadTasks.ViewModel.ListItemViewModel) {
+    func showCell(_ viewModel: ListModels.ListItemViewModel) {
         print("hui")
     }
     
@@ -139,4 +140,14 @@ final class ListViewController: UIViewController, ListViewInput {
     func showError() {
         print("hui")
     }
+}
+
+// MARK: - SearchController Methods
+extension ListViewController: UISearchResultsUpdating, UISearchBarDelegate {
+    func updateSearchResults(for searchController: UISearchController) {
+        let text = searchController.searchBar.text ?? ""
+        output.searchChanged(query: text)
+    }
+    
+    
 }
