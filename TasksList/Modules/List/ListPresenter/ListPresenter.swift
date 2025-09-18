@@ -24,7 +24,7 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
         self.router = router
     }
     
-    // MARK: - ListInteractorOutput methods
+    // MARK: - ListViewOutput methods
     func viewDidLoad() {
         interactor.loadItems(request: .init())
     }

@@ -68,9 +68,10 @@ extension ListTableAdapter: UITableViewDelegate {
                    contextMenuConfigurationForRowAt indexPath: IndexPath,
                    point: CGPoint) -> UIContextMenuConfiguration? {
         UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let share = UIAction(title: "Поделиться", image: UIImage(systemName: "square.and.arrow.up")) { _ in }
             let edit = UIAction(title: "Редактировать", image: UIImage(systemName: "pencil")) { _ in }
             let delete = UIAction(title: "Удалить", image: UIImage(systemName: "trash"), attributes: .destructive) { _ in }
-            return UIMenu(title: "", children: [edit, delete])
+            return UIMenu(title: "", children: [share, edit, delete])
         }
     }
 }

@@ -11,11 +11,25 @@ final class ListTaskCell: UITableViewCell {
     // MARK: - ReuseIdentificator
     static let reuseId = "ListTaskCell"
     
-    // MARK: - Proprties
-    private var titleLabel: UILabel = UILabel()
-    private var subtitleLabel: UILabel = UILabel()
-    private var doneButton: UIButton = DoneButton()
-    private var dateLabel: UILabel = UILabel()
+    // MARK: - UI
+    private let titleLabel = UILabel()
+    private let subtitleLabel = UILabel()
+    private let doneButton = DoneButton()
+    private let dateLabel = UILabel()
+    
+    // MARK: - State
+    private var isDone = false
+    
+    // MARK: - Init
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        configureUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        configureUI()
+    }
     
     // MARK: - Configure
     func configure(
@@ -27,23 +41,26 @@ final class ListTaskCell: UITableViewCell {
         titleLabel.text = title
         subtitleLabel.text = subtitle
         dateLabel.text = date
-        
-        configureUI()
+        self.isDone = isDone
     }
-    
-    private func configureUI() {
+}
+
+// MARK: - Private
+private extension ListTaskCell {
+    func configureUI() {
         selectionStyle = .none
         backgroundColor = .clear
         preservesSuperviewLayoutMargins = true
         contentView.preservesSuperviewLayoutMargins = true
         contentView.insetsLayoutMarginsFromSafeArea = false
+        
         configureDoneButton()
         configureTitle()
         configureSubtitle()
         configureDate()
     }
     
-    private func configureDoneButton() {
+    func configureDoneButton() {
         doneButton.tintColor = .DoneButton.selected
         contentView.addSubview(doneButton)
         doneButton.translatesAutoresizingMaskIntoConstraints = false
@@ -53,9 +70,10 @@ final class ListTaskCell: UITableViewCell {
         doneButton.setHeight(48)
     }
     
-    private func configureTitle() {
+    func configureTitle() {
         titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
-        titleLabel.textColor = .General.secondary
+        titleLabel.textColor = .label
+        titleLabel.numberOfLines = 1
         contentView.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.pinTop(to: contentView.topAnchor, 12)
@@ -64,7 +82,7 @@ final class ListTaskCell: UITableViewCell {
         titleLabel.setHeight(22)
     }
     
-    private func configureSubtitle() {
+    func configureSubtitle() {
         subtitleLabel.font = .systemFont(ofSize: 12, weight: .regular)
         subtitleLabel.textColor = .General.secondary
         subtitleLabel.numberOfLines = 2
@@ -75,9 +93,9 @@ final class ListTaskCell: UITableViewCell {
         subtitleLabel.pinRight(to: contentView.layoutMarginsGuide.trailingAnchor)
     }
     
-    private func configureDate() {
+    func configureDate() {
         dateLabel.font = .systemFont(ofSize: 12, weight: .regular)
-        dateLabel.textColor = .General.secondary
+        dateLabel.textColor = .systemGray
         contentView.addSubview(dateLabel)
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.pinTop(to: subtitleLabel.bottomAnchor, 6)
@@ -88,8 +106,3 @@ final class ListTaskCell: UITableViewCell {
     }
 }
 
-extension ListTaskCell {
-    enum Constraints {
-        
-    }
-}

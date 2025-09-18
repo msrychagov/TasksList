@@ -19,7 +19,7 @@ extension ListItemViewModelMapper {
             title: item.title,
             subTitle: item.description ?? "",
             isDone: item.isDone,
-            date: item.date.description
+            date: item.date.dmyslash()
         )
     }
 }
