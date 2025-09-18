@@ -59,10 +59,9 @@ final class ListViewController: UIViewController, ListViewInput {
     
     private func configureSearch() {
         let search = UISearchController(searchResultsController: nil)
-        search.obscuresBackgroundDuringPresentation = false
-        search.hidesNavigationBarDuringPresentation = false
-        
         let textField = search.searchBar.searchTextField
+        
+        /// Color setup
         let tintColor: UIColor = .SearchBar.tintColor
         textField.backgroundColor = .SearchBar.background
         textField.textColor = tintColor
@@ -76,10 +75,11 @@ final class ListViewController: UIViewController, ListViewInput {
         )
         search.searchBar.tintColor = tintColor
         
+        search.searchBar.scopeButtonTitles = ["Все", "Активные", "Завершенные"]
         search.searchBar.showsBookmarkButton = true
         search.searchBar.setImage(UIImage(systemName: "mic.fill"), for: .bookmark, state: .normal)
-        search.searchBar.tintColor = tintColor
-        
+        search.obscuresBackgroundDuringPresentation = false
+        search.hidesNavigationBarDuringPresentation = false
         navigationItem.searchController = search
         definesPresentationContext = true
     }
