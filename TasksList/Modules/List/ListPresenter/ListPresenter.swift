@@ -42,7 +42,7 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
     }
     
     func didTapEditButton(for id: UUID) {
-        print("hui")
+        interactor.getTaskInfo(request: .init(id: id))
     }
     
     func didTapShareButton(for id: UUID) {
@@ -108,8 +108,14 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
         }
     }
     
-    func didEditItem(response: ListModels.EditTask.Response) {
-        print("hui")
+    func didLoadTaskInfo(response: ListModels.EditTask.Response) {
+        DispatchQueue.main.async { [weak self] in
+            self?.router.routeToEdit(taskId: response.task.id)
+        }
+    }
+    
+    func didFailedToLoadTaskInfo(error: any Error) {
+        print(error.localizedDescription)
     }
     
     func didShareItem(response: ListModels.ShareTask.Response) {

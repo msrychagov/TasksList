@@ -19,8 +19,8 @@ final class ListTableAdapter: NSObject {
     // MARK: Properties
     private weak var tableView: UITableView?
     private var dataSource: UITableViewDiffableDataSource<Section, Item>!
-    var onSelect: ((UUID) -> Void)?
     var onDelete: ((UUID) -> Void)?
+    var onEdit: ((UUID) -> Void)?
     
     // MARK: Table Settings Properties
     private let normalSeparatorInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
@@ -83,7 +83,12 @@ extension ListTableAdapter: UITableViewDelegate {
         let id = item.id
         let menu = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
             let share = UIAction(title: "Поделиться", image: UIImage(systemName: "square.and.arrow.up")) { _ in }
-            let edit = UIAction(title: "Редактировать", image: UIImage(systemName: "pencil")) { _ in }
+            let edit = UIAction(
+                title: "Редактировать",
+                image: UIImage(systemName: "pencil")
+            ) { [weak self] _ in
+                self?.onEdit?(id)
+            }
             let delete = UIAction(
                 title: "Удалить",
                 image: UIImage(systemName: "trash"),

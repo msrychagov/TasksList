@@ -32,7 +32,7 @@ protocol ListInteractorInput {
     func fetchItems(request: ListModels.LoadTasks.Request)
     func createItem(request: ListModels.CreateTask.Request)
     func deleteItem(request: ListModels.DeleteTask.Request)
-    func editItem(request: ListModels.EditTask.Request)
+    func getTaskInfo(request: ListModels.EditTask.Request)
     func shareItem(request: ListModels.ShareTask.Request)
 }
 
@@ -41,7 +41,8 @@ protocol ListInteractorOutput: AnyObject {
     func didFilteredItems(response: ListModels.FilterTasks.Response)
     func didCreateItem(response: ListModels.CreateTask.Response)
     func didDeleteItem(response: ListModels.DeleteTask.Response)
-    func didEditItem(response: ListModels.EditTask.Response)
+    func didLoadTaskInfo(response: ListModels.EditTask.Response)
+    func didFailedToLoadTaskInfo(error: Error)
     func didShareItem(response: ListModels.ShareTask.Response)
 }
 
@@ -49,13 +50,13 @@ protocol ListWorkerInput {
     func fetchItems(completion: @escaping (Result<[TaskItem], Error>) -> Void)
     func createItem()
     func deleteItem(with id: UUID, completion: @escaping (Result<Void, Error>) -> Void)
+    func getTaskInfo(with id: UUID, completion: @escaping (Result<TaskItem, Error>) -> Void)
     func editItem(with id: UUID)
     func shareItem(with id: UUID)
 }
 
 protocol ListRouterInput {
     func routeToCreate()
-    func routeToEdit()
+    func routeToEdit(taskId: UUID)
     func routeToShare()
-    func routeToDelete()
 }

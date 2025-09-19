@@ -108,8 +108,8 @@ final class ListViewController: UIViewController, ListViewInput {
         tableView.pinRight(to: view.safeAreaLayoutGuide.trailingAnchor)
         tableView.pinBottom(to: summaryView.topAnchor)
         tableAdapter.bind(tableView: tableView)
-        tableAdapter.onSelect = { [weak self] id in
-            self?.onItemTap?(id)
+        tableAdapter.onEdit = { [weak self] id in
+            self?.output.didTapEditButton(for: id)
         }
         tableAdapter.onDelete = { [weak self] id in
             self?.output.didTapDeleteButton(for: id)

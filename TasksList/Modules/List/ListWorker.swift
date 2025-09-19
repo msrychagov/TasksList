@@ -28,6 +28,10 @@ final class ListWorker: ListWorkerInput {
         storage.delete(id, completion: completion)
     }
     
+    func getTaskInfo(with id: UUID, completion: @escaping (Result<TaskItem, Error>) -> Void) {
+        storage.fetchTask(withId: id, completion: completion)
+    }
+    
     func editItem(with id: UUID) {
         print("hui")
     }

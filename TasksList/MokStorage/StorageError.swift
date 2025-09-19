@@ -7,4 +7,5 @@
 
 enum StorageError: Error {
     case deleteError
+    case taskNotFound
 }
