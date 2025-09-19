@@ -19,5 +19,8 @@ struct ManageTaskView: View {
     // MARK: UI
     var body: some View {
         Text("ManageTaskView")
+            .onAppear {
+                output.onAppear()
+            }
     }
 }

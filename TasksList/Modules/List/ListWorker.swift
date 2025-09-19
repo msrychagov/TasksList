@@ -13,7 +13,7 @@ final class ListWorker: ListWorkerInput {
     
     // MARK: - Lefycycle
     init(storage: Storage) {
-        self.storage = storage
+        self.storage = InMemoryStorage.shared
     }
     // MARK: - ListWorkerInputMethods
     func fetchItems(completion: @escaping (Result<[TaskItem], Error>) -> Void) {

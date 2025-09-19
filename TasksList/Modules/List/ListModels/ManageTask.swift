@@ -1,23 +1,20 @@
 //
-//  EditTask.swift
+//  ManageTask.swift
 //  TasksList
 //
-//  Created by Михаил Рычагов on 15.09.2025.
+//  Created by Михаил Рычагов on 19.09.2025.
 //
 
 import Foundation
 
 extension ListModels {
-    enum EditTask {
+    enum ManageTask {
         struct Request {
-            let id: UUID
+            let id: UUID?
         }
         
         struct Response {
-            let id: UUID?
             let mode: ManageMode
         }
-        
-        struct ViewModel {}
     }
 }

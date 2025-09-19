@@ -27,5 +27,12 @@ final class ManageTaaskHostingVC: UIHostingController<ManageTaskView>, ManageTas
     }
     
     // MARK: ManageTaskViewInput Methods
+    func setLoading(isLoading: Bool) {
+        state.phase = .loading
+    }
+    
+    func showTaskInfo(viewModel: ManageTaskModels.ShowInfo.ViewModel) {
+        print(viewModel)
+    }
 }
 

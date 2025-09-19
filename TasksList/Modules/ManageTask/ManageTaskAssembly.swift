@@ -6,11 +6,11 @@
 //
 import UIKit
 enum ManageTaskAssembly {
-    static func build(taskId: UUID) -> UIViewController {
+    static func build(mode: ManageMode) -> UIViewController {
         let storage = InMemoryStorage()
         let worker = ManageTaskWorker(storage: storage)
         let router = ManageTaskRouter()
-        let interactor = ManageTaskInteractor(worker: worker)
+        let interactor = ManageTaskInteractor(worker: worker, mode: mode)
         let presenter = ManageTaskPresenter(interactor: interactor, router: router)
         let view = ManageTaaskHostingVC(output: presenter)
         router.view = view

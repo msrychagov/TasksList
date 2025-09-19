@@ -16,16 +16,12 @@ final class ListRouter: ListRouterInput {
         print("hui")
     }
     
-    func routeToEdit(taskId: UUID) {
-        let editVC = ManageTaskAssembly.build(taskId: taskId)
+    func routeToManageTaskView(mode: ManageMode) {
+        let editVC = ManageTaskAssembly.build(mode: mode)
         viewController?.navigationController?.pushViewController(editVC, animated: true)
     }
     
     func routeToShare() {
-        print("hui")
-    }
-    
-    func routeToDelete() {
         print("hui")
     }
 }

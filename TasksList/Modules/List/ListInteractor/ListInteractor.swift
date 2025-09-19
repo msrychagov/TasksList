@@ -47,7 +47,7 @@ final class ListInteractor: ListInteractorInput {
         }
     }
     
-    func createItem(request: ListModels.CreateTask.Request) {
+    func createTask(request: ListModels.ManageTask.Request) {
         print("hui")
     }
     
@@ -61,14 +61,12 @@ final class ListInteractor: ListInteractorInput {
         }
     }
     
-    func getTaskInfo(request: ListModels.EditTask.Request) {
-        let id = request.id
-        worker.getTaskInfo(with: id) { [weak self] result in
-            switch result {
-            case .success(let task): self?.output?.didLoadTaskInfo(response: .init(task: task))
-            case .failure(let error): self?.output?.didFailedToLoadTaskInfo(error: error)
-            }
+    func editTask(request: ListModels.ManageTask.Request) {
+        guard let id = request.id else {
+            self.output?.didFaileToEditTask(error: ListModels.Errors.emptyID)
+            return
         }
+        self.output?.didRequestManageTask(response: .init(mode: .edit(id)))
     }
     
     func shareItem(request: ListModels.ShareTask.Request) {
