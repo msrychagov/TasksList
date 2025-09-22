@@ -69,6 +69,9 @@ final class ListTableAdapter: NSObject {
     
     func deleteItem(viewModel: ListModels.DeleteTask.ViewModel) {
         let id = viewModel.id
+        
+        itemsByID.removeValue(forKey: id)
+        
         var snapshot = dataSource.snapshot()
         if let item = snapshot.itemIdentifiers.first(where: { $0.id == id }) {
             snapshot.deleteItems([item])
@@ -96,6 +99,25 @@ final class ListTableAdapter: NSObject {
         var snapshot = dataSource.snapshot()
         guard let existing = snapshot.itemIdentifiers.first(where: { $0.id == id }) else { return }
         snapshot.reconfigureItems([existing])
+        DispatchQueue.main.async { [weak self] in
+            self?.dataSource.apply(snapshot, animatingDifferences: true)
+        }
+    }
+    
+    func insertItem(_ vm: ListModels.ListItemViewModel) {
+        print(vm)
+        let item = Item(id: vm.id, title: vm.title, subtitle: vm.subTitle, isDone: vm.isDone, date: vm.date)
+        
+        itemsByID[item.id] = item
+
+        var snapshot = dataSource.snapshot()
+        
+        if let firstItem = snapshot.itemIdentifiers.first {
+            snapshot.insertItems([item], beforeItem: firstItem)
+        } else {
+            snapshot.appendItems([item], toSection: .main)
+        }
+
         DispatchQueue.main.async { [weak self] in
             self?.dataSource.apply(snapshot, animatingDifferences: true)
         }

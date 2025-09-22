@@ -55,18 +55,22 @@ struct ManageTaskView: View {
     }
     
     private var descriptionTextField: some View {
-        ZStack {
-            if state.note.isEmpty {
-                Text("Описание")
-                    .foregroundStyle(.white)
-            }
+        ZStack(alignment: .topLeading) {
             TightTextEditor(
                 text: Binding(
                     get: { state.note },
                     set: { output.onDescriptionChange($0) }
                 )
             )
+            
+            if state.note.isEmpty {
+                Text("Описание")
+                    .foregroundStyle(.secondary)
+                    .font(.system(size: 16, weight: .regular))
+                    .allowsHitTesting(false)
+            }
         }
+        .frame(minHeight: 140)
     }
     
 }

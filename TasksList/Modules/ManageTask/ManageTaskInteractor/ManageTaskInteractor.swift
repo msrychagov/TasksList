@@ -30,7 +30,7 @@ extension ManageTaskInteractor: ManageTaskInteractorInput {
     func loadTaskInfo(request: ManageTaskModels.ShowInfo.Request) {
         switch mode {
         case .create:
-            output?.didFailToLoadTaskInfo(error: ManageTaskModels.Errors.tryingToCreateInsteadOfEdit)
+            self.output?.didStartCreate(response: .init(date: Date()))
         case .edit(let id):
             worker.loadTaskInfo(for: id) { [weak self] result in
                 switch result {
@@ -44,6 +44,7 @@ extension ManageTaskInteractor: ManageTaskInteractorInput {
     }
     
     func saveTaskInfo(request: ManageTaskModels.SaveTaskInfo.Request) {
+        guard !request.title.isEmpty else { return }
         let title = request.title
         let description = request.description
         switch mode {

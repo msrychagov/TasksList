@@ -9,8 +9,13 @@ import Foundation
 
 enum TasksEvents {
     static let taskDidChange = Notification.Name("taskDidChange")
+    static let taskDidCreate = Notification.Name("taskDidCreate")
     
     struct UpdatedPayload {
         let id: UUID
+    }
+    
+    struct CreatePayload {
+        let task: TaskItem
     }
 }

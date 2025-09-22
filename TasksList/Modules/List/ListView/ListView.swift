@@ -125,6 +125,9 @@ final class ListViewController: UIViewController, ListViewInput {
     
     func configureSummaryView() {
         summaryView.backgroundColor = .SummaryView.background
+        summaryView.onCreateTaskButtonTapped = { [weak self] in
+            self?.output.didTapCreateButton()
+        }
         view.addSubview(summaryView)
         summaryView.translatesAutoresizingMaskIntoConstraints = false
         summaryView.pinBottom(to: view.bottomAnchor)
@@ -158,6 +161,9 @@ final class ListViewController: UIViewController, ListViewInput {
         )
     }
     
+    func insertItem(viewModel: ListModels.ListItemViewModel) {
+        tableAdapter.insertItem(viewModel)
+    }
     func showPopup(for id: UUID) {
         print("hui")
     }

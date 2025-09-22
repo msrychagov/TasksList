@@ -16,14 +16,19 @@ protocol Storage {
 final class InMemoryStorage: Storage {
     func createTask(title: String, description: String?, completion: @escaping (Result<Void, any Error>) -> Void) {
         queue.async {
-            self.tasks.append(
-                TaskItem(
-                    id: UUID(),
-                    title: title,
-                    description: description,
-                    isDone: false,
-                    date: Date()
-                )
+            let newTask = TaskItem(
+                id: UUID(),
+                title: title,
+                description: description,
+                isDone: false,
+                date: Date()
+            )
+            self.tasks.append(newTask)
+            
+            NotificationCenter.default.post(
+                name: TasksEvents.taskDidCreate,
+                object: self,
+                userInfo: ["newTask": TasksEvents.CreatePayload(task: newTask)]
             )
         }
     }
@@ -43,7 +48,7 @@ final class InMemoryStorage: Storage {
                 NotificationCenter.default.post(
                     name: TasksEvents.taskDidChange,
                     object: self,
-                    userInfo: ["payload": TasksEvents.UpdatedPayload(id: id)]
+                    userInfo: ["changedTask": TasksEvents.UpdatedPayload(id: id)]
                 )
             }
         }

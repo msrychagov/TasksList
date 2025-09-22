@@ -13,7 +13,8 @@ final class ListInteractor: ListInteractorInput {
     weak var output: ListInteractorOutput?
     
     // MARK: - Observer Properties
-    private var token: NSObjectProtocol?
+    private var tokenUpdate: NSObjectProtocol?
+    private var tokenCreate: NSObjectProtocol?
     
     // MARK: - Data
     private var allTasks: [TaskItem] = []
@@ -21,17 +22,39 @@ final class ListInteractor: ListInteractorInput {
     // MARK: - Lyfecycle
     init(worker: ListWorkerInput) {
         self.worker = worker
-        self.token = NotificationCenter.default.addObserver(
+        
+        // Create
+        self.tokenCreate = NotificationCenter.default.addObserver(
+            forName: TasksEvents.taskDidCreate,
+            object: nil,
+            queue: .main) { [weak self] note in
+                guard
+                    let self,
+                    let p = note.userInfo?["newTask"] as? TasksEvents.CreatePayload
+                else { return }
+                
+                // Обновляем кэш allTasks с новой задачей и сортируем
+                self.allTasks.append(p.task)
+                self.allTasks.sort { $0.date > $1.date }
+                
+                self.output?.didCreateItem(response: .init(task: p.task))
+            }
+        // Update
+        self.tokenUpdate = NotificationCenter.default.addObserver(
             forName: TasksEvents.taskDidChange,
             object: nil,
             queue: .main) { [weak self] note in
                 guard
                     let self,
-                    let p = note.userInfo?["payload"] as? TasksEvents.UpdatedPayload
+                    let p = note.userInfo?["changedTask"] as? TasksEvents.UpdatedPayload
                 else { return }
                 worker.getTaskInfo(with: p.id) { result in
                     switch result {
                     case .success(let task):
+                        if let index = self.allTasks.firstIndex(where: { $0.id == task.id }) {
+                            self.allTasks[index] = task
+                            self.allTasks.sort { $0.date > $1.date }
+                        }
                         self.output?.didUpdateItem(response: .init(task: task))
                     case .failure(let error):
                         self.output?.didFaileToEditTask(error: error)
@@ -41,9 +64,8 @@ final class ListInteractor: ListInteractorInput {
     }
     
     deinit {
-        if let t = token {
-            NotificationCenter.default.removeObserver(t)
-        }
+        if let tU = tokenUpdate { NotificationCenter.default.removeObserver(tU) }
+        if let tC = tokenCreate { NotificationCenter.default.removeObserver(tC) }
     }
     
     // MARK: ListInteractor InputMethods
@@ -51,8 +73,9 @@ final class ListInteractor: ListInteractorInput {
         worker.fetchItems { [weak self] result in
             switch result {
             case .success(let items):
-                self?.allTasks = items
-                let response: ListModels.LoadTasks.Response = items.isEmpty ? .empty : .success(items)
+                let sortedItems = items.sorted { $0.date > $1.date }
+                self?.allTasks = sortedItems
+                let response: ListModels.LoadTasks.Response = sortedItems.isEmpty ? .empty : .success(sortedItems)
                 self?.output?.didLoadItems(response: response)
             case.failure(let error):
                 let response: ListModels.LoadTasks.Response = .failure(error)
@@ -67,7 +90,9 @@ final class ListInteractor: ListInteractorInput {
             output?.didFilteredItems(response: .success(allTasks))
             return
         }
-        let filteredTasks = allTasks.filter { $0.title.matched(with: query) }
+        let filteredTasks = allTasks
+            .filter { $0.title.matched(with: query) }
+            .sorted { $0.date > $1.date }
         switch filteredTasks.count {
             case 0: output?.didFilteredItems(response: .empty)
             default: output?.didFilteredItems(response: .success(filteredTasks))
@@ -75,15 +100,18 @@ final class ListInteractor: ListInteractorInput {
     }
     
     func createTask(request: ListModels.ManageTask.Request) {
-        print("hui")
+        output?.didRequestManageTask(response: .init(mode: .create))
     }
     
     func deleteItem(request: ListModels.DeleteTask.Request) {
         let id = request.id
         worker.deleteItem(with: id) { [weak self] result in
             switch result {
-            case .success: self?.output?.didDeleteItem(response: .success(id))
-            case .failure(let error): self?.output?.didDeleteItem(response: .failure(error))
+            case .success: 
+                self?.allTasks.removeAll { $0.id == id }
+                self?.output?.didDeleteItem(response: .success(id))
+            case .failure(let error): 
+                self?.output?.didDeleteItem(response: .failure(error))
             }
         }
     }

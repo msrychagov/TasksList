@@ -11,6 +11,7 @@ protocol ListViewInput: AnyObject {
     func show(viewModel: ListModels.LoadTasks.ViewModel)
     func removeItem(viewModel: ListModels.DeleteTask.ViewModel)
     func reloadItem(viewModel: ListModels.EditTask.ViewModel)
+    func insertItem(viewModel: ListModels.ListItemViewModel)
     func showEmpty()
     func showPopup(for id: UUID)
     func showIsLoading()
@@ -20,8 +21,8 @@ protocol ListViewInput: AnyObject {
 protocol ListViewOutput {
     func viewDidLoad()
     func searchChanged(query: String)
-    func didTapAddButton()
     func didSelectItem(with id: UUID)
+    func didTapCreateButton()
     func didTapEditButton(for id: UUID)
     func didTapShareButton(for id: UUID)
     func didTapDeleteButton(for id: UUID)
@@ -45,14 +46,13 @@ protocol ListInteractorOutput: AnyObject {
     func didFaileToEditTask(error: Error)
     func didShareItem(response: ListModels.ShareTask.Response)
     func didUpdateItem(response: ListModels.EditTask.Response)
+    func didCreateItem(response: ListModels.CreateTask.Response)
 }
 
 protocol ListWorkerInput {
     func fetchItems(completion: @escaping (Result<[TaskItem], Error>) -> Void)
-    func createItem()
     func deleteItem(with id: UUID, completion: @escaping (Result<Void, Error>) -> Void)
     func getTaskInfo(with id: UUID, completion: @escaping (Result<TaskItem, Error>) -> Void)
-    func editItem(with id: UUID)
     func shareItem(with id: UUID)
 }
 

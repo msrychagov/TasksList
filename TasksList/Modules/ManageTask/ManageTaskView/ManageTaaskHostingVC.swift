@@ -41,6 +41,7 @@ final class ManageTaaskHostingVC: UIHostingController<ManageTaskView>, ManageTas
     }
     
     func showTaskInfo(viewModel: ManageTaskModels.ShowInfo.ViewModel) {
+        print(viewModel.info)
         DispatchQueue.main.async { [weak self] in
             self?.state.title = viewModel.info.title
             self?.state.note = viewModel.info.note

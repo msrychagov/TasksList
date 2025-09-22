@@ -33,8 +33,8 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
         interactor.filterItems(request: .init(query: query))
     }
     
-    func didTapAddButton() {
-        print("hui")
+    func didTapCreateButton() {
+        interactor.createTask(request: .init(id: nil))
     }
     
     func didSelectItem(with id: UUID) {
@@ -95,10 +95,6 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
         }
     }
     
-    func didCreateItem(response: ListModels.CreateTask.Response) {
-        print("hui")
-    }
-    
     func didDeleteItem(response: ListModels.DeleteTask.Response) {
         switch response {
         case .success(let id):
@@ -132,6 +128,16 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
         }
     }
     
+    func didCreateItem(response: ListModels.CreateTask.Response) {
+        mappingQueue.async { [weak self] in
+            guard let self else { return }
+            let vm = self.make(from: response.task)
+            DispatchQueue.main.async {
+                self.view?.insertItem(viewModel: vm)
+            }
+        }
+    }
+    
     func didFaileToEditTask(error: Error) {
         print(error.localizedDescription)
     }
@@ -140,3 +146,4 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
         print("hui")
     }
 }
+

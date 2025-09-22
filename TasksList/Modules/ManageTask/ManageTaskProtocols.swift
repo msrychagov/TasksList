@@ -30,6 +30,7 @@ protocol ManageTaskInteractorInput {
 
 protocol ManageTaskInteractorOutput: AnyObject {
     func didLoadTaskInfo(response: ManageTaskModels.ShowInfo.Response)
+    func didStartCreate(response: ManageTaskModels.Create.Response)
     func didFailToLoadTaskInfo(error: Error)
     func didUpdateTitle(response: ManageTaskModels.UpdateTitle.Response)
     func didUpdateDescription(response: ManageTaskModels.UpdateDescription.Response)

@@ -70,6 +70,20 @@ final class ManageTaskPresenter: ManageTaskViewOutput, ManageTaskInteractorOutpu
             self?.view?.showUpdatedDescription(viewModel: .init(text: updatedDescription))
         }
     }
+    
+    func didStartCreate(response: ManageTaskModels.Create.Response) {
+        DispatchQueue.main.async { [weak self] in
+            self?.view?.showTaskInfo(
+                viewModel: .init(
+                    info: .init(
+                        title: "",
+                        note: "",
+                        date: response.date.dmyslash()
+                    )
+                )
+            )
+        }
+    }
 }
 
 extension ManageTaskPresenter: ManageTaskBackHandler {

@@ -18,5 +18,5 @@ final class ManageTaskState: ObservableObject {
     @Published var phase: Phase = .idle
     @Published var title: String = ""
     @Published var note: String = ""
-    @Published var date: String = ""
+    @Published var date: String = Date().dmyslash()
 }
