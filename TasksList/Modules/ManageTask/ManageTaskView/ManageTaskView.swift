@@ -50,7 +50,7 @@ struct ManageTaskView: View {
     }
     
     private var date: some View {
-        Text("21/09/25")
+        Text(state.date)
             .foregroundStyle(Color.dateText)
     }
     
