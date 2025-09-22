@@ -34,9 +34,6 @@ struct ManageTaskView: View {
         .onAppear {
             output.onAppear()
         }
-        .onDisappear {
-            output.onDisappear(title: state.title, description: state.note)
-        }
     }
     
     private var titleTextField: some View {
@@ -47,7 +44,7 @@ struct ManageTaskView: View {
                 set: { output.onTitleChange($0) }
             )
         )
-        .tint(Color.yellow)
+        .tint(.yellow)
         .font(.system(size: 34, weight: .bold))
         .foregroundStyle(.primary)
     }
@@ -58,19 +55,17 @@ struct ManageTaskView: View {
     }
     
     private var descriptionTextField: some View {
-        ZStack(alignment: .topLeading) {
+        ZStack {
+            if state.note.isEmpty {
+                Text("Описание")
+                    .foregroundStyle(.white)
+            }
             TightTextEditor(
                 text: Binding(
                     get: { state.note },
                     set: { output.onDescriptionChange($0) }
                 )
             )
-            
-            if state.note.isEmpty {
-                Text("Описание")
-                    .foregroundStyle(.secondary)
-                    .font(.system(size: 16, weight: .regular))
-            }
         }
     }
     
