@@ -51,5 +51,15 @@ extension ManageTaskInteractor: ManageTaskInteractorInput {
         print()
     }
     
+    func updateTitle(request: ManageTaskModels.UpdateTitle.Request) {
+        let text = request.text
+        output?.didUpdateTitle(response: .init(text: text))
+    }
+    
+    func updateDescription(request: ManageTaskModels.UpdateDescription.Request) {
+        let text = request.text
+        output?.didUpdateDescription(response: .init(text: text))
+    }
+    
     
 }

@@ -13,6 +13,7 @@ enum ManageTaskAssembly {
         let interactor = ManageTaskInteractor(worker: worker, mode: mode)
         let presenter = ManageTaskPresenter(interactor: interactor, router: router)
         let view = ManageTaaskHostingVC(output: presenter)
+        view.navigationItem.largeTitleDisplayMode = .never
         router.view = view
         interactor.output = presenter
         presenter.view = view

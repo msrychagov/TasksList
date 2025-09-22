@@ -46,18 +46,25 @@ final class ListViewController: UIViewController, ListViewInput {
     // MARK: - Configure UI
     private func configureUI() {
         view.backgroundColor = .General.primary
-        configureNavigationTitle()
+        configureNavigationBar()
         configureSearch()
         configureSummaryView()
         configureTable()
     }
     
-    private func configureNavigationTitle() {
+    private func configureNavigationBar() {
         navigationItem.title = "Задачи"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.largeTitleTextAttributes = [
             .foregroundColor: UIColor.General.secondary
         ]
+        navigationController?.navigationBar.tintColor = .SummaryView.createButton
+        navigationItem.backBarButtonItem = UIBarButtonItem(
+            title: "Назад",
+            style: .plain,
+            target: nil,
+            action: nil
+        )
     }
     
     private func configureSearch() {

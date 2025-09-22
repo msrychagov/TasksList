@@ -9,15 +9,13 @@ import SwiftUI
 
 final class ManageTaaskHostingVC: UIHostingController<ManageTaskView>, ManageTaskViewInput {
     // MARK: State
-    private let state: ManageTaskState
+    private let state: ManageTaskState = ManageTaskState()
     
     // MARK: Lifecycle
     init(
-        output: ManageTaskViewOutput,
-        state: ManageTaskState = .init()
+        output: ManageTaskViewOutput
     ) {
-        self.state = state
-        let rootView = ManageTaskView(output: output)
+        let rootView = ManageTaskView(output: output, state: state)
         super.init(rootView: rootView)
     }
     
@@ -33,6 +31,18 @@ final class ManageTaaskHostingVC: UIHostingController<ManageTaskView>, ManageTas
     
     func showTaskInfo(viewModel: ManageTaskModels.ShowInfo.ViewModel) {
         print(viewModel)
+    }
+    
+    func showUpdatedTitle(viewModel: ManageTaskModels.UpdateTitle.ViewModel) {
+        DispatchQueue.main.async { [weak self] in
+            self?.state.title = viewModel.text
+        }
+    }
+    
+    func showUpdatedDescription(viewModel: ManageTaskModels.UpdateDescription.ViewModel) {
+        DispatchQueue.main.async { [weak self] in
+            self?.state.note = viewModel.text
+        }
     }
 }
 

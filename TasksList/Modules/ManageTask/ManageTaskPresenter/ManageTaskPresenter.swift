@@ -30,6 +30,14 @@ final class ManageTaskPresenter: ManageTaskViewOutput, ManageTaskInteractorOutpu
         interactor.loadTaskInfo(request: .init())
     }
     
+    func onTitleChange(_ text: String) {
+        interactor.updateTitle(request: .init(text: text))
+    }
+    
+    func onDescriptionChange(_ text: String) {
+        interactor.updateDescription(request: .init(text: text))
+    }
+    
     // MARK: ManageTaskInteractorOutput Methods
     func didLoadTaskInfo(response: ManageTaskModels.ShowInfo.Response) {
         let task = response.task
@@ -43,5 +51,19 @@ final class ManageTaskPresenter: ManageTaskViewOutput, ManageTaskInteractorOutpu
     
     func didFailToLoadTaskInfo(error: any Error) {
         print(error.localizedDescription)
+    }
+    
+    func didUpdateTitle(response: ManageTaskModels.UpdateTitle.Response) {
+        let updatedTitle = response.text
+        DispatchQueue.main.async { [weak self] in
+            self?.view?.showUpdatedTitle(viewModel: .init(text: updatedTitle))
+        }
+    }
+    
+    func didUpdateDescription(response: ManageTaskModels.UpdateDescription.Response) {
+        let updatedDescription = response.text
+        DispatchQueue.main.async { [weak self] in
+            self?.view?.showUpdatedDescription(viewModel: .init(text: updatedDescription))
+        }
     }
 }
