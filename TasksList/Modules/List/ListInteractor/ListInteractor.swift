@@ -4,12 +4,16 @@
 //
 //  Created by Михаил Рычагов on 14.09.2025.
 //
+import Foundation
 
 final class ListInteractor: ListInteractorInput {
     
-    // MARK: - Properties
+    // MARK: - Connection Properties
     private let worker: ListWorkerInput
     weak var output: ListInteractorOutput?
+    
+    // MARK: - Observer Properties
+    private var token: NSObjectProtocol?
     
     // MARK: - Data
     private var allTasks: [TaskItem] = []
@@ -17,6 +21,29 @@ final class ListInteractor: ListInteractorInput {
     // MARK: - Lyfecycle
     init(worker: ListWorkerInput) {
         self.worker = worker
+        self.token = NotificationCenter.default.addObserver(
+            forName: TasksEvents.taskDidChange,
+            object: nil,
+            queue: .main) { [weak self] note in
+                guard
+                    let self,
+                    let p = note.userInfo?["payload"] as? TasksEvents.UpdatedPayload
+                else { return }
+                worker.getTaskInfo(with: p.id) { result in
+                    switch result {
+                    case .success(let task):
+                        self.output?.didUpdateItem(response: .init(task: task))
+                    case .failure(let error):
+                        self.output?.didFaileToEditTask(error: error)
+                    }
+                }
+            }
+    }
+    
+    deinit {
+        if let t = token {
+            NotificationCenter.default.removeObserver(t)
+        }
     }
     
     // MARK: ListInteractor InputMethods

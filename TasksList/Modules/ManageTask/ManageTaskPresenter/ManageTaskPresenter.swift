@@ -30,6 +30,10 @@ final class ManageTaskPresenter: ManageTaskViewOutput, ManageTaskInteractorOutpu
         interactor.loadTaskInfo(request: .init())
     }
     
+    func onDisappear(title: String, description: String) {
+        interactor.saveTaskInfo(request: .init(title: title, description: description))
+    }
+    
     func onTitleChange(_ text: String) {
         interactor.updateTitle(request: .init(text: text))
     }
@@ -65,5 +69,11 @@ final class ManageTaskPresenter: ManageTaskViewOutput, ManageTaskInteractorOutpu
         DispatchQueue.main.async { [weak self] in
             self?.view?.showUpdatedDescription(viewModel: .init(text: updatedDescription))
         }
+    }
+}
+
+extension ManageTaskPresenter: ManageTaskBackHandler {
+    func onBackCommit(title: String, description: String) {
+        interactor.saveTaskInfo(request: .init(title: title, description: description))
     }
 }

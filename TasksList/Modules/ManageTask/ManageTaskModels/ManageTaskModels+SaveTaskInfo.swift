@@ -6,9 +6,10 @@
 //
 
 extension ManageTaskModels {
-    enum Update {
+    enum SaveTaskInfo {
         struct Request {
-            
+            let title: String
+            let description: String
         }
         
         struct Response {

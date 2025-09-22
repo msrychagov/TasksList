@@ -8,10 +8,47 @@ import Foundation
 
 protocol Storage {
     func fetchAll(completion: @escaping (Result<[TaskItem], Error>) -> Void)
-    func delete(_ id: UUID, completion: @escaping (Result<Void, Error>) -> Void)
     func fetchTask(withId id: UUID, completion: @escaping (Result<TaskItem, Error>) -> Void)
+    func delete(_ id: UUID, completion: @escaping (Result<Void, Error>) -> Void)
+    func createTask(title: String, description: String?, completion: @escaping (Result<Void, Error>) -> Void)
+    func updateTask(with id: UUID, title: String, description: String?, completion: @escaping (Result<Void, Error>) -> Void)
 }
 final class InMemoryStorage: Storage {
+    func createTask(title: String, description: String?, completion: @escaping (Result<Void, any Error>) -> Void) {
+        queue.async {
+            self.tasks.append(
+                TaskItem(
+                    id: UUID(),
+                    title: title,
+                    description: description,
+                    isDone: false,
+                    date: Date()
+                )
+            )
+        }
+    }
+    
+    func updateTask(with id: UUID, title: String, description: String?, completion: @escaping (Result<Void, any Error>) -> Void) {
+        queue.async {
+            if let idx = self.tasks.firstIndex(where: { $0.id == id }) {
+                let prevTask = self.tasks[idx]
+                self.tasks[idx] = TaskItem(
+                    id: id,
+                    title: title,
+                    description: description,
+                    isDone: prevTask.isDone,
+                    date: prevTask.date
+                )
+                
+                NotificationCenter.default.post(
+                    name: TasksEvents.taskDidChange,
+                    object: self,
+                    userInfo: ["payload": TasksEvents.UpdatedPayload(id: id)]
+                )
+            }
+        }
+    }
+    
     func fetchTask(withId id: UUID, completion: @escaping (Result<TaskItem, any Error>) -> Void) {
         queue.async {
             guard let idx = self.tasks.firstIndex(where: { $0.id == id }) else {

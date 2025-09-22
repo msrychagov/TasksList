@@ -43,12 +43,24 @@ extension ManageTaskInteractor: ManageTaskInteractorInput {
         }
     }
     
-    func createTask(request: ManageTaskModels.ShowInfo.Request) {
-        print()
-    }
-    
-    func updateTask(request: ManageTaskModels.ShowInfo.Request) {
-        print()
+    func saveTaskInfo(request: ManageTaskModels.SaveTaskInfo.Request) {
+        let title = request.title
+        let description = request.description
+        switch mode {
+        case .create:
+            worker.createTask(
+                title: title,
+                description: description,
+                completion: {_ in print("createdTask")}
+            )
+        case .edit(let id):
+            worker.updateTask(
+                with: id,
+                title: title,
+                description: description,
+                completion: {_ in print("updatedTask")}
+            )
+        }
     }
     
     func updateTitle(request: ManageTaskModels.UpdateTitle.Request) {

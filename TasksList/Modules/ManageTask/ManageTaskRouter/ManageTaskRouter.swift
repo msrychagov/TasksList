@@ -8,4 +8,8 @@
 final class ManageTaskRouter: ManageTaskRouterInput {
     // MARK: Connection Properties
     weak var view: ManageTaskViewInput?
+    
+    // MARK: Callback to notify list to reload
+    var onDidChangeData: (() -> Void)?
 }
+

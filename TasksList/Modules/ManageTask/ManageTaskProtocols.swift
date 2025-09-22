@@ -16,14 +16,14 @@ protocol ManageTaskViewInput: AnyObject {
 
 protocol ManageTaskViewOutput {
     func onAppear()
+    func onDisappear(title: String, description: String)
     func onTitleChange(_ text: String)
     func onDescriptionChange(_ text: String)
 }
 
 protocol ManageTaskInteractorInput {
     func loadTaskInfo(request: ManageTaskModels.ShowInfo.Request)
-    func createTask(request: ManageTaskModels.ShowInfo.Request)
-    func updateTask(request: ManageTaskModels.ShowInfo.Request)
+    func saveTaskInfo(request: ManageTaskModels.SaveTaskInfo.Request)
     func updateTitle(request: ManageTaskModels.UpdateTitle.Request)
     func updateDescription(request: ManageTaskModels.UpdateDescription.Request)
 }
@@ -41,4 +41,6 @@ protocol ManageTaskRouterInput {
 
 protocol ManageTaskWorkerInput {
     func loadTaskInfo(for id: UUID, completion: @escaping (Result<TaskItem, Error>) -> Void)
+    func updateTask(with id: UUID, title: String, description: String, completion: @escaping (Result<Void, Error>) -> Void)
+    func createTask(title: String, description: String, completion: @escaping (Result<Void, Error>) -> Void)
 }

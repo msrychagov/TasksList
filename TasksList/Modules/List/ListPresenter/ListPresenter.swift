@@ -114,6 +114,24 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
         }
     }
     
+    func didUpdateItem(response: ListModels.EditTask.Response) {
+        mappingQueue.async { [weak self] in
+            guard let self else { return }
+            let vm = self.make(from: response.task)
+            DispatchQueue.main.async {
+                self.view?.reloadItem(
+                    viewModel: .init(
+                        id: vm.id,
+                        title: vm.title,
+                        description: vm.subTitle,
+                        date: vm.date,
+                        isDone: vm.isDone
+                    )
+                )
+            }
+        }
+    }
+    
     func didFaileToEditTask(error: Error) {
         print(error.localizedDescription)
     }

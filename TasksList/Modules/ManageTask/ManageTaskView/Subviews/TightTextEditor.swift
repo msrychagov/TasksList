@@ -28,8 +28,6 @@ struct TightTextEditor: UIViewRepresentable {
     func updateUIView(_ uiView: UITextView, context: Context) {
         uiView.text = text
         uiView.font = font
-        uiView.textColor = UIColor.label
-        uiView.backgroundColor = UIColor.clear
     }
     
     func makeCoordinator() -> Coordinator {

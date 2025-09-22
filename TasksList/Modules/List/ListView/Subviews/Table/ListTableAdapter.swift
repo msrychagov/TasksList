@@ -14,11 +14,15 @@ final class ListTableAdapter: NSObject {
         let subtitle: String
         let isDone: Bool
         let date: String
+        
+        func hash(into hasher: inout Hasher) { hasher.combine(id) }
+        static func == (lhs: Item, rhs: Item) -> Bool { lhs.id == rhs.id }
     }
     
     // MARK: Properties
     private weak var tableView: UITableView?
     private var dataSource: UITableViewDiffableDataSource<Section, Item>!
+    private var itemsByID: [UUID: Item] = [:]
     var onDelete: ((UUID) -> Void)?
     var onEdit: ((UUID) -> Void)?
     
@@ -28,16 +32,14 @@ final class ListTableAdapter: NSObject {
     func bind(tableView: UITableView) {
         self.tableView = tableView
         tableView.register(ListTaskCell.self, forCellReuseIdentifier: ListTaskCell.reuseId)
-        dataSource = .init(tableView: tableView) {
-            tableView,
-            indexPath,
-            item in
+        dataSource = .init(tableView: tableView) {tableView, indexPath, item in
+            guard let vm = self.itemsByID[item.id] else { return UITableViewCell() }
             let cell = tableView.dequeueReusableCell(withIdentifier: ListTaskCell.reuseId, for: indexPath) as! ListTaskCell
             cell.configure(
-                title: item.title,
-                subtitle: item.subtitle,
-                isDone: item.isDone,
-                date: item.date
+                title: vm.title,
+                subtitle: vm.subtitle,
+                isDone: vm.isDone,
+                date: vm.date
             )
             return cell
         }
@@ -54,6 +56,8 @@ final class ListTableAdapter: NSObject {
                 date: $0.date
             )
         }
+        
+        itemsByID = Dictionary(uniqueKeysWithValues: items.map { ($0.id, $0) })
         
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.main])
@@ -73,6 +77,30 @@ final class ListTableAdapter: NSObject {
             }
         }
     }
+    
+    func reloadItem(
+        id: UUID,
+        title: String,
+        subtitle: String,
+        isDone: Bool,
+        date: String
+    ) {
+        itemsByID[id] = Item(
+            id: id,
+            title: title,
+            subtitle: subtitle,
+            isDone: isDone,
+            date: date
+        )
+
+        var snapshot = dataSource.snapshot()
+        guard let existing = snapshot.itemIdentifiers.first(where: { $0.id == id }) else { return }
+        snapshot.reconfigureItems([existing])
+        DispatchQueue.main.async { [weak self] in
+            self?.dataSource.apply(snapshot, animatingDifferences: true)
+        }
+    }
+
 }
 
 extension ListTableAdapter: UITableViewDelegate {

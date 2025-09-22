@@ -148,6 +148,16 @@ final class ListViewController: UIViewController, ListViewInput {
         tableAdapter.deleteItem(viewModel: viewModel)
     }
     
+    func reloadItem(viewModel: ListModels.EditTask.ViewModel) {
+        tableAdapter.reloadItem(
+            id: viewModel.id,
+            title: viewModel.title,
+            subtitle: viewModel.description,
+            isDone: viewModel.isDone,
+            date: viewModel.date
+        )
+    }
+    
     func showPopup(for id: UUID) {
         print("hui")
     }

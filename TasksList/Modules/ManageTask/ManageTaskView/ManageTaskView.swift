@@ -34,6 +34,9 @@ struct ManageTaskView: View {
         .onAppear {
             output.onAppear()
         }
+        .onDisappear {
+            output.onDisappear(title: state.title, description: state.note)
+        }
     }
     
     private var titleTextField: some View {
@@ -69,7 +72,6 @@ struct ManageTaskView: View {
                     .font(.system(size: 16, weight: .regular))
             }
         }
-//        .frame(minHeight: 140)
     }
     
 }

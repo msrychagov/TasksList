@@ -14,10 +14,15 @@ extension ListModels {
         }
         
         struct Response {
-            let id: UUID?
-            let mode: ManageMode
+            let task: TaskItem
         }
         
-        struct ViewModel {}
+        struct ViewModel {
+            let id: UUID
+            let title: String
+            let description: String
+            let date: String
+            let isDone: Bool
+        }
     }
 }

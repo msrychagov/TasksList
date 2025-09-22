@@ -19,7 +19,26 @@ final class ManageTaskWorker {
 
 // MARK: ManageTaskWorkerInput Conforming
 extension ManageTaskWorker: ManageTaskWorkerInput {
+    func updateTask(with id: UUID, title: String, description: String, completion: @escaping (Result<Void, any Error>) -> Void) {
+        storage.updateTask(
+            with: id,
+            title: title,
+            description: description,
+            completion: completion
+        )
+    }
+    
+    func createTask(title: String, description: String, completion: @escaping (Result<Void, any Error>) -> Void) {
+        storage.createTask(
+            title: title,
+            description: description,
+            completion: completion
+        )
+    }
+    
     func loadTaskInfo(for id: UUID, completion: @escaping (Result<TaskItem, any Error>) -> Void) {
         storage.fetchTask(withId: id, completion: completion)
     }
+    
+    
 }

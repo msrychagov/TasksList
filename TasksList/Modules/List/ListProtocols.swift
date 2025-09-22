@@ -10,6 +10,7 @@ import Foundation
 protocol ListViewInput: AnyObject {
     func show(viewModel: ListModels.LoadTasks.ViewModel)
     func removeItem(viewModel: ListModels.DeleteTask.ViewModel)
+    func reloadItem(viewModel: ListModels.EditTask.ViewModel)
     func showEmpty()
     func showPopup(for id: UUID)
     func showIsLoading()
@@ -43,6 +44,7 @@ protocol ListInteractorOutput: AnyObject {
     func didDeleteItem(response: ListModels.DeleteTask.Response)
     func didFaileToEditTask(error: Error)
     func didShareItem(response: ListModels.ShareTask.Response)
+    func didUpdateItem(response: ListModels.EditTask.Response)
 }
 
 protocol ListWorkerInput {
