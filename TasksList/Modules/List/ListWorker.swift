@@ -13,23 +13,19 @@ final class ListWorker: ListWorkerInput {
     
     // MARK: - Lefycycle
     init(storage: Storage) {
-        self.storage = storage
+        self.storage = InMemoryStorage.shared
     }
     // MARK: - ListWorkerInputMethods
     func fetchItems(completion: @escaping (Result<[TaskItem], Error>) -> Void) {
         storage.fetchAll(completion: completion)
     }
     
-    func createItem() {
-        print("hui")
+    func deleteItem(with id: UUID, completion: @escaping (Result<Void, Error>) -> Void) {
+        storage.delete(id, completion: completion)
     }
     
-    func deleteItem(with id: UUID) {
-        print("hui")
-    }
-    
-    func editItem(with id: UUID) {
-        print("hui")
+    func getTaskInfo(with id: UUID, completion: @escaping (Result<TaskItem, Error>) -> Void) {
+        storage.fetchTask(withId: id, completion: completion)
     }
     
     func shareItem(with id: UUID) {

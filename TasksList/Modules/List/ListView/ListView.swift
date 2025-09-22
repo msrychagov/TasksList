@@ -46,18 +46,25 @@ final class ListViewController: UIViewController, ListViewInput {
     // MARK: - Configure UI
     private func configureUI() {
         view.backgroundColor = .General.primary
-        configureNavigationTitle()
+        configureNavigationBar()
         configureSearch()
         configureSummaryView()
         configureTable()
     }
     
-    private func configureNavigationTitle() {
+    private func configureNavigationBar() {
         navigationItem.title = "Задачи"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.largeTitleTextAttributes = [
             .foregroundColor: UIColor.General.secondary
         ]
+        navigationController?.navigationBar.tintColor = .SummaryView.createButton
+        navigationItem.backBarButtonItem = UIBarButtonItem(
+            title: "Назад",
+            style: .plain,
+            target: nil,
+            action: nil
+        )
     }
     
     private func configureSearch() {
@@ -108,13 +115,19 @@ final class ListViewController: UIViewController, ListViewInput {
         tableView.pinRight(to: view.safeAreaLayoutGuide.trailingAnchor)
         tableView.pinBottom(to: summaryView.topAnchor)
         tableAdapter.bind(tableView: tableView)
-        tableAdapter.onSelect = { [weak self] id in
-            self?.onItemTap?(id)
+        tableAdapter.onEdit = { [weak self] id in
+            self?.output.didTapEditButton(for: id)
+        }
+        tableAdapter.onDelete = { [weak self] id in
+            self?.output.didTapDeleteButton(for: id)
         }
     }
     
     func configureSummaryView() {
         summaryView.backgroundColor = .SummaryView.background
+        summaryView.onCreateTaskButtonTapped = { [weak self] in
+            self?.output.didTapCreateButton()
+        }
         view.addSubview(summaryView)
         summaryView.translatesAutoresizingMaskIntoConstraints = false
         summaryView.pinBottom(to: view.bottomAnchor)
@@ -134,6 +147,23 @@ final class ListViewController: UIViewController, ListViewInput {
         tableView.separatorStyle = .none
     }
     
+    func removeItem(viewModel: ListModels.DeleteTask.ViewModel) {
+        tableAdapter.deleteItem(viewModel: viewModel)
+    }
+    
+    func reloadItem(viewModel: ListModels.EditTask.ViewModel) {
+        tableAdapter.reloadItem(
+            id: viewModel.id,
+            title: viewModel.title,
+            subtitle: viewModel.description,
+            isDone: viewModel.isDone,
+            date: viewModel.date
+        )
+    }
+    
+    func insertItem(viewModel: ListModels.ListItemViewModel) {
+        tableAdapter.insertItem(viewModel)
+    }
     func showPopup(for id: UUID) {
         print("hui")
     }

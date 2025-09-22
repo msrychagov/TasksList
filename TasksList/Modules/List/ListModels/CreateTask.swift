@@ -9,8 +9,12 @@ extension ListModels {
     enum CreateTask {
         struct Request {}
         
-        struct Response {}
+        struct Response {
+            let task: TaskItem
+        }
         
-        struct ViewModel {}
+        struct ViewModel {
+            
+        }
     }
 }

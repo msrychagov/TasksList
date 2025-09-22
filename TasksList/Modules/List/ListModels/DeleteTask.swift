@@ -5,12 +5,21 @@
 //  Created by Михаил Рычагов on 15.09.2025.
 //
 
+import Foundation
+
 extension ListModels {
     enum DeleteTask {
-        struct Request {}
+        struct Request {
+            let id: UUID
+        }
         
-        struct Response {}
+        enum Response {
+            case success(UUID)
+            case failure(Error)
+        }
         
-        struct ViewModel {}
+        struct ViewModel {
+            let id: UUID
+        }
     }
 }

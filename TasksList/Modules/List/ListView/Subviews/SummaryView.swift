@@ -11,7 +11,7 @@ final class SummaryView: UIView {
     // MARK: - Properties
     private let tasksCount: Int
     
-    // MARK: -
+    // MARK: - Actions Propeties
     var onCreateTaskButtonTapped: (() -> Void)?
     
     // MARK: - UI Properties
@@ -65,5 +65,12 @@ final class SummaryView: UIView {
         createTaskButton.pinTop(to: border.bottomAnchor, 13)
         createTaskButton.setWidth(68)
         createTaskButton.setHeight(28)
+        
+        createTaskButton.addTarget(self, action: #selector(createTaskButtonTapped), for: .touchUpInside)
+    }
+    
+    // MARK: Actions
+    @objc func createTaskButtonTapped() {
+        onCreateTaskButtonTapped?()
     }
 }

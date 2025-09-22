@@ -26,15 +26,15 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
     
     // MARK: - ListViewOutput methods
     func viewDidLoad() {
-        interactor.loadItems(request: .init())
+        interactor.fetchItems(request: .init())
     }
     
     func searchChanged(query: String) {
         interactor.filterItems(request: .init(query: query))
     }
     
-    func didTapAddButton() {
-        print("hui")
+    func didTapCreateButton() {
+        interactor.createTask(request: .init(id: nil))
     }
     
     func didSelectItem(with id: UUID) {
@@ -42,7 +42,7 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
     }
     
     func didTapEditButton(for id: UUID) {
-        print("hui")
+        interactor.editTask(request: .init(id: id))
     }
     
     func didTapShareButton(for id: UUID) {
@@ -50,7 +50,7 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
     }
     
     func didTapDeleteButton(for id: UUID) {
-        print("hui")
+        interactor.deleteItem(request: .init(id: id))
     }
     
     func didHoldTaskCell(for id: UUID) {
@@ -95,19 +95,55 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
         }
     }
     
-    func didCreateItem(response: ListModels.CreateTask.Response) {
-        print("hui")
-    }
-    
     func didDeleteItem(response: ListModels.DeleteTask.Response) {
-        print("hui")
+        switch response {
+        case .success(let id):
+            view?.removeItem(viewModel: .init(id: id))
+        case .failure(let error):
+            print(error.localizedDescription)
+        }
     }
     
-    func didEditItem(response: ListModels.EditTask.Response) {
-        print("hui")
+    func didRequestManageTask(response: ListModels.ManageTask.Response) {
+        DispatchQueue.main.async { [weak self] in
+            self?.router.routeToManageTaskView(mode: response.mode)
+        }
+    }
+    
+    func didUpdateItem(response: ListModels.EditTask.Response) {
+        mappingQueue.async { [weak self] in
+            guard let self else { return }
+            let vm = self.make(from: response.task)
+            DispatchQueue.main.async {
+                self.view?.reloadItem(
+                    viewModel: .init(
+                        id: vm.id,
+                        title: vm.title,
+                        description: vm.subTitle,
+                        date: vm.date,
+                        isDone: vm.isDone
+                    )
+                )
+            }
+        }
+    }
+    
+    func didCreateItem(response: ListModels.CreateTask.Response) {
+        mappingQueue.async { [weak self] in
+            guard let self else { return }
+            let vm = self.make(from: response.task)
+            DispatchQueue.main.async {
+                self.view?.insertItem(viewModel: vm)
+            }
+        }
+    }
+    
+    func didFaileToEditTask(error: Error) {
+        print(error.localizedDescription)
     }
     
     func didShareItem(response: ListModels.ShareTask.Response) {
         print("hui")
     }
 }
+

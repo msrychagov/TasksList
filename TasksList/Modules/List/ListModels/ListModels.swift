@@ -15,4 +15,8 @@ enum ListModels {
         let isDone: Bool
         let date: String
     }
+    
+    enum Errors: Error {
+        case emptyID
+    }
 }
