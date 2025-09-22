@@ -30,7 +30,6 @@ final class NetworkService: NetworkServiceProtocol {
     
     private let session: URLSession
     private let baseURL = "https://dummyjson.com"
-    private let localJSONPath = "/Users/mixail.rychagov/Downloads/todos.json"
     
     // MARK: - Initialization
     
@@ -89,11 +88,19 @@ final class NetworkService: NetworkServiceProtocol {
         task.resume()
     }
     
-    /// Загружает задачи из локального JSON файла
+    /// Загружает задачи из локального JSON файла в bundle приложения
     private func fetchTodosFromLocalFile(completion: @escaping (Result<TodosResponse, NetworkError>) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
-                let data = try Data(contentsOf: URL(fileURLWithPath: self.localJSONPath))
+                // Ищем файл в bundle приложения
+                guard let url = Bundle.main.url(forResource: "todos", withExtension: "json") else {
+                    DispatchQueue.main.async {
+                        completion(.failure(.networkError(NSError(domain: "LocalFileError", code: 404, userInfo: [NSLocalizedDescriptionKey: "Local todos.json file not found in app bundle"]))))
+                    }
+                    return
+                }
+                
+                let data = try Data(contentsOf: url)
                 let todosResponse = try JSONDecoder().decode(TodosResponse.self, from: data)
                 DispatchQueue.main.async {
                     completion(.success(todosResponse))
