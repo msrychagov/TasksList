@@ -12,6 +12,7 @@ protocol Storage {
     func delete(_ id: UUID, completion: @escaping (Result<Void, Error>) -> Void)
     func createTask(title: String, details: String?, completion: @escaping (Result<Void, Error>) -> Void)
     func updateTask(with id: UUID, title: String, details: String?, completion: @escaping (Result<Void, Error>) -> Void)
+    func initializeWithTasks(_ tasks: [TaskItem], completion: @escaping (Result<Void, Error>) -> Void)
 }
 final class InMemoryStorage: Storage {
     func createTask(title: String, details: String?, completion: @escaping (Result<Void, any Error>) -> Void) {
@@ -78,6 +79,14 @@ final class InMemoryStorage: Storage {
     func fetchAll(completion: @escaping (Result<[TaskItem], any Error>) -> Void) {
         queue.async {
             completion(.success(self.tasks))
+        }
+    }
+    
+    func initializeWithTasks(_ tasks: [TaskItem], completion: @escaping (Result<Void, any Error>) -> Void) {
+        queue.async(flags: .barrier) {
+            // Очищаем существующие задачи и заменяем их новыми
+            self.tasks = tasks
+            completion(.success(()))
         }
     }
     

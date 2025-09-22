@@ -10,6 +10,7 @@ final class ListInteractor: ListInteractorInput {
     
     // MARK: - Connection Properties
     private let worker: ListWorkerInput
+    private let appInitializationManager: AppInitializationManagerProtocol
     weak var output: ListInteractorOutput?
     
     // MARK: - Observer Properties
@@ -20,8 +21,9 @@ final class ListInteractor: ListInteractorInput {
     private var allTasks: [TaskItem] = []
     
     // MARK: - Lyfecycle
-    init(worker: ListWorkerInput) {
+    init(worker: ListWorkerInput, appInitializationManager: AppInitializationManagerProtocol) {
         self.worker = worker
+        self.appInitializationManager = appInitializationManager
         
         // Create
         self.tokenCreate = NotificationCenter.default.addObserver(
@@ -70,6 +72,27 @@ final class ListInteractor: ListInteractorInput {
     
     // MARK: ListInteractor InputMethods
     func fetchItems(request: ListModels.LoadTasks.Request) {
+        // Сначала инициализируем приложение, если нужно
+        guard let storage = worker as? (any ListWorkerInput & StorageProvider) else {
+            // Если worker не предоставляет storage, просто загружаем данные
+            self.loadItemsDirectly()
+            return
+        }
+        
+        appInitializationManager.initializeAppIfNeeded(with: storage.getStorage()) { [weak self] result in
+            switch result {
+            case .success:
+                // Инициализация прошла успешно, теперь загружаем данные
+                self?.loadItemsDirectly()
+            case .failure(let error):
+                // Ошибка инициализации - все равно пытаемся загрузить данные из хранилища
+                print("Ошибка инициализации данных: \(error.localizedDescription)")
+                self?.loadItemsDirectly()
+            }
+        }
+    }
+    
+    private func loadItemsDirectly() {
         worker.fetchItems { [weak self] result in
             switch result {
             case .success(let items):

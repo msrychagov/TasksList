@@ -14,9 +14,8 @@ final class CoreDataStack {
     var viewContext: NSManagedObjectContext { container.viewContext }
 
     init(inMemory: Bool = false) {
-        // Создаем модель программно
-        let managedObjectModel = CoreDataStack.createManagedObjectModel()
-        container = NSPersistentContainer(name: "TasksList", managedObjectModel: managedObjectModel)
+        // Используем скомпилированную модель из .xcdatamodeld
+        container = NSPersistentContainer(name: "TasksList")
         
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
@@ -54,57 +53,5 @@ final class CoreDataStack {
         let ctx = container.newBackgroundContext()
         ctx.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return ctx
-    }
-    
-    // MARK: - Private Methods
-    
-    private static func createManagedObjectModel() -> NSManagedObjectModel {
-        let model = NSManagedObjectModel()
-        
-        // Создаем entity для ToDo
-        let taskEntity = NSEntityDescription()
-        taskEntity.name = "ToDo"
-        taskEntity.managedObjectClassName = "ToDo"
-        
-        // Создаем атрибуты
-        let idAttribute = NSAttributeDescription()
-        idAttribute.name = "id"
-        idAttribute.attributeType = .UUIDAttributeType
-        idAttribute.isOptional = false
-        
-        let titleAttribute = NSAttributeDescription()
-        titleAttribute.name = "title"
-        titleAttribute.attributeType = .stringAttributeType
-        titleAttribute.isOptional = false
-        
-        let descriptionAttribute = NSAttributeDescription()
-        descriptionAttribute.name = "taskDescription"
-        descriptionAttribute.attributeType = .stringAttributeType
-        descriptionAttribute.isOptional = true
-        
-        let isDoneAttribute = NSAttributeDescription()
-        isDoneAttribute.name = "isDone"
-        isDoneAttribute.attributeType = .booleanAttributeType
-        isDoneAttribute.isOptional = false
-        isDoneAttribute.defaultValue = false
-        
-        let dateAttribute = NSAttributeDescription()
-        dateAttribute.name = "date"
-        dateAttribute.attributeType = .dateAttributeType
-        dateAttribute.isOptional = false
-        
-        // Добавляем атрибуты к entity
-        taskEntity.properties = [
-            idAttribute,
-            titleAttribute, 
-            descriptionAttribute,
-            isDoneAttribute,
-            dateAttribute
-        ]
-        
-        // Добавляем entity к модели
-        model.entities = [taskEntity]
-        
-        return model
     }
 }

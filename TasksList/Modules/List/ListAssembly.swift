@@ -11,7 +11,8 @@ enum ListAssembly {
         let storage = CoreDataStorage.shared
         let router = ListRouter()
         let worker = ListWorker(storage: storage)
-        let interactor = ListInteractor(worker: worker)
+        let appInitializationManager = AppInitializationManager()
+        let interactor = ListInteractor(worker: worker, appInitializationManager: appInitializationManager)
         let presenter = ListPresenter(interactor: interactor, router: router)
         let tableAdapter = ListTableAdapter()
         let view = ListViewController(output: presenter, tableAdapter: tableAdapter)

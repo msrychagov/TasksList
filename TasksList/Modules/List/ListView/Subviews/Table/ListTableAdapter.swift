@@ -112,6 +112,11 @@ final class ListTableAdapter: NSObject {
 
         var snapshot = dataSource.snapshot()
         
+        // Ensure the main section exists before adding items
+        if !snapshot.sectionIdentifiers.contains(.main) {
+            snapshot.appendSections([.main])
+        }
+        
         if let firstItem = snapshot.itemIdentifiers.first {
             snapshot.insertItems([item], beforeItem: firstItem)
         } else {

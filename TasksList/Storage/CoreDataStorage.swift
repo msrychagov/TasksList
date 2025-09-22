@@ -53,6 +53,20 @@ final class CoreDataStorage: Storage {
         operationManager.updateTask(with: id, title: title, description: details, completion: completion)
     }
     
+    /// Инициализировать хранилище списком задач
+    func initializeWithTasks(_ tasks: [TaskItem], completion: @escaping (Result<Void, Error>) -> Void) {
+        // Сначала очищаем все существующие задачи
+        deleteAllTasks { [weak self] result in
+            switch result {
+            case .success:
+                // Затем создаем новые задачи
+                self?.createTasks(tasks, completion: completion)
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
     // MARK: - Additional Methods
     
     /// Переключить статус задачи (выполнена/не выполнена)

@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class ListWorker: ListWorkerInput {
+final class ListWorker: ListWorkerInput, StorageProvider {
     // MARK: - Properties
     private let storage: Storage
     
@@ -30,5 +30,10 @@ final class ListWorker: ListWorkerInput {
     
     func shareItem(with id: UUID) {
         print("hui")
+    }
+    
+    // MARK: - StorageProvider
+    func getStorage() -> Storage {
+        return storage
     }
 }
