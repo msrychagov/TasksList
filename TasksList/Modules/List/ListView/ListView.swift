@@ -155,7 +155,7 @@ final class ListViewController: UIViewController, ListViewInput {
         tableAdapter.reloadItem(
             id: viewModel.id,
             title: viewModel.title,
-            subtitle: viewModel.description,
+            subtitle: viewModel.details,
             isDone: viewModel.isDone,
             date: viewModel.date
         )

@@ -30,8 +30,8 @@ final class ManageTaskPresenter: ManageTaskViewOutput, ManageTaskInteractorOutpu
         interactor.loadTaskInfo(request: .init())
     }
     
-    func onDisappear(title: String, description: String) {
-        interactor.saveTaskInfo(request: .init(title: title, description: description))
+    func onDisappear(title: String, details: String) {
+        interactor.saveTaskInfo(request: .init(title: title, details: details))
     }
     
     func onTitleChange(_ text: String) {
@@ -87,7 +87,7 @@ final class ManageTaskPresenter: ManageTaskViewOutput, ManageTaskInteractorOutpu
 }
 
 extension ManageTaskPresenter: ManageTaskBackHandler {
-    func onBackCommit(title: String, description: String) {
-        interactor.saveTaskInfo(request: .init(title: title, description: description))
+    func onBackCommit(title: String, details: String) {
+        interactor.saveTaskInfo(request: .init(title: title, details: details))
     }
 }

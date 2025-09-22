@@ -14,7 +14,7 @@ extension ManageTaskViewModelMapper {
     func make(from task: TaskItem) -> ManageTaskModels.ManageTaskViewModel {
         ManageTaskModels.ManageTaskViewModel(
             title: task.title,
-            note: task.description ?? "",
+            note: task.details ?? "",
             date: task.date.dmyslash()
             )
     }

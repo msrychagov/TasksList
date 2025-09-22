@@ -9,7 +9,7 @@ extension ManageTaskModels {
     enum SaveTaskInfo {
         struct Request {
             let title: String
-            let description: String
+            let details: String
         }
         
         struct Response {

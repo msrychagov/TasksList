@@ -14,7 +14,7 @@ final class CoreDataStack {
     var viewContext: NSManagedObjectContext { container.viewContext }
 
     private init(inMemory: Bool = false) {
-        container = NSPersistentContainer(name: "YourModelName") // имя файла .xcdatamodeld
+        container = NSPersistentContainer(name: "TasksList")
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
         }

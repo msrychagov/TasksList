@@ -10,7 +10,7 @@ import Foundation
 struct TaskItem {
     let id: UUID
     let title: String
-    let description: String?
+    let details: String?
     let isDone: Bool
     let date: Date
 }

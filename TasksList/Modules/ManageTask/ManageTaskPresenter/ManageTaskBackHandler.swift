@@ -6,5 +6,5 @@
 //
 
 protocol ManageTaskBackHandler: AnyObject {
-    func onBackCommit(title: String, description: String)
+    func onBackCommit(title: String, details: String)
 }
