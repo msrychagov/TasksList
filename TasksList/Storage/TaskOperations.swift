@@ -9,7 +9,7 @@ import CoreData
 import Foundation
 
 // MARK: - Base Operation
-class CoreDataOperation: Operation {
+class CoreDataOperation: Operation, @unchecked Sendable {
     let context: NSManagedObjectContext
     var completion: ((Result<Any, Error>) -> Void)?
     
@@ -36,13 +36,13 @@ class CoreDataOperation: Operation {
 }
 
 // MARK: - Create Task Operation
-class CreateTaskOperation: CoreDataOperation {
+class CreateTaskOperation: CoreDataOperation, @unchecked Sendable {
     private let title: String
-    private let details: String?
+    private let taskDetails: String?
     
-    init(context: NSManagedObjectContext, title: String, details: String?) {
+    init(context: NSManagedObjectContext, title: String, description: String?) {
         self.title = title
-        self.details = details
+        self.taskDetails = description
         super.init(context: context)
     }
     
@@ -51,12 +51,12 @@ class CreateTaskOperation: CoreDataOperation {
             let newTask = TaskItem(
                 id: UUID(),
                 title: title,
-                details: details,
+                details: taskDetails,
                 isDone: false,
                 date: Date()
             )
             
-            _ = CDTaskItem.fromDomainModel(newTask, context: context)
+            _ = ToDo.fromDomainModel(newTask, context: context)
             try saveContext()
             
             DispatchQueue.main.async {
@@ -76,11 +76,11 @@ class CreateTaskOperation: CoreDataOperation {
 }
 
 // MARK: - Fetch All Tasks Operation
-class FetchAllTasksOperation: CoreDataOperation {
+class FetchAllTasksOperation: CoreDataOperation, @unchecked Sendable {
     
     override func executeOperation() {
         do {
-            let request: NSFetchRequest<CDTaskItem> = CDTaskItem.fetchRequest()
+            let request: NSFetchRequest<ToDo> = ToDo.fetchRequest()
             let cdTasks = try context.fetch(request)
             let tasks = cdTasks.map { $0.toDomainModel() }
             
@@ -96,7 +96,7 @@ class FetchAllTasksOperation: CoreDataOperation {
 }
 
 // MARK: - Fetch Task by ID Operation
-class FetchTaskOperation: CoreDataOperation {
+class FetchTaskOperation: CoreDataOperation, @unchecked Sendable {
     private let taskId: UUID
     
     init(context: NSManagedObjectContext, taskId: UUID) {
@@ -106,20 +106,20 @@ class FetchTaskOperation: CoreDataOperation {
     
     override func executeOperation() {
         do {
-            let request: NSFetchRequest<CDTaskItem> = CDTaskItem.fetchRequest()
+            let request: NSFetchRequest<ToDo> = ToDo.fetchRequest()
             request.predicate = NSPredicate(format: "id == %@", taskId as CVarArg)
             request.fetchLimit = 1
             
-            let cdTasks = try context.fetch(request)
+            let todos = try context.fetch(request)
             
-            guard let cdTask = cdTasks.first else {
+            guard let todo = todos.first else {
                 DispatchQueue.main.async {
                     self.completion?(.failure(StorageError.taskNotFound))
                 }
                 return
             }
             
-            let task = cdTask.toDomainModel()
+            let task = todo.toDomainModel()
             DispatchQueue.main.async {
                 self.completion?(.success(task))
             }
@@ -132,35 +132,35 @@ class FetchTaskOperation: CoreDataOperation {
 }
 
 // MARK: - Update Task Operation
-class UpdateTaskOperation: CoreDataOperation {
+class UpdateTaskOperation: CoreDataOperation, @unchecked Sendable {
     private let taskId: UUID
     private let title: String
-    private let details: String?
+    private let taskDetails: String?
     
-    init(context: NSManagedObjectContext, taskId: UUID, title: String, details: String?) {
+    init(context: NSManagedObjectContext, taskId: UUID, title: String, description: String?) {
         self.taskId = taskId
         self.title = title
-        self.details = details
+        self.taskDetails = description
         super.init(context: context)
     }
     
     override func executeOperation() {
         do {
-            let request: NSFetchRequest<CDTaskItem> = CDTaskItem.fetchRequest()
+            let request: NSFetchRequest<ToDo> = ToDo.fetchRequest()
             request.predicate = NSPredicate(format: "id == %@", taskId as CVarArg)
             request.fetchLimit = 1
             
-            let cdTasks = try context.fetch(request)
+            let todos = try context.fetch(request)
             
-            guard let cdTask = cdTasks.first else {
+            guard let todo = todos.first else {
                 DispatchQueue.main.async {
                     self.completion?(.failure(StorageError.taskNotFound))
                 }
                 return
             }
             
-            cdTask.title = title
-            cdTask.taskDescription = details
+            todo.title = title
+            todo.details = taskDetails
             
             try saveContext()
             
@@ -181,7 +181,7 @@ class UpdateTaskOperation: CoreDataOperation {
 }
 
 // MARK: - Delete Task Operation
-class DeleteTaskOperation: CoreDataOperation {
+class DeleteTaskOperation: CoreDataOperation, @unchecked Sendable {
     private let taskId: UUID
     
     init(context: NSManagedObjectContext, taskId: UUID) {
@@ -191,20 +191,20 @@ class DeleteTaskOperation: CoreDataOperation {
     
     override func executeOperation() {
         do {
-            let request: NSFetchRequest<CDTaskItem> = CDTaskItem.fetchRequest()
+            let request: NSFetchRequest<ToDo> = ToDo.fetchRequest()
             request.predicate = NSPredicate(format: "id == %@", taskId as CVarArg)
             request.fetchLimit = 1
             
-            let cdTasks = try context.fetch(request)
+            let todos = try context.fetch(request)
             
-            guard let cdTask = cdTasks.first else {
+            guard let todo = todos.first else {
                 DispatchQueue.main.async {
                     self.completion?(.failure(StorageError.taskNotFound))
                 }
                 return
             }
             
-            context.delete(cdTask)
+            context.delete(todo)
             try saveContext()
             
             DispatchQueue.main.async {
@@ -219,7 +219,7 @@ class DeleteTaskOperation: CoreDataOperation {
 }
 
 // MARK: - Toggle Task Status Operation  
-class ToggleTaskStatusOperation: CoreDataOperation {
+class ToggleTaskStatusOperation: CoreDataOperation, @unchecked Sendable {
     private let taskId: UUID
     
     init(context: NSManagedObjectContext, taskId: UUID) {
@@ -229,20 +229,20 @@ class ToggleTaskStatusOperation: CoreDataOperation {
     
     override func executeOperation() {
         do {
-            let request: NSFetchRequest<CDTaskItem> = CDTaskItem.fetchRequest()
+            let request: NSFetchRequest<ToDo> = ToDo.fetchRequest()
             request.predicate = NSPredicate(format: "id == %@", taskId as CVarArg)
             request.fetchLimit = 1
             
-            let cdTasks = try context.fetch(request)
+            let todos = try context.fetch(request)
             
-            guard let cdTask = cdTasks.first else {
+            guard let todo = todos.first else {
                 DispatchQueue.main.async {
                     self.completion?(.failure(StorageError.taskNotFound))
                 }
                 return
             }
             
-            cdTask.isDone = !cdTask.isDone
+            todo.done = !todo.done
             try saveContext()
             
             DispatchQueue.main.async {

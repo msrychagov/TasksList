@@ -38,9 +38,9 @@ class TaskOperationManager {
     // MARK: - Public Methods
     
     /// Создать задачу
-    func createTask(title: String, details: String?, completion: @escaping (Result<Void, Error>) -> Void) {
+    func createTask(title: String, description: String?, completion: @escaping (Result<Void, Error>) -> Void) {
         let context = coreDataStack.newBackgroundContext()
-        let operation = CreateTaskOperation(context: context, title: title, details: details)
+        let operation = CreateTaskOperation(context: context, title: title, description: description)
         
         operation.completion = { result in
             switch result {
@@ -97,9 +97,9 @@ class TaskOperationManager {
     }
     
     /// Обновить задачу
-    func updateTask(with id: UUID, title: String, details: String?, completion: @escaping (Result<Void, Error>) -> Void) {
+    func updateTask(with id: UUID, title: String, description: String?, completion: @escaping (Result<Void, Error>) -> Void) {
         let context = coreDataStack.newBackgroundContext()
-        let operation = UpdateTaskOperation(context: context, taskId: id, title: title, details: details)
+        let operation = UpdateTaskOperation(context: context, taskId: id, title: title, description: description)
         
         operation.completion = { result in
             switch result {

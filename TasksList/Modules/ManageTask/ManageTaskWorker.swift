@@ -13,7 +13,7 @@ final class ManageTaskWorker {
     
     // MARK: Lyfecycle
     init(storage: Storage) {
-        self.storage = InMemoryStorage.shared
+        self.storage = storage
     }
 }
 

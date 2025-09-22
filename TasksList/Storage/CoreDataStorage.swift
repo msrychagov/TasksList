@@ -45,12 +45,12 @@ final class CoreDataStorage: Storage {
     
     /// Создать новую задачу
     func createTask(title: String, details: String?, completion: @escaping (Result<Void, Error>) -> Void) {
-        operationManager.createTask(title: title, details: details, completion: completion)
+        operationManager.createTask(title: title, description: details, completion: completion)
     }
     
     /// Обновить существующую задачу
     func updateTask(with id: UUID, title: String, details: String?, completion: @escaping (Result<Void, Error>) -> Void) {
-        operationManager.updateTask(with: id, title: title, details: details, completion: completion)
+        operationManager.updateTask(with: id, title: title, description: details, completion: completion)
     }
     
     // MARK: - Additional Methods
@@ -64,7 +64,7 @@ final class CoreDataStorage: Storage {
     func getTasksCount(completion: @escaping (Result<Int, Error>) -> Void) {
         operationManager.executeOnBackground {
             let context = self.coreDataStack.newBackgroundContext()
-            let request: NSFetchRequest<CDTaskItem> = CDTaskItem.fetchRequest()
+            let request: NSFetchRequest<ToDo> = ToDo.fetchRequest()
             return try context.count(for: request)
         } completion: { result in
             completion(result)
@@ -75,7 +75,7 @@ final class CoreDataStorage: Storage {
     func getCompletedTasksCount(completion: @escaping (Result<Int, Error>) -> Void) {
         operationManager.executeOnBackground {
             let context = self.coreDataStack.newBackgroundContext()
-            let request: NSFetchRequest<CDTaskItem> = CDTaskItem.fetchRequest()
+            let request: NSFetchRequest<ToDo> = ToDo.fetchRequest()
             request.predicate = NSPredicate(format: "isDone == %@", NSNumber(value: true))
             return try context.count(for: request)
         } completion: { result in
@@ -92,12 +92,12 @@ final class CoreDataStorage: Storage {
         let context = coreDataStack.newBackgroundContext()
         
         operationManager.executeOnBackground {
-            let request: NSFetchRequest<CDTaskItem> = CDTaskItem.fetchRequest()
+            let request: NSFetchRequest<ToDo> = ToDo.fetchRequest()
             request.predicate = predicate
             request.sortDescriptors = sortDescriptors
             
-            let cdTasks = try context.fetch(request)
-            return cdTasks.map { $0.toDomainModel() }
+            let todos = try context.fetch(request)
+            return todos.map { $0.toDomainModel() }
         } completion: { result in
             completion(result)
         }
@@ -108,7 +108,7 @@ final class CoreDataStorage: Storage {
         let context = coreDataStack.newBackgroundContext()
         
         operationManager.executeOnBackground {
-            let request: NSFetchRequest<NSFetchRequestResult> = CDTaskItem.fetchRequest()
+            let request: NSFetchRequest<NSFetchRequestResult> = ToDo.fetchRequest()
             let deleteRequest = NSBatchDeleteRequest(fetchRequest: request)
             
             try context.execute(deleteRequest)
@@ -124,7 +124,7 @@ final class CoreDataStorage: Storage {
         
         operationManager.executeOnBackground {
             for task in tasks {
-                _ = CDTaskItem.fromDomainModel(task, context: context)
+                _ = ToDo.fromDomainModel(task, context: context)
             }
             
             if context.hasChanges {
