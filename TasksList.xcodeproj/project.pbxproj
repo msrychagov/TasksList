@@ -14,19 +14,11 @@
 			remoteGlobalIDString = F57DD39C2E772E0500CA05C2;
 			remoteInfo = TasksList;
 		};
-		F57DD3C12E772E0800CA05C2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F57DD3952E772E0500CA05C2 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F57DD39C2E772E0500CA05C2;
-			remoteInfo = TasksList;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		F57DD39D2E772E0500CA05C2 /* TasksList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TasksList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F57DD3B62E772E0800CA05C2 /* TasksListTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TasksListTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		F57DD3C02E772E0800CA05C2 /* TasksListUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TasksListUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -53,11 +45,6 @@
 			path = TasksListTests;
 			sourceTree = "<group>";
 		};
-		F57DD3C32E772E0800CA05C2 /* TasksListUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TasksListUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,13 +62,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F57DD3BD2E772E0800CA05C2 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -90,7 +70,6 @@
 			children = (
 				F57DD39F2E772E0500CA05C2 /* TasksList */,
 				F57DD3B92E772E0800CA05C2 /* TasksListTests */,
-				F57DD3C32E772E0800CA05C2 /* TasksListUITests */,
 				F57DD39E2E772E0500CA05C2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -100,7 +79,6 @@
 			children = (
 				F57DD39D2E772E0500CA05C2 /* TasksList.app */,
 				F57DD3B62E772E0800CA05C2 /* TasksListTests.xctest */,
-				F57DD3C02E772E0800CA05C2 /* TasksListUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -153,29 +131,6 @@
 			productReference = F57DD3B62E772E0800CA05C2 /* TasksListTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		F57DD3BF2E772E0800CA05C2 /* TasksListUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F57DD3D12E772E0800CA05C2 /* Build configuration list for PBXNativeTarget "TasksListUITests" */;
-			buildPhases = (
-				F57DD3BC2E772E0800CA05C2 /* Sources */,
-				F57DD3BD2E772E0800CA05C2 /* Frameworks */,
-				F57DD3BE2E772E0800CA05C2 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				F57DD3C22E772E0800CA05C2 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				F57DD3C32E772E0800CA05C2 /* TasksListUITests */,
-			);
-			name = TasksListUITests;
-			packageProductDependencies = (
-			);
-			productName = TasksListUITests;
-			productReference = F57DD3C02E772E0800CA05C2 /* TasksListUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -190,10 +145,6 @@
 						CreatedOnToolsVersion = 16.1;
 					};
 					F57DD3B52E772E0800CA05C2 = {
-						CreatedOnToolsVersion = 16.1;
-						TestTargetID = F57DD39C2E772E0500CA05C2;
-					};
-					F57DD3BF2E772E0800CA05C2 = {
 						CreatedOnToolsVersion = 16.1;
 						TestTargetID = F57DD39C2E772E0500CA05C2;
 					};
@@ -215,7 +166,6 @@
 			targets = (
 				F57DD39C2E772E0500CA05C2 /* TasksList */,
 				F57DD3B52E772E0800CA05C2 /* TasksListTests */,
-				F57DD3BF2E772E0800CA05C2 /* TasksListUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -229,13 +179,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F57DD3B42E772E0800CA05C2 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F57DD3BE2E772E0800CA05C2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -259,13 +202,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F57DD3BC2E772E0800CA05C2 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -273,11 +209,6 @@
 			isa = PBXTargetDependency;
 			target = F57DD39C2E772E0500CA05C2 /* TasksList */;
 			targetProxy = F57DD3B72E772E0800CA05C2 /* PBXContainerItemProxy */;
-		};
-		F57DD3C22E772E0800CA05C2 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F57DD39C2E772E0500CA05C2 /* TasksList */;
-			targetProxy = F57DD3C12E772E0800CA05C2 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -293,8 +224,10 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TasksList/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -324,8 +257,10 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TasksList/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -475,9 +410,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = msrychagov.TasksListTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TasksList.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TasksList";
 			};
 			name = Debug;
@@ -494,44 +433,14 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = msrychagov.TasksListTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TasksList.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TasksList";
-			};
-			name = Release;
-		};
-		F57DD3D22E772E0800CA05C2 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7KVC9GS82W;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = msrychagov.TasksListUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = TasksList;
-			};
-			name = Debug;
-		};
-		F57DD3D32E772E0800CA05C2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7KVC9GS82W;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = msrychagov.TasksListUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = TasksList;
 			};
 			name = Release;
 		};
@@ -561,15 +470,6 @@
 			buildConfigurations = (
 				F57DD3CF2E772E0800CA05C2 /* Debug */,
 				F57DD3D02E772E0800CA05C2 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		F57DD3D12E772E0800CA05C2 /* Build configuration list for PBXNativeTarget "TasksListUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F57DD3D22E772E0800CA05C2 /* Debug */,
-				F57DD3D32E772E0800CA05C2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
