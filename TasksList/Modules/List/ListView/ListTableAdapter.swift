@@ -33,11 +33,13 @@ final class ListTableAdapter: NSObject {
     var onToggleTask: ((UUID) -> Void)?
     
     // MARK: Table Settings Properties
-    private let normalSeparatorInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+    private var normalSeparatorInsets: UIEdgeInsets = .zero
+    private var contextMenuIndexPath: IndexPath?
     
     func bind(tableView: UITableView) {
         self.tableView = tableView
         tableView.register(ListTaskCell.self, forCellReuseIdentifier: ListTaskCell.reuseId)
+        normalSeparatorInsets = tableView.separatorInset
         dataSource = .init(tableView: tableView) { [weak self] tableView, indexPath, item in
             let cell = tableView.dequeueReusableCell(withIdentifier: ListTaskCell.reuseId, for: indexPath) as! ListTaskCell
             // Use the latest data from itemsByID to ensure reconfigure reflects updates
@@ -144,11 +146,22 @@ final class ListTableAdapter: NSObject {
 
 // MARK: - UITableViewDelegate
 extension ListTableAdapter: UITableViewDelegate {
+    private func hideSeparator(for indexPath: IndexPath) {
+        guard let cell = tableView?.cellForRow(at: indexPath) else { return }
+        cell.separatorInset = UIEdgeInsets(top: 0, left: .greatestFiniteMagnitude, bottom: 0, right: 0)
+    }
+    private func restoreSeparator(for indexPath: IndexPath) {
+        guard let cell = tableView?.cellForRow(at: indexPath) else { return }
+        cell.separatorInset = normalSeparatorInsets
+    }
+
     func tableView(_ tableView: UITableView,
                    contextMenuConfigurationForRowAt indexPath: IndexPath,
                    point: CGPoint) -> UIContextMenuConfiguration? {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
         let id = item.id
+        contextMenuIndexPath = indexPath
+        hideSeparator(for: indexPath)
         let menu = UIContextMenuConfiguration(identifier: item.id as NSUUID, previewProvider: nil) { _ in
             let share = UIAction(
                 title: "Поделиться",
@@ -187,6 +200,8 @@ extension ListTableAdapter: UITableViewDelegate {
               let id = pendingDeleteId,
               id == nsuuid as UUID else {
             pendingDeleteId = nil
+            if let idx = contextMenuIndexPath { restoreSeparator(for: idx) }
+            contextMenuIndexPath = nil
             return
         }
         animator?.addCompletion { [weak self] in
@@ -194,6 +209,8 @@ extension ListTableAdapter: UITableViewDelegate {
             let deleteId = id
             self.pendingDeleteId = nil
             self.onDelete?(deleteId)
+            if let idx = self.contextMenuIndexPath { self.restoreSeparator(for: idx) }
+            self.contextMenuIndexPath = nil
         }
     }
 }
