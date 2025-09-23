@@ -28,8 +28,20 @@ final class ListWorker: ListWorkerInput, StorageProvider {
         storage.fetchTask(withId: id, completion: completion)
     }
     
-    func shareItem(with id: UUID) {
-        print("hui")
+    func toggleTaskState(with id: UUID, completion: @escaping (Result<TaskItem, Error>) -> Void) {
+        storage.toggleTaskStatus(withId: id) { result in
+            switch result {
+            case .success:
+                // После успешного переключения получаем обновленную задачу
+                self.storage.fetchTask(withId: id, completion: completion)
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func shareItem(with id: UUID, completion: @escaping (Result<TaskItem, Error>) -> Void) {
+        storage.fetchTask(withId: id, completion: completion)
     }
     
     // MARK: - StorageProvider

@@ -121,6 +121,12 @@ final class ListViewController: UIViewController, ListViewInput {
         tableAdapter.onDelete = { [weak self] id in
             self?.output.didTapDeleteButton(for: id)
         }
+        tableAdapter.onToggleTask = { [weak self] id in
+            self?.output.didToggleTaskState(for: id)
+        }
+        tableAdapter.onShare = { [weak self] id in
+            self?.output.didTapShareButton(for: id)
+        }
     }
     
     func configureSummaryView() {

@@ -46,11 +46,15 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
     }
     
     func didTapShareButton(for id: UUID) {
-        print("hui")
+        interactor.shareItem(request: .init(id: id))
     }
     
     func didTapDeleteButton(for id: UUID) {
         interactor.deleteItem(request: .init(id: id))
+    }
+    
+    func didToggleTaskState(for id: UUID) {
+        interactor.toggleTaskState(request: .init(id: id))
     }
     
     func didHoldTaskCell(for id: UUID) {
@@ -104,6 +108,29 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
         }
     }
     
+    func didToggleTaskState(response: ListModels.ToggleIsDone.Response) {
+        switch response {
+        case .success(let task):
+            mappingQueue.async { [weak self] in
+                guard let self else { return }
+                let vm = self.make(from: task)
+                DispatchQueue.main.async {
+                    self.view?.reloadItem(
+                        viewModel: .init(
+                            id: vm.id,
+                            title: vm.title,
+                            details: vm.subTitle,
+                            date: vm.date,
+                            isDone: vm.isDone
+                        )
+                    )
+                }
+            }
+        case .failure(let error):
+            print(error.localizedDescription)
+        }
+    }
+    
     func didRequestManageTask(response: ListModels.ManageTask.Response) {
         DispatchQueue.main.async { [weak self] in
             self?.router.routeToManageTaskView(mode: response.mode)
@@ -143,7 +170,16 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
     }
     
     func didShareItem(response: ListModels.ShareTask.Response) {
-        print("hui")
+        let task = response.task
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .short
+        
+        let shareText = "\"\(task.title)\"\n\(task.details ?? "Описание отсутствует")\n\nСоздано: \(dateFormatter.string(from: task.date))\nСтатус: \(task.isDone ? "✅ Выполнено" : "⏳ В процессе")"
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.router.routeToShare(with: shareText)
+        }
     }
 }
 

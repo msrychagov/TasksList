@@ -19,6 +19,10 @@ final class ListTaskCell: UITableViewCell {
     
     // MARK: - State
     private var isDone = false
+    private var titleText: String = ""
+    
+    // MARK: - Callback
+    var onToggleTask: (() -> Void)?
     
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -38,10 +42,38 @@ final class ListTaskCell: UITableViewCell {
         isDone: Bool,
         date: String
     ) {
+        self.titleText = title
         titleLabel.text = title
         subtitleLabel.text = subtitle
         dateLabel.text = date
         self.isDone = isDone
+        
+        updateUI()
+    }
+    
+    // MARK: - Update UI based on isDone state
+    private func updateUI() {
+        doneButton.isSelected = isDone
+        
+        if isDone {
+            titleLabel.textColor = .systemGray2
+            titleLabel.attributedText = NSAttributedString(
+                string: titleText,
+                attributes: [.strikethroughStyle: NSUnderlineStyle.single.rawValue]
+            )
+            subtitleLabel.textColor = .systemGray3
+        } else {
+            titleLabel.textColor = .label
+            // Всегда создаем новый NSAttributedString с явным сбросом всех атрибутов
+            titleLabel.attributedText = NSAttributedString(
+                string: titleText,
+                attributes: [
+                    .strikethroughStyle: 0,
+                    .foregroundColor: UIColor.label
+                ]
+            )
+            subtitleLabel.textColor = .General.secondary
+        }
     }
 }
 
@@ -62,6 +94,9 @@ private extension ListTaskCell {
     
     func configureDoneButton() {
         doneButton.tintColor = .DoneButton.selected
+        doneButton.onTap = { [weak self] in
+            self?.onToggleTask?()
+        }
         contentView.addSubview(doneButton)
         doneButton.translatesAutoresizingMaskIntoConstraints = false
         doneButton.pinTop(to: contentView.topAnchor)

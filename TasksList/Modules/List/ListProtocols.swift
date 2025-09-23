@@ -26,6 +26,7 @@ protocol ListViewOutput {
     func didTapEditButton(for id: UUID)
     func didTapShareButton(for id: UUID)
     func didTapDeleteButton(for id: UUID)
+    func didToggleTaskState(for id: UUID)
     func didHoldTaskCell(for id: UUID)
 }
 
@@ -35,6 +36,7 @@ protocol ListInteractorInput {
     func createTask(request: ListModels.ManageTask.Request)
     func deleteItem(request: ListModels.DeleteTask.Request)
     func editTask(request: ListModels.ManageTask.Request)
+    func toggleTaskState(request: ListModels.ToggleIsDone.Request)
     func shareItem(request: ListModels.ShareTask.Request)
 }
 
@@ -43,6 +45,7 @@ protocol ListInteractorOutput: AnyObject {
     func didFilteredItems(response: ListModels.FilterTasks.Response)
     func didRequestManageTask(response: ListModels.ManageTask.Response)
     func didDeleteItem(response: ListModels.DeleteTask.Response)
+    func didToggleTaskState(response: ListModels.ToggleIsDone.Response)
     func didFaileToEditTask(error: Error)
     func didShareItem(response: ListModels.ShareTask.Response)
     func didUpdateItem(response: ListModels.EditTask.Response)
@@ -53,10 +56,11 @@ protocol ListWorkerInput {
     func fetchItems(completion: @escaping (Result<[TaskItem], Error>) -> Void)
     func deleteItem(with id: UUID, completion: @escaping (Result<Void, Error>) -> Void)
     func getTaskInfo(with id: UUID, completion: @escaping (Result<TaskItem, Error>) -> Void)
-    func shareItem(with id: UUID)
+    func toggleTaskState(with id: UUID, completion: @escaping (Result<TaskItem, Error>) -> Void)
+    func shareItem(with id: UUID, completion: @escaping (Result<TaskItem, Error>) -> Void)
 }
 
 protocol ListRouterInput {
     func routeToManageTaskView(mode: ManageMode)
-    func routeToShare()
+    func routeToShare(with text: String)
 }

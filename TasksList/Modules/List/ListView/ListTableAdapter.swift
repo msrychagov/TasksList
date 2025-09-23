@@ -2,8 +2,9 @@
 //  ListTableAdapter.swift
 //  TasksList
 //
-//  Created by Михаил Рычагов on 16.09.2025.
+//  Created by Михаил Рычагов on 23.09.2025.
 //
+
 import Foundation
 import UIKit
 final class ListTableAdapter: NSObject {
@@ -23,8 +24,12 @@ final class ListTableAdapter: NSObject {
     private weak var tableView: UITableView?
     private var dataSource: UITableViewDiffableDataSource<Section, Item>!
     private var itemsByID: [UUID: Item] = [:]
+    
+    // MARK: Actions
+    var onShare: ((UUID) -> Void)?
     var onDelete: ((UUID) -> Void)?
     var onEdit: ((UUID) -> Void)?
+    var onToggleTask: ((UUID) -> Void)?
     
     // MARK: Table Settings Properties
     private let normalSeparatorInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
@@ -41,6 +46,10 @@ final class ListTableAdapter: NSObject {
                 isDone: vm.isDone,
                 date: vm.date
             )
+            
+            cell.onToggleTask = { [weak self] in
+                self?.onToggleTask?(vm.id)
+            }
             return cell
         }
         tableView.delegate = self
@@ -130,6 +139,7 @@ final class ListTableAdapter: NSObject {
 
 }
 
+// MARK: - UITableViewDelegate
 extension ListTableAdapter: UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                    contextMenuConfigurationForRowAt indexPath: IndexPath,
@@ -137,7 +147,14 @@ extension ListTableAdapter: UITableViewDelegate {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
         let id = item.id
         let menu = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
-            let share = UIAction(title: "Поделиться", image: UIImage(systemName: "square.and.arrow.up")) { _ in }
+            let share = UIAction(
+                title: "Поделиться",
+                image: UIImage(systemName: "square.and.arrow.up"),
+                handler: { [weak self] _ in
+                    self?.onShare?(id)
+                }
+            )
+            
             let edit = UIAction(
                 title: "Редактировать",
                 image: UIImage(systemName: "pencil")
@@ -156,4 +173,3 @@ extension ListTableAdapter: UITableViewDelegate {
         return menu
     }
 }
-
