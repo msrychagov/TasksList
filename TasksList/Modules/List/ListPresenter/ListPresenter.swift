@@ -69,8 +69,6 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
                     self.view?.show(viewModel: vm)
                 }
             }
-        case .empty:
-            print("пусто")
         case .failure(let error):
             print(error.localizedDescription)
         }

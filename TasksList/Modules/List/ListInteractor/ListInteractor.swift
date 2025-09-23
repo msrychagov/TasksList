@@ -94,7 +94,7 @@ final class ListInteractor: ListInteractorInput {
             case .success(let items):
                 let sortedItems = items.sorted { $0.date > $1.date }
                 self?.allTasks = sortedItems
-                let response: ListModels.LoadTasks.Response = sortedItems.isEmpty ? .empty : .success(sortedItems)
+                let response: ListModels.LoadTasks.Response = .success(sortedItems)
                 self?.output?.didLoadItems(response: response)
             case.failure(let error):
                 let response: ListModels.LoadTasks.Response = .failure(error)

@@ -13,7 +13,6 @@ extension ListModels {
         
         enum Response {
             case success([TaskItem])
-            case empty
             case failure(Error)
         }
         
