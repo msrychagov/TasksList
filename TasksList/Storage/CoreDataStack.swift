@@ -14,7 +14,6 @@ final class CoreDataStack {
     var viewContext: NSManagedObjectContext { container.viewContext }
 
     init(inMemory: Bool = false) {
-        // Используем скомпилированную модель из .xcdatamodeld
         container = NSPersistentContainer(name: "TasksList")
         
         if inMemory {
@@ -26,8 +25,7 @@ final class CoreDataStack {
 
         container.loadPersistentStores { _, error in
             if let error = error {
-                print("Core Data load error: \(error)")
-                // В случае ошибки создаем новую базу
+                // Критическая ошибка Core Data - пытаемся пересоздать хранилище
                 self.recreateStore()
             }
         }

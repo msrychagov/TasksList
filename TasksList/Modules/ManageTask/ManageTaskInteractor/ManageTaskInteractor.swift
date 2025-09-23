@@ -52,14 +52,30 @@ extension ManageTaskInteractor: ManageTaskInteractorInput {
             worker.createTask(
                 title: title,
                 details: details,
-                completion: {_ in print("createdTask")}
+                completion: { [weak self] result in
+                    switch result {
+                    case .success:
+                        /// The task has been successfully created, no additional logic is needed.
+                        break
+                    case .failure(let error):
+                        self?.output?.didFailToCreateTask(error: error)
+                    }
+                }
             )
         case .edit(let id):
             worker.updateTask(
                 with: id,
                 title: title,
                 details: details,
-                completion: {_ in print("updatedTask")}
+                completion: { [weak self] result in
+                    switch result {
+                    case .success:
+                        /// The task has been successfully updated, no additional logic is needed.
+                        break
+                    case .failure(let error):
+                        self?.output?.didFailToUpdateTask(error: error)
+                    }
+                }
             )
         }
     }

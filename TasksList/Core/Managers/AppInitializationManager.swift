@@ -8,69 +8,55 @@
 import Foundation
 
 // MARK: - App Initialization Manager Protocol
-
 protocol AppInitializationManagerProtocol {
     func initializeAppIfNeeded(with storage: Storage, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
 // MARK: - App Initialization Manager Implementation
-
 final class AppInitializationManager: AppInitializationManagerProtocol {
     
     // MARK: - Properties
-    
     private let tasksService: TasksServiceProtocol
     private let userDefaults: UserDefaults
     
     // MARK: - Constants
-    
     private enum Keys {
         static let hasInitializedData = "hasInitializedData"
     }
     
     // MARK: - Initialization
-    
     init(tasksService: TasksServiceProtocol = TasksService(), userDefaults: UserDefaults = .standard) {
         self.tasksService = tasksService
         self.userDefaults = userDefaults
     }
     
     // MARK: - Public Methods
-    
-    /// Инициализирует приложение данными из API если это первый запуск
     func initializeAppIfNeeded(with storage: Storage, completion: @escaping (Result<Void, Error>) -> Void) {
-        // Проверяем, была ли уже выполнена инициализация
         if userDefaults.bool(forKey: Keys.hasInitializedData) {
             completion(.success(()))
             return
         }
         
-        // Проверяем, есть ли уже данные в хранилище
         storage.fetchAll { [weak self] result in
             switch result {
             case .success(let tasks):
                 if tasks.isEmpty {
-                    // Данных нет, загружаем из API
                     self?.loadInitialDataFromAPI(storage: storage, completion: completion)
                 } else {
-                    // Данные уже есть, помечаем как инициализированные
                     self?.markAsInitialized()
                     completion(.success(()))
                 }
             case .failure:
-                // В случае ошибки чтения, все равно пытаемся загрузить из API
                 self?.loadInitialDataFromAPI(storage: storage, completion: completion)
             }
         }
     }
     
     // MARK: - Private Methods
-    
     private func loadInitialDataFromAPI(storage: Storage, completion: @escaping (Result<Void, Error>) -> Void) {
         tasksService.loadInitialTasks { [weak self] result in
             switch result {
             case .success(let tasks):
-                // Сохраняем загруженные задачи в хранилище
                 storage.initializeWithTasks(tasks) { initResult in
                     switch initResult {
                     case .success:
@@ -90,7 +76,6 @@ final class AppInitializationManager: AppInitializationManagerProtocol {
         userDefaults.set(true, forKey: Keys.hasInitializedData)
     }
     
-    /// Сбросить флаг инициализации (для тестирования)
     func resetInitializationFlag() {
         userDefaults.removeObject(forKey: Keys.hasInitializedData)
     }

@@ -32,7 +32,7 @@ final class FirstLaunchSeedTests: XCTestCase {
 			XCTAssertTrue(items[0].isDone)
 			exp.fulfill()
 		}
-		wait(for: [exp], timeout: 3)
+		wait(for: [exp], timeout: TestConstants.Timeout.long)
 	}
 
 	func test_import_setsFirstLaunchFlag_and_idempotentOnSecondRun() {
@@ -47,10 +47,10 @@ final class FirstLaunchSeedTests: XCTestCase {
 		URLProtocolStub.stubs[url] = .init(data: json.data(using: .utf8)!, response: HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil), error: nil)
 		let exp1 = expectation(description: "first")
 		manager.initializeAppIfNeeded(with: storage) { res in if case .success = res {} else { XCTFail() } ; exp1.fulfill() }
-		wait(for: [exp1], timeout: 3)
+		wait(for: [exp1], timeout: TestConstants.Timeout.long)
 		XCTAssertTrue(ud.bool(forKey: "hasInitializedData"))
 		let exp2 = expectation(description: "second")
 		manager.initializeAppIfNeeded(with: storage) { res in if case .success = res {} else { XCTFail() } ; exp2.fulfill() }
-		wait(for: [exp2], timeout: 1)
+		wait(for: [exp2], timeout: TestConstants.Timeout.short)
 	}
 }

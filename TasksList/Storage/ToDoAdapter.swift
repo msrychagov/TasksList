@@ -9,10 +9,7 @@ import CoreData
 import Foundation
 
 // MARK: - ToDo Extensions for working with Domain Model
-
 extension ToDo {
-    
-    /// Конвертирует CoreData объект в доменную модель
     func toDomainModel() -> TaskItem {
         return TaskItem(
             id: self.id ?? UUID(),
@@ -23,7 +20,6 @@ extension ToDo {
         )
     }
     
-    /// Создает ToDo из доменной модели
     static func fromDomainModel(_ taskItem: TaskItem, context: NSManagedObjectContext) -> ToDo {
         let todo = ToDo(context: context)
         todo.id = taskItem.id
@@ -34,11 +30,9 @@ extension ToDo {
         return todo
     }
     
-    /// Обновляет ToDo из доменной модели
     func updateFromDomainModel(_ taskItem: TaskItem) {
         self.title = taskItem.title
         self.details = taskItem.details
         self.done = taskItem.isDone
-        // id и date не обновляем
     }
 }

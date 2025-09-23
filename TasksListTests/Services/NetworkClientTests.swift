@@ -13,6 +13,6 @@ final class NetworkClientTests: XCTestCase {
 			if case .success(let resp) = result { XCTAssertEqual(resp.todos.count, 0) } else { XCTFail("expected success") }
 			exp.fulfill()
 		}
-		wait(for: [exp], timeout: 1)
+		wait(for: [exp], timeout: TestConstants.Timeout.short)
 	}
 }

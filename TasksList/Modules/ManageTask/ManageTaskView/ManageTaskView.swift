@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Foundation
 
 struct ManageTaskView: View {
     // MARK: Source Properties
@@ -30,7 +31,7 @@ struct ManageTaskView: View {
             date
             detailsTextField
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, UIConstants.Spacing.horizontalPage)
         .onAppear {
             output.onAppear()
         }
@@ -44,14 +45,14 @@ struct ManageTaskView: View {
                 set: { output.onTitleChange($0) }
             )
         )
-        .tint(.yellow)
-        .font(.system(size: 34, weight: .bold))
+        .tint(.Brand.yellow)
+        .font(.system(size: UIConstants.Fonts.titleSize, weight: .bold))
         .foregroundStyle(.primary)
     }
     
     private var date: some View {
         Text(state.date)
-            .foregroundStyle(Color.dateText)
+            .foregroundStyle(Color.Text.date)
     }
     
     private var detailsTextField: some View {
@@ -65,12 +66,12 @@ struct ManageTaskView: View {
             
             if state.note.isEmpty {
                 Text("Описание")
+                    .font(.system(size: UIConstants.Fonts.bodySize, weight: .regular))
                     .foregroundStyle(.secondary)
-                    .font(.system(size: 16, weight: .regular))
                     .allowsHitTesting(false)
             }
         }
-        .frame(minHeight: 140)
+        .frame(minHeight: UIConstants.Sizing.detailsMinHeight)
     }
     
 }

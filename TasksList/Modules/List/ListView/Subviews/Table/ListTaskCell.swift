@@ -56,12 +56,12 @@ final class ListTaskCell: UITableViewCell {
         doneButton.isSelected = isDone
         
         if isDone {
-            titleLabel.textColor = .systemGray2
+            titleLabel.textColor = .Text.completed
             titleLabel.attributedText = NSAttributedString(
                 string: titleText,
                 attributes: [.strikethroughStyle: NSUnderlineStyle.single.rawValue]
             )
-            subtitleLabel.textColor = .systemGray3
+            subtitleLabel.textColor = .Text.completedSubtitle
         } else {
             titleLabel.textColor = .label
             // Всегда создаем новый NSAttributedString с явным сбросом всех атрибутов
@@ -72,7 +72,7 @@ final class ListTaskCell: UITableViewCell {
                     .foregroundColor: UIColor.label
                 ]
             )
-            subtitleLabel.textColor = .General.secondary
+            subtitleLabel.textColor = .Text.secondary
         }
     }
 }
@@ -101,43 +101,43 @@ private extension ListTaskCell {
         doneButton.translatesAutoresizingMaskIntoConstraints = false
         doneButton.pinTop(to: contentView.topAnchor)
         doneButton.pinLeft(to: contentView.layoutMarginsGuide.leadingAnchor)
-        doneButton.setWidth(24)
-        doneButton.setHeight(48)
+        doneButton.setWidth(UIConstants.Sizing.doneButtonWidth)
+        doneButton.setHeight(UIConstants.Sizing.doneButtonHeight)
     }
     
     func configureTitle() {
-        titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
+        titleLabel.font = .systemFont(ofSize: UIConstants.Fonts.cellTitle, weight: .medium)
         titleLabel.textColor = .label
         titleLabel.numberOfLines = 1
         contentView.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.pinTop(to: contentView.topAnchor, 12)
-        titleLabel.pinLeft(to: doneButton.trailingAnchor, 8)
+        titleLabel.pinTop(to: contentView.topAnchor, UIConstants.Spacing.cellTitleTop)
+        titleLabel.pinLeft(to: doneButton.trailingAnchor, UIConstants.Spacing.cellTitleLeftAfterIcon)
         titleLabel.pinRight(to: contentView.layoutMarginsGuide.trailingAnchor)
-        titleLabel.setHeight(22)
+        titleLabel.setHeight(UIConstants.Sizing.cellTitleHeight)
     }
     
     func configureSubtitle() {
-        subtitleLabel.font = .systemFont(ofSize: 12, weight: .regular)
+        subtitleLabel.font = .systemFont(ofSize: UIConstants.Fonts.cellSubtitle, weight: .regular)
         subtitleLabel.textColor = .General.secondary
         subtitleLabel.numberOfLines = 2
         contentView.addSubview(subtitleLabel)
         subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        subtitleLabel.pinTop(to: titleLabel.bottomAnchor, 6)
+        subtitleLabel.pinTop(to: titleLabel.bottomAnchor, UIConstants.Spacing.cellSubtitleTop)
         subtitleLabel.pinLeft(to: titleLabel.leadingAnchor)
         subtitleLabel.pinRight(to: contentView.layoutMarginsGuide.trailingAnchor)
     }
     
     func configureDate() {
-        dateLabel.font = .systemFont(ofSize: 12, weight: .regular)
-        dateLabel.textColor = .systemGray
+        dateLabel.font = .systemFont(ofSize: UIConstants.Fonts.cellSubtitle, weight: .regular)
+        dateLabel.textColor = .Text.date
         contentView.addSubview(dateLabel)
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        dateLabel.pinTop(to: subtitleLabel.bottomAnchor, 6)
+        dateLabel.pinTop(to: subtitleLabel.bottomAnchor, UIConstants.Spacing.cellDateTop)
         dateLabel.pinLeft(to: titleLabel.leadingAnchor)
         dateLabel.pinRight(to: contentView.layoutMarginsGuide.trailingAnchor)
-        dateLabel.setHeight(16)
-        dateLabel.pinBottom(to: contentView.bottomAnchor, 12)
+        dateLabel.setHeight(UIConstants.Sizing.dateLabelHeight)
+        dateLabel.pinBottom(to: contentView.bottomAnchor, UIConstants.Spacing.cellDateBottom)
     }
 }
 

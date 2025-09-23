@@ -9,7 +9,6 @@ import Foundation
 
 // MARK: - Storage Provider Protocol
 
-/// Протокол для объектов, которые предоставляют доступ к хранилищу данных
 protocol StorageProvider {
     func getStorage() -> Storage
 }

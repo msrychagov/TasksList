@@ -14,7 +14,18 @@ extension ListModels {
         }
         
         struct Response {
-            let task: TaskItem
+            let task: TaskItem?
+            let error: Error?
+            
+            init(task: TaskItem) {
+                self.task = task
+                self.error = nil
+            }
+            
+            init(task: TaskItem?, error: Error) {
+                self.task = task
+                self.error = error
+            }
         }
         
         struct ViewModel {

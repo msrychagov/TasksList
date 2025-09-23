@@ -43,16 +43,16 @@ final class SummaryView: UIView {
         border.backgroundColor = .SummaryView.border
         self.addSubview(border)
         border.pinTop(to: self.topAnchor)
-        border.setHeight(0.33)
+        border.setHeight(UIConstants.Sizing.summaryBorderHeight)
         border.pinHorizontal(to: self)
     }
     
     private func configureSummaryLabel() {
         summaryLabel.text = "\(tasksCount) \(tasksWord(for: tasksCount))"
-        summaryLabel.font = .systemFont(ofSize: 11, weight: .regular)
+        summaryLabel.font = .systemFont(ofSize: UIConstants.Fonts.summaryLabel, weight: .regular)
         summaryLabel.tintColor = .SummaryView.text
         self.addSubview(summaryLabel)
-        summaryLabel.pinTop(to: border.bottomAnchor, 20)
+        summaryLabel.pinTop(to: border.bottomAnchor, UIConstants.Spacing.summaryTopToBorder)
         summaryLabel.pinCenterX(to: self.centerXAnchor)
         summaryLabel.setHeight(13)
     }
@@ -62,9 +62,9 @@ final class SummaryView: UIView {
         createTaskButton.tintColor = .SummaryView.createButton
         self.addSubview(createTaskButton)
         createTaskButton.pinRight(to: self.trailingAnchor)
-        createTaskButton.pinTop(to: border.bottomAnchor, 13)
-        createTaskButton.setWidth(68)
-        createTaskButton.setHeight(28)
+        createTaskButton.pinTop(to: border.bottomAnchor, UIConstants.Spacing.createButtonTop)
+        createTaskButton.setWidth(UIConstants.Sizing.createButtonWidth)
+        createTaskButton.setHeight(UIConstants.Sizing.createButtonHeight)
         
         createTaskButton.addTarget(self, action: #selector(createTaskButtonTapped), for: .touchUpInside)
     }

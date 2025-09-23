@@ -32,7 +32,6 @@ final class ListWorker: ListWorkerInput, StorageProvider {
         storage.toggleTaskStatus(withId: id) { result in
             switch result {
             case .success:
-                // После успешного переключения получаем обновленную задачу
                 self.storage.fetchTask(withId: id, completion: completion)
             case .failure(let error):
                 completion(.failure(error))

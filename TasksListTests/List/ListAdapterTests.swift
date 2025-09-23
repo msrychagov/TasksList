@@ -13,8 +13,8 @@ final class ListAdapterTests: XCTestCase {
 		])
 		adapter.apply(cellVM: vm)
 		let exp = expectation(description: "apply")
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { exp.fulfill() }
-		wait(for: [exp], timeout: 1)
+		DispatchQueue.main.asyncAfter(deadline: .now() + TestConstants.Delay.medium) { exp.fulfill() }
+		wait(for: [exp], timeout: TestConstants.Timeout.short)
 		XCTAssertEqual(table.numberOfRows(inSection: 0), 1)
 	}
 
@@ -28,15 +28,15 @@ final class ListAdapterTests: XCTestCase {
 		])
 		adapter.apply(cellVM: vm)
 		let expApply = expectation(description: "apply")
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { expApply.fulfill() }
-		wait(for: [expApply], timeout: 1)
+		DispatchQueue.main.asyncAfter(deadline: .now() + TestConstants.Delay.medium) { expApply.fulfill() }
+		wait(for: [expApply], timeout: TestConstants.Timeout.short)
 		var received: UUID?
 		adapter.onDelete = { received = $0 }
 		// Simulate internal call
 		adapter.deleteItem(viewModel: .init(id: id))
 		let exp = expectation(description: "delete")
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { exp.fulfill() }
-		wait(for: [exp], timeout: 1)
+		DispatchQueue.main.asyncAfter(deadline: .now() + TestConstants.Delay.medium) { exp.fulfill() }
+		wait(for: [exp], timeout: TestConstants.Timeout.short)
 		XCTAssertEqual(table.numberOfRows(inSection: 0), 0)
 	}
 
@@ -50,8 +50,8 @@ final class ListAdapterTests: XCTestCase {
 		])
 		adapter.apply(cellVM: vm)
 		let expApply = expectation(description: "apply")
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { expApply.fulfill() }
-		wait(for: [expApply], timeout: 1)
+		DispatchQueue.main.asyncAfter(deadline: .now() + TestConstants.Delay.medium) { expApply.fulfill() }
+		wait(for: [expApply], timeout: TestConstants.Timeout.short)
 		var editCalledWith: UUID?
 		adapter.onEdit = { editCalledWith = $0 }
 		// Trigger context menu programmatically by calling delegate method

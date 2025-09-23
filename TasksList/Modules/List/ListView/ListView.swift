@@ -94,7 +94,6 @@ final class ListViewController: UIViewController, ListViewInput {
         )
         searchBarController.searchBar.tintColor = tintColor
         
-//        searchBarController.searchBar.scopeButtonTitles = ["Все", "Активные", "Завершенные"]
         searchBarController.searchBar.showsBookmarkButton = true
         searchBarController.searchBar.setImage(UIImage(systemName: "mic.fill"), for: .bookmark, state: .normal)
         searchBarController.obscuresBackgroundDuringPresentation = false
@@ -108,15 +107,15 @@ final class ListViewController: UIViewController, ListViewInput {
         tableView.backgroundColor = .General.primary
         tableView.separatorColor = .systemGray
         tableView.cellLayoutMarginsFollowReadableWidth = false
-        tableView.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        tableView.layoutMargins = UIEdgeInsets(top: 0, left: UIConstants.Spacing.horizontalPage, bottom: 0, right: UIConstants.Spacing.horizontalPage)
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: UIConstants.Spacing.horizontalPage, bottom: 0, right: UIConstants.Spacing.horizontalPage)
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 72
+        tableView.estimatedRowHeight = UIConstants.Sizing.tableEstimatedRowHeight
         tableView.allowsSelection = true
         tableView.allowsMultipleSelection = false
         
         /// Added header to hide up separator for first row
-        let header = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 1))
+        let header = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: UIConstants.Sizing.tableHeaderHeight))
         header.backgroundColor = .clear
         tableView.tableHeaderView = header
         
@@ -150,7 +149,7 @@ final class ListViewController: UIViewController, ListViewInput {
         summaryView.translatesAutoresizingMaskIntoConstraints = false
         summaryView.pinBottom(to: view.bottomAnchor)
         summaryView.pinHorizontal(to: view)
-        summaryView.setHeight(83)
+        summaryView.setHeight(UIConstants.Sizing.summaryViewHeight)
     }
     
     private func configureEmptyStateContainer() {
@@ -159,7 +158,7 @@ final class ListViewController: UIViewController, ListViewInput {
         view.addSubview(emptyContainerView)
         emptyContainerView.translatesAutoresizingMaskIntoConstraints = false
         emptyContainerView.pinTop(to: view.safeAreaLayoutGuide.topAnchor)
-        // Keep the container above the keyboard at all times
+        /// Keep the container above the keyboard at all times
         emptyContainerView.pinBottom(to: view.keyboardLayoutGuide.topAnchor)
         emptyContainerView.pinLeft(to: view)
         emptyContainerView.pinRight(to: view)
@@ -168,8 +167,8 @@ final class ListViewController: UIViewController, ListViewInput {
         emptySearchResultView.translatesAutoresizingMaskIntoConstraints = false
         emptySearchResultView.pinCenterX(to: emptyContainerView)
         emptySearchResultView.pinCenterY(to: emptyContainerView)
-        emptySearchResultView.pinLeft(to: emptyContainerView, 24)
-        emptySearchResultView.pinRight(to: emptyContainerView, 24)
+        emptySearchResultView.pinLeft(to: emptyContainerView, UIConstants.Spacing.emptyHorizontal)
+        emptySearchResultView.pinRight(to: emptyContainerView, UIConstants.Spacing.emptyHorizontal)
     }
     
     // MARK: - Keyboard Handling
@@ -192,7 +191,6 @@ final class ListViewController: UIViewController, ListViewInput {
         keyboardVisibleBottomInset = bottomInset
         let options = UIView.AnimationOptions(rawValue: curveRaw << 16)
         UIView.animate(withDuration: duration, delay: 0, options: options, animations: { [weak self] in
-            // Empty view is managed by constraints; ensure no residual transform
             self?.emptySearchResultView.transform = .identity
         })
     }
@@ -228,6 +226,12 @@ final class ListViewController: UIViewController, ListViewInput {
         summaryView.setTasksCount(0)
     }
     
+    func showError(message: String) {
+        let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+    
     func removeItem(viewModel: ListModels.DeleteTask.ViewModel) {
         tableAdapter.deleteItem(viewModel: viewModel)
         let currentRows = tableView.numberOfRows(inSection: 0)
@@ -249,17 +253,6 @@ final class ListViewController: UIViewController, ListViewInput {
         tableAdapter.insertItem(viewModel)
         let currentRows = tableView.numberOfRows(inSection: 0)
         summaryView.setTasksCount(currentRows + 1)
-    }
-    func showPopup(for id: UUID) {
-        print("hui")
-    }
-    
-    func showIsLoading() {
-        print("hui")
-    }
-    
-    func showError() {
-        print("hui")
     }
 }
 

@@ -36,29 +36,24 @@ final class ManageTaaskHostingVC: UIHostingController<ManageTaskView>, ManageTas
     }
     
     // MARK: ManageTaskViewInput Methods
-    func setLoading(isLoading: Bool) {
-        state.phase = .loading
-    }
-    
     func showTaskInfo(viewModel: ManageTaskModels.ShowInfo.ViewModel) {
-        print(viewModel.info)
-        DispatchQueue.main.async { [weak self] in
-            self?.state.title = viewModel.info.title
-            self?.state.note = viewModel.info.note
-            self?.state.date = viewModel.info.date
-        }
+        state.title = viewModel.info.title
+        state.note = viewModel.info.note
+        state.date = viewModel.info.date
     }
     
     func showUpdatedTitle(viewModel: ManageTaskModels.UpdateTitle.ViewModel) {
-        DispatchQueue.main.async { [weak self] in
-            self?.state.title = viewModel.text
-        }
+        state.title = viewModel.text
     }
     
     func showUpdatedDescription(viewModel: ManageTaskModels.UpdateDescription.ViewModel) {
-        DispatchQueue.main.async { [weak self] in
-            self?.state.note = viewModel.text
-        }
+        state.note = viewModel.text
+    }
+    
+    func showError(message: String) {
+        let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
 }
 

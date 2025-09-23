@@ -8,28 +8,22 @@
 import Foundation
 
 // MARK: - Tasks Service Protocol
-
 protocol TasksServiceProtocol {
     func loadInitialTasks(completion: @escaping (Result<[TaskItem], Error>) -> Void)
 }
 
 // MARK: - Tasks Service Implementation
-
 final class TasksService: TasksServiceProtocol {
     
     // MARK: - Properties
-    
     private let networkService: NetworkServiceProtocol
     
     // MARK: - Initialization
-    
     init(networkService: NetworkServiceProtocol = NetworkService()) {
         self.networkService = networkService
     }
     
     // MARK: - Public Methods
-    
-    /// Загружает начальный список задач из DummyJSON API
     func loadInitialTasks(completion: @escaping (Result<[TaskItem], Error>) -> Void) {
         networkService.fetchTodos { result in
             switch result {
@@ -38,7 +32,6 @@ final class TasksService: TasksServiceProtocol {
                 completion(.success(taskItems))
                 
             case .failure(let networkError):
-                // Преобразуем NetworkError в обычный Error
                 completion(.failure(networkError))
             }
         }
@@ -46,7 +39,6 @@ final class TasksService: TasksServiceProtocol {
 }
 
 // MARK: - Network Error Extension
-
 extension NetworkError: LocalizedError {
     var errorDescription: String? {
         switch self {

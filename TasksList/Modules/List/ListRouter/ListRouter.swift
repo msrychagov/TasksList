@@ -12,13 +12,15 @@ final class ListRouter: ListRouterInput {
     weak var viewController: UIViewController?
     
     // MARK: - ListRouterInput methods
-    func routeToCreate() {
-        print("hui")
-    }
-    
     func routeToManageTaskView(mode: ManageMode) {
         let editVC = ManageTaskAssembly.build(mode: mode)
-        viewController?.navigationController?.pushViewController(editVC, animated: true)
+        if Thread.isMainThread {
+            viewController?.navigationController?.pushViewController(editVC, animated: true)
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                self?.viewController?.navigationController?.pushViewController(editVC, animated: true)
+            }
+        }
     }
     
     func routeToShare(with text: String) {
@@ -27,16 +29,13 @@ final class ListRouter: ListRouterInput {
             applicationActivities: nil
         )
         
-        // Настройка для iPad
-        if let popover = activityViewController.popoverPresentationController {
-            popover.sourceView = viewController?.view
-            popover.sourceRect = CGRect(x: viewController?.view.bounds.midX ?? 0,
-                                      y: viewController?.view.bounds.midY ?? 0,
-                                      width: 0, height: 0)
-            popover.permittedArrowDirections = []
+        if Thread.isMainThread {
+            viewController?.present(activityViewController, animated: true)
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                self?.viewController?.present(activityViewController, animated: true)
+            }
         }
-        
-        viewController?.present(activityViewController, animated: true)
     }
 }
 

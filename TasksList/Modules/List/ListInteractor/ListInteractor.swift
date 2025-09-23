@@ -72,9 +72,7 @@ final class ListInteractor: ListInteractorInput {
     
     // MARK: ListInteractor InputMethods
     func fetchItems(request: ListModels.LoadTasks.Request) {
-        // Сначала инициализируем приложение, если нужно
         guard let storage = worker as? (any ListWorkerInput & StorageProvider) else {
-            // Если worker не предоставляет storage, просто загружаем данные
             self.loadItemsDirectly()
             return
         }
@@ -82,11 +80,9 @@ final class ListInteractor: ListInteractorInput {
         appInitializationManager.initializeAppIfNeeded(with: storage.getStorage()) { [weak self] result in
             switch result {
             case .success:
-                // Инициализация прошла успешно, теперь загружаем данные
                 self?.loadItemsDirectly()
             case .failure(let error):
-                // Ошибка инициализации - все равно пытаемся загрузить данные из хранилища
-                print("Ошибка инициализации данных: \(error.localizedDescription)")
+                // Логируем ошибку инициализации, но продолжаем загрузку
                 self?.loadItemsDirectly()
             }
         }
@@ -98,7 +94,7 @@ final class ListInteractor: ListInteractorInput {
             case .success(let items):
                 let sortedItems = items.sorted { $0.date > $1.date }
                 self?.allTasks = sortedItems
-                let response: ListModels.LoadTasks.Response = sortedItems.isEmpty ? .empty : .success(sortedItems)
+                let response: ListModels.LoadTasks.Response = .success(sortedItems)
                 self?.output?.didLoadItems(response: response)
             case.failure(let error):
                 let response: ListModels.LoadTasks.Response = .failure(error)
@@ -167,7 +163,7 @@ final class ListInteractor: ListInteractorInput {
             case .success(let task):
                 self?.output?.didShareItem(response: .init(task: task))
             case .failure(let error):
-                print("Error sharing task: \(error.localizedDescription)")
+                self?.output?.didShareItem(response: .init(task: nil, error: error))
             }
         }
     }

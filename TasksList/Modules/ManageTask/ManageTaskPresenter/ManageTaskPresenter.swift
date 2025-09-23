@@ -54,7 +54,9 @@ final class ManageTaskPresenter: ManageTaskViewOutput, ManageTaskInteractorOutpu
     }
     
     func didFailToLoadTaskInfo(error: any Error) {
-        print(error.localizedDescription)
+        DispatchQueue.main.async { [weak self] in
+            self?.view?.showError(message: "Не удалось загрузить информацию о задаче: \(error.localizedDescription)")
+        }
     }
     
     func didUpdateTitle(response: ManageTaskModels.UpdateTitle.Response) {
@@ -82,6 +84,18 @@ final class ManageTaskPresenter: ManageTaskViewOutput, ManageTaskInteractorOutpu
                     )
                 )
             )
+        }
+    }
+    
+    func didFailToCreateTask(error: Error) {
+        DispatchQueue.main.async { [weak self] in
+            self?.view?.showError(message: "Не удалось создать задачу: \(error.localizedDescription)")
+        }
+    }
+    
+    func didFailToUpdateTask(error: Error) {
+        DispatchQueue.main.async { [weak self] in
+            self?.view?.showError(message: "Не удалось обновить задачу: \(error.localizedDescription)")
         }
     }
 }

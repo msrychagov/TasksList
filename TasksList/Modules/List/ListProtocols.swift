@@ -13,21 +13,17 @@ protocol ListViewInput: AnyObject {
     func reloadItem(viewModel: ListModels.EditTask.ViewModel)
     func insertItem(viewModel: ListModels.ListItemViewModel)
     func showEmpty()
-    func showPopup(for id: UUID)
-    func showIsLoading()
-    func showError()
+    func showError(message: String)
 }
 
 protocol ListViewOutput {
     func viewDidLoad()
     func searchChanged(query: String)
-    func didSelectItem(with id: UUID)
     func didTapCreateButton()
     func didTapEditButton(for id: UUID)
     func didTapShareButton(for id: UUID)
     func didTapDeleteButton(for id: UUID)
     func didToggleTaskState(for id: UUID)
-    func didHoldTaskCell(for id: UUID)
 }
 
 protocol ListInteractorInput {

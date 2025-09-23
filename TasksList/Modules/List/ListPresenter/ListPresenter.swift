@@ -8,6 +8,7 @@
 import Foundation
 
 final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewModelMapper {
+    
     // MARK: ListInteractorOutput Properties
     private let interactor: ListInteractorInput
     private let router: ListRouterInput
@@ -15,6 +16,7 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
     
     // MARK: Properties
     private let mappingQueue = DispatchQueue(label: "list.presenter.mapping", qos: .userInitiated)
+    
     // MARK: Lyfecycle
     init(
         interactor: ListInteractorInput,
@@ -37,10 +39,6 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
         interactor.createTask(request: .init(id: nil))
     }
     
-    func didSelectItem(with id: UUID) {
-        print("hui")
-    }
-    
     func didTapEditButton(for id: UUID) {
         interactor.editTask(request: .init(id: id))
     }
@@ -57,9 +55,7 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
         interactor.toggleTaskState(request: .init(id: id))
     }
     
-    func didHoldTaskCell(for id: UUID) {
-        print("hui")
-    }
+    
     
     // MARK: - ListInteractorOutput methods
     func didLoadItems(response: ListModels.LoadTasks.Response) {
@@ -73,10 +69,8 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
                     self.view?.show(viewModel: vm)
                 }
             }
-        case .empty:
-            print("пусто")
         case .failure(let error):
-            print(error.localizedDescription)
+            view?.showError(message: "Ошибка фильтрации задач: \(error.localizedDescription)")
         }
     }
     
@@ -102,9 +96,11 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
     func didDeleteItem(response: ListModels.DeleteTask.Response) {
         switch response {
         case .success(let id):
-            view?.removeItem(viewModel: .init(id: id))
+            DispatchQueue.main.async { [weak self] in
+                self?.view?.removeItem(viewModel: .init(id: id))
+            }
         case .failure(let error):
-            print(error.localizedDescription)
+            view?.showError(message: "Ошибка удаления задачи: \(error.localizedDescription)")
         }
     }
     
@@ -127,7 +123,7 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
                 }
             }
         case .failure(let error):
-            print(error.localizedDescription)
+            view?.showError(message: "Ошибка изменения статуса задачи: \(error.localizedDescription)")
         }
     }
     
@@ -166,11 +162,20 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
     }
     
     func didFaileToEditTask(error: Error) {
-        print(error.localizedDescription)
+        view?.showError(message: "Ошибка редактирования задачи: \(error.localizedDescription)")
     }
     
     func didShareItem(response: ListModels.ShareTask.Response) {
-        let task = response.task
+        if let error = response.error {
+            view?.showError(message: "Ошибка при подготовке задачи для шаринга: \(error.localizedDescription)")
+            return
+        }
+        
+        guard let task = response.task else {
+            view?.showError(message: "Задача не найдена")
+            return
+        }
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
