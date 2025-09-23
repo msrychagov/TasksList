@@ -38,8 +38,8 @@ final class ListInteractorErrorAndThreadingTests: XCTestCase {
 		let out = SpyOutput(); sut.output = out
 		sut.fetchItems(request: .init())
 		let exp = expectation(description: "err")
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { exp.fulfill() }
-		wait(for: [exp], timeout: 1)
+		DispatchQueue.main.asyncAfter(deadline: .now() + TestConstants.Delay.medium) { exp.fulfill() }
+		wait(for: [exp], timeout: TestConstants.Timeout.short)
 		guard case .failure = out.loaded.last! else { return XCTFail("expected failure") }
 	}
 
@@ -50,8 +50,8 @@ final class ListInteractorErrorAndThreadingTests: XCTestCase {
 		let out = SpyOutput(); sut.output = out
 		sut.fetchItems(request: .init())
 		let exp = expectation(description: "main")
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { exp.fulfill() }
-		wait(for: [exp], timeout: 1)
+		DispatchQueue.main.asyncAfter(deadline: .now() + TestConstants.Delay.long) { exp.fulfill() }
+		wait(for: [exp], timeout: TestConstants.Timeout.short)
 		XCTAssertTrue(out.updateOnMain)
 	}
 }

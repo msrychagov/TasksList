@@ -34,7 +34,7 @@ final class ListInteractorTests: XCTestCase {
 		let storage = InMemoryStorage()
 		let sema = DispatchSemaphore(value: 0)
 		storage.initializeWithTasks(tasks) { _ in sema.signal() }
-		_ = sema.wait(timeout: .now() + 1)
+		_ = sema.wait(timeout: .now() + TestConstants.Timeout.short)
 		let worker = ListWorker(storage: storage)
 		let initManager = StubInitManager()
 		let sut = ListInteractor(worker: worker, appInitializationManager: initManager)
@@ -44,13 +44,13 @@ final class ListInteractorTests: XCTestCase {
 	}
 
 	func test_fetchTasks_onAppear_returnsSortedByCreationDesc() {
-		let t1 = TaskItem(id: UUID(), title: "1", details: nil, isDone: false, date: Date(timeIntervalSince1970: 100))
-		let t2 = TaskItem(id: UUID(), title: "2", details: nil, isDone: false, date: Date(timeIntervalSince1970: 200))
+		let t1 = TaskItem(id: UUID(), title: "1", details: nil, isDone: false, date: Date(timeIntervalSince1970: TestConstants.DateSeconds.sample100))
+		let t2 = TaskItem(id: UUID(), title: "2", details: nil, isDone: false, date: Date(timeIntervalSince1970: TestConstants.DateSeconds.sample200))
 		let (sut, out, _) = makeSUT(with: [t1, t2])
 		let exp = expectation(description: "fetch")
 		sut.fetchItems(request: .init())
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { exp.fulfill() }
-		wait(for: [exp], timeout: 2)
+		DispatchQueue.main.asyncAfter(deadline: .now() + TestConstants.Delay.long) { exp.fulfill() }
+		wait(for: [exp], timeout: TestConstants.Timeout.medium)
 		guard case let .success(items)? = out.didLoadItemsCalls.last else { return XCTFail("no success") }
 		XCTAssertEqual(items.map{ $0.id }, [t2.id, t1.id])
 	}
@@ -60,14 +60,14 @@ final class ListInteractorTests: XCTestCase {
 		let (sut, out, storage) = makeSUT(with: [t])
 		let exp = expectation(description: "delete")
 		sut.deleteItem(request: .init(id: t.id))
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { exp.fulfill() }
-		wait(for: [exp], timeout: 2)
+		DispatchQueue.main.asyncAfter(deadline: .now() + TestConstants.Delay.long) { exp.fulfill() }
+		wait(for: [exp], timeout: TestConstants.Timeout.medium)
 		guard case let .success(id) = out.deleted.last else { return XCTFail("no delete success") }
 		XCTAssertEqual(id, t.id)
 		let sema = DispatchSemaphore(value: 0)
 		var count = -1
 		storage.fetchAll { res in if case let .success(items) = res { count = items.count } ; sema.signal() }
-		_ = sema.wait(timeout: .now() + 1)
+		_ = sema.wait(timeout: .now() + TestConstants.Timeout.short)
 		XCTAssertEqual(count, 0)
 	}
 
@@ -76,14 +76,14 @@ final class ListInteractorTests: XCTestCase {
 		let (sut, out, storage) = makeSUT(with: [t])
 		let exp = expectation(description: "toggle")
 		sut.toggleTaskState(request: .init(id: t.id))
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { exp.fulfill() }
-		wait(for: [exp], timeout: 2)
+		DispatchQueue.main.asyncAfter(deadline: .now() + TestConstants.Delay.veryLong) { exp.fulfill() }
+		wait(for: [exp], timeout: TestConstants.Timeout.medium)
 		guard case let .success(changed) = out.toggled.last else { return XCTFail("no toggle success") }
 		XCTAssertTrue(changed.isDone)
 		let sema = DispatchSemaphore(value: 0)
 		var persisted = false
 		storage.fetchTask(withId: t.id) { res in if case let .success(task) = res { persisted = task.isDone } ; sema.signal() }
-		_ = sema.wait(timeout: .now() + 1)
+		_ = sema.wait(timeout: .now() + TestConstants.Timeout.short)
 		XCTAssertTrue(persisted)
 	}
 
@@ -93,8 +93,8 @@ final class ListInteractorTests: XCTestCase {
 		let (sut, out, _) = makeSUT(with: [t1, t2])
 		let exp = expectation(description: "fetch")
 		sut.fetchItems(request: .init())
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { exp.fulfill() }
-		wait(for: [exp], timeout: 2)
+		DispatchQueue.main.asyncAfter(deadline: .now() + TestConstants.Delay.long) { exp.fulfill() }
+		wait(for: [exp], timeout: TestConstants.Timeout.medium)
 		sut.filterItems(request: .init(query: "opt"))
 		guard case let .success(items) = out.filteredCalls.last! else { return XCTFail("no filter success") }
 		XCTAssertEqual(items.map{ $0.id }, [t1.id])

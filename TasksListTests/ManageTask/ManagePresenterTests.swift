@@ -22,11 +22,11 @@ final class ManagePresenterTests: XCTestCase {
 	func test_presentInitialState_buildsFormViewModel() {
 		let presenter = ManageTaskPresenter(interactor: StubInteractor(), router: StubRouter())
 		let view = SpyView(); presenter.view = view
-		let task = TaskItem(id: UUID(), title: "T", details: "D", isDone: false, date: Date(timeIntervalSince1970: 0))
+		let task = TaskItem(id: UUID(), title: "T", details: "D", isDone: false, date: Date(timeIntervalSince1970: TestConstants.DateSeconds.epoch))
 		presenter.didLoadTaskInfo(response: .init(task: task))
 		let exp = expectation(description: "map")
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { exp.fulfill() }
-		wait(for: [exp], timeout: 1)
+		DispatchQueue.main.asyncAfter(deadline: .now() + TestConstants.Delay.medium) { exp.fulfill() }
+		wait(for: [exp], timeout: TestConstants.Timeout.short)
 		XCTAssertEqual(view.showedInfo?.info.title, "T")
 		XCTAssertEqual(view.showedInfo?.info.note, "D")
 		XCTAssertEqual(view.showedInfo?.info.date, "01/01/70")
@@ -38,8 +38,8 @@ final class ManagePresenterTests: XCTestCase {
 		presenter.didUpdateTitle(response: .init(text: "Hello"))
 		presenter.didUpdateDescription(response: .init(text: "World"))
 		let exp = expectation(description: "main")
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) { exp.fulfill() }
-		wait(for: [exp], timeout: 1)
+		DispatchQueue.main.asyncAfter(deadline: .now() + TestConstants.Delay.short) { exp.fulfill() }
+		wait(for: [exp], timeout: TestConstants.Timeout.short)
 		XCTAssertEqual(view.updatedTitle, "Hello")
 		XCTAssertEqual(view.updatedDescription, "World")
 	}

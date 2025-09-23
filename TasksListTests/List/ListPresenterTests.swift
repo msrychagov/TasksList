@@ -42,26 +42,26 @@ final class ListPresenterTests: XCTestCase {
 	func test_presentTasks_mapsDomainToViewModels() {
 		let (sut, view) = makeSUT()
 		let items: [TaskItem] = [
-			.init(id: UUID(), title: "A", details: "d", isDone: true, date: Date(timeIntervalSince1970: 0)),
-			.init(id: UUID(), title: "B", details: nil, isDone: false, date: Date(timeIntervalSince1970: 86400))
+			.init(id: UUID(), title: "A", details: "d", isDone: true, date: Date(timeIntervalSince1970: TestConstants.DateSeconds.epoch)),
+			.init(id: UUID(), title: "B", details: nil, isDone: false, date: Date(timeIntervalSince1970: TestConstants.DateSeconds.oneDay))
 		]
 		sut.didLoadItems(response: .success(items))
 		let exp = expectation(description: "map")
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { exp.fulfill() }
-		wait(for: [exp], timeout: 1)
+		DispatchQueue.main.asyncAfter(deadline: .now() + TestConstants.Delay.medium) { exp.fulfill() }
+		wait(for: [exp], timeout: TestConstants.Timeout.short)
 		XCTAssertEqual(view.shownVMs.count, 1)
 		XCTAssertEqual(view.shownVMs.first?.items.count, 2)
 		XCTAssertEqual(view.shownVMs.first?.items[0].title, "A")
 		XCTAssertEqual(view.shownVMs.first?.items[0].subTitle, "d")
-		XCTAssertEqual(view.shownVMs.first?.items[0].date, Date(timeIntervalSince1970: 0).dmyslash())
+		XCTAssertEqual(view.shownVMs.first?.items[0].date, Date(timeIntervalSince1970: TestConstants.DateSeconds.epoch).dmyslash())
 	}
 
 	func test_presentEmpty_showsEmptyState() {
 		let (sut, view) = makeSUT()
 		sut.didFilteredItems(response: .empty)
 		let exp = expectation(description: "empty")
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) { exp.fulfill() }
-		wait(for: [exp], timeout: 1)
+		DispatchQueue.main.asyncAfter(deadline: .now() + TestConstants.Delay.short) { exp.fulfill() }
+		wait(for: [exp], timeout: TestConstants.Timeout.short)
 		XCTAssertTrue(view.emptyShown)
 		XCTAssertEqual(view.shownVMs.last?.items.count, 0)
 	}
@@ -71,8 +71,8 @@ final class ListPresenterTests: XCTestCase {
 		let task = TaskItem(id: UUID(), title: "T", details: nil, isDone: false, date: Date())
 		sut.didToggleTaskState(response: .success(task))
 		let exp = expectation(description: "reload")
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { exp.fulfill() }
-		wait(for: [exp], timeout: 1)
+		DispatchQueue.main.asyncAfter(deadline: .now() + TestConstants.Delay.medium) { exp.fulfill() }
+		wait(for: [exp], timeout: TestConstants.Timeout.short)
 		XCTAssertEqual(view.reloaded.count, 1)
 		XCTAssertTrue(view.lastOnMain)
 	}
@@ -81,8 +81,8 @@ final class ListPresenterTests: XCTestCase {
 		let (sut, view) = makeSUT()
 		sut.didFilteredItems(response: .empty)
 		let exp = expectation(description: "main")
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.03) { exp.fulfill() }
-		wait(for: [exp], timeout: 1)
+		DispatchQueue.main.asyncAfter(deadline: .now() + TestConstants.Delay.shorter) { exp.fulfill() }
+		wait(for: [exp], timeout: TestConstants.Timeout.short)
 		XCTAssertTrue(view.lastOnMain)
 	}
 }

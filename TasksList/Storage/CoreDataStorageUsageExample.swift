@@ -141,8 +141,8 @@ class CoreDataStorageUsageExample {
         storage.suspendWriteOperations()
         print("⏸ Операции записи приостановлены")
         
-        // Возобновить через 2 секунды
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+        // Возобновить через заданную задержку
+        DispatchQueue.main.asyncAfter(deadline: .now() + AppConstants.Timing.resumeWriteDelay) {
             self.storage.resumeWriteOperations()
             print("▶️ Операции записи возобновлены")
         }
