@@ -45,14 +45,14 @@ struct ManageTaskView: View {
                 set: { output.onTitleChange($0) }
             )
         )
-        .tint(.yellow)
+        .tint(.Brand.yellow)
         .font(.system(size: UIConstants.Fonts.titleSize, weight: .bold))
         .foregroundStyle(.primary)
     }
     
     private var date: some View {
         Text(state.date)
-            .foregroundStyle(Color.dateText)
+            .foregroundStyle(Color.Text.date)
     }
     
     private var detailsTextField: some View {
@@ -66,7 +66,7 @@ struct ManageTaskView: View {
             
             if state.note.isEmpty {
                 Text("Описание")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.Text.secondary)
                     .font(.system(size: UIConstants.Fonts.bodySize, weight: .regular))
                     .allowsHitTesting(false)
             }

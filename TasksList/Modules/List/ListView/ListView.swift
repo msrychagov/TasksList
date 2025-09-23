@@ -94,7 +94,6 @@ final class ListViewController: UIViewController, ListViewInput {
         )
         searchBarController.searchBar.tintColor = tintColor
         
-//        searchBarController.searchBar.scopeButtonTitles = ["Все", "Активные", "Завершенные"]
         searchBarController.searchBar.showsBookmarkButton = true
         searchBarController.searchBar.setImage(UIImage(systemName: "mic.fill"), for: .bookmark, state: .normal)
         searchBarController.obscuresBackgroundDuringPresentation = false
@@ -159,7 +158,7 @@ final class ListViewController: UIViewController, ListViewInput {
         view.addSubview(emptyContainerView)
         emptyContainerView.translatesAutoresizingMaskIntoConstraints = false
         emptyContainerView.pinTop(to: view.safeAreaLayoutGuide.topAnchor)
-        // Keep the container above the keyboard at all times
+        /// Keep the container above the keyboard at all times
         emptyContainerView.pinBottom(to: view.keyboardLayoutGuide.topAnchor)
         emptyContainerView.pinLeft(to: view)
         emptyContainerView.pinRight(to: view)
@@ -192,7 +191,6 @@ final class ListViewController: UIViewController, ListViewInput {
         keyboardVisibleBottomInset = bottomInset
         let options = UIView.AnimationOptions(rawValue: curveRaw << 16)
         UIView.animate(withDuration: duration, delay: 0, options: options, animations: { [weak self] in
-            // Empty view is managed by constraints; ensure no residual transform
             self?.emptySearchResultView.transform = .identity
         })
     }

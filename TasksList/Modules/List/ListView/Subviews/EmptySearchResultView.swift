@@ -46,7 +46,7 @@ final class EmptySearchResultView: UIView {
     private func configureTitleLabel() {
         titleLabel.text = "Нет результатов по запросу"
         titleLabel.font = .systemFont(ofSize: UIConstants.Fonts.emptyTitle, weight: .bold)
-        titleLabel.textColor = .General.secondary
+        titleLabel.textColor = .Text.secondary
         titleLabel.numberOfLines = 0
         titleLabel.textAlignment = .center
         stackView.addArrangedSubview(titleLabel)
@@ -56,7 +56,7 @@ final class EmptySearchResultView: UIView {
     private func configureSubtitleLabel() {
         subtitleLabel.text = "Проверьте написание или попробуйте изменить запрос"
         subtitleLabel.font = .systemFont(ofSize: UIConstants.Fonts.bodySize, weight: .regular)
-        subtitleLabel.textColor = .systemGray
+        subtitleLabel.textColor = .Text.date
         subtitleLabel.numberOfLines = 0
         subtitleLabel.textAlignment = .center
         stackView.addArrangedSubview(subtitleLabel)

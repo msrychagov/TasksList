@@ -56,12 +56,12 @@ final class ListTaskCell: UITableViewCell {
         doneButton.isSelected = isDone
         
         if isDone {
-            titleLabel.textColor = .systemGray2
+            titleLabel.textColor = .Text.completed
             titleLabel.attributedText = NSAttributedString(
                 string: titleText,
                 attributes: [.strikethroughStyle: NSUnderlineStyle.single.rawValue]
             )
-            subtitleLabel.textColor = .systemGray3
+            subtitleLabel.textColor = .Text.completedSubtitle
         } else {
             titleLabel.textColor = .label
             // Всегда создаем новый NSAttributedString с явным сбросом всех атрибутов
@@ -72,7 +72,7 @@ final class ListTaskCell: UITableViewCell {
                     .foregroundColor: UIColor.label
                 ]
             )
-            subtitleLabel.textColor = .General.secondary
+            subtitleLabel.textColor = .Text.secondary
         }
     }
 }
@@ -130,7 +130,7 @@ private extension ListTaskCell {
     
     func configureDate() {
         dateLabel.font = .systemFont(ofSize: UIConstants.Fonts.cellSubtitle, weight: .regular)
-        dateLabel.textColor = .systemGray
+        dateLabel.textColor = .Text.date
         contentView.addSubview(dateLabel)
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.pinTop(to: subtitleLabel.bottomAnchor, UIConstants.Spacing.cellDateTop)
