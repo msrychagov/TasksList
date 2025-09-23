@@ -9,7 +9,7 @@ import UIKit
 
 final class SummaryView: UIView {
     // MARK: - Properties
-    private let tasksCount: Int
+    private var tasksCount: Int
     
     // MARK: - Actions Propeties
     var onCreateTaskButtonTapped: (() -> Void)?
@@ -48,7 +48,7 @@ final class SummaryView: UIView {
     }
     
     private func configureSummaryLabel() {
-        summaryLabel.text = "\(tasksCount) задач"
+        summaryLabel.text = "\(tasksCount) \(tasksWord(for: tasksCount))"
         summaryLabel.font = .systemFont(ofSize: 11, weight: .regular)
         summaryLabel.tintColor = .SummaryView.text
         self.addSubview(summaryLabel)
@@ -72,5 +72,22 @@ final class SummaryView: UIView {
     // MARK: Actions
     @objc func createTaskButtonTapped() {
         onCreateTaskButtonTapped?()
+    }
+
+    // MARK: - Public API
+    func setTasksCount(_ count: Int) {
+        self.tasksCount = count
+        summaryLabel.text = "\(count) \(tasksWord(for: count))"
+    }
+
+    // MARK: - Helpers
+    private func tasksWord(for count: Int) -> String {
+        let lastTwo = count % 100
+        if lastTwo >= 11 && lastTwo <= 14 { return "задач" }
+        switch count % 10 {
+        case 1: return "задача"
+        case 2, 3, 4: return "задачи"
+        default: return "задач"
+        }
     }
 }

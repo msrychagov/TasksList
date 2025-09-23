@@ -17,7 +17,7 @@ final class ListViewController: UIViewController, ListViewInput {
     
     // MARK: - UIProperties
     private let tableView: UITableView = UITableView(frame: .zero, style: .plain)
-    private let summaryView: SummaryView = SummaryView(tasksCount: 5, frame: .zero)
+    private let summaryView: SummaryView = SummaryView(tasksCount: 0, frame: .zero)
     private let searchBarController = UISearchController(searchResultsController: nil)
     private let emptySearchResultView: EmptySearchResultView = EmptySearchResultView()
     private let emptyContainerView: UIView = UIView()
@@ -217,6 +217,7 @@ final class ListViewController: UIViewController, ListViewInput {
         emptySearchResultView.transform = .identity
         tableView.backgroundView = nil
         tableAdapter.apply(cellVM: viewModel)
+        summaryView.setTasksCount(viewModel.items.count)
     }
     
     func showEmpty() {
@@ -224,10 +225,14 @@ final class ListViewController: UIViewController, ListViewInput {
         view.bringSubviewToFront(emptyContainerView)
         tableView.separatorStyle = .none
         tableView.backgroundView = nil
+        summaryView.setTasksCount(0)
     }
     
     func removeItem(viewModel: ListModels.DeleteTask.ViewModel) {
         tableAdapter.deleteItem(viewModel: viewModel)
+        let currentRows = tableView.numberOfRows(inSection: 0)
+        let newCount = max(0, currentRows - 1)
+        summaryView.setTasksCount(newCount)
     }
     
     func reloadItem(viewModel: ListModels.EditTask.ViewModel) {
@@ -242,6 +247,8 @@ final class ListViewController: UIViewController, ListViewInput {
     
     func insertItem(viewModel: ListModels.ListItemViewModel) {
         tableAdapter.insertItem(viewModel)
+        let currentRows = tableView.numberOfRows(inSection: 0)
+        summaryView.setTasksCount(currentRows + 1)
     }
     func showPopup(for id: UUID) {
         print("hui")
