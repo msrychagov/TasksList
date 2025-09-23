@@ -66,8 +66,8 @@ struct ManageTaskView: View {
             
             if state.note.isEmpty {
                 Text("Описание")
-                    .foregroundStyle(Color.Text.secondary)
                     .font(.system(size: UIConstants.Fonts.bodySize, weight: .regular))
+                    .foregroundStyle(.secondary)
                     .allowsHitTesting(false)
             }
         }

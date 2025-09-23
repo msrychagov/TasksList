@@ -12,43 +12,19 @@ import SwiftUI
 enum ColorConstants {
     
     // MARK: - Base Colors
-    static let brandYellow = "#FED702"
+    static let brandYellow = (light: "#E6B800", dark: "#FED702")
     
+    // MARK: Text Colors
     static let primaryText = (light: "#040404", dark: "#FFFFFF")
-    
     static let secondaryText = (light: "#040404", dark: "#F4F4F4")
     
+    // MARK: Background Colors
     static let primaryBackground = (light: "#FFFFFF", dark: "#040404")
-    
     static let secondaryBackground = (light: "#F5F5F5", dark: "#272729")
-    
     static let tertiaryBackground = (light: "#DFDFDF", dark: "#272729")
     
-    // MARK: - UI Component Colors
-    static let searchBarBackground = (light: "#F5F5F5", dark: "#272729")
-    
-    static let summaryViewBackground = (light: "#DFDFDF", dark: "#272729")
-    
+    // MARK: UI Component Colors
     static let summaryViewBorder = (light: "#E0E0E0", dark: "#4D555E")
-    
-    static let summaryViewText = (light: "#040404", dark: "#F4F4F4")
-    
-    static let createButtonColor = "#FED702"
-    
-    static let doneButtonNormal = "#FED702"
-    
-    static let doneButtonSelected = "#FED702"
-    
-    // MARK: - System Colors (for reference)
-    static let dateText = "systemGray"
-    
-    static let secondaryLabel = "secondaryLabel"
-    
-    static let label = "label"
-    
-    static let systemGray2 = "systemGray2"
-    
-    static let systemGray3 = "systemGray3"
 }
 
 // MARK: - UIColor Extensions
@@ -95,20 +71,20 @@ extension UIColor {
     }
     
     enum SearchBar {
-        static let background: UIColor = UIColor.adaptiveColor(lightHex: ColorConstants.searchBarBackground.light, darkHex: ColorConstants.searchBarBackground.dark)
+        static let background: UIColor = UIColor.adaptiveColor(lightHex: ColorConstants.secondaryBackground.light, darkHex: ColorConstants.secondaryBackground.dark)
         static let tintColor: UIColor = UIColor.secondaryLabel
     }
     
     enum SummaryView {
-        static let background: UIColor = UIColor.adaptiveColor(lightHex: ColorConstants.summaryViewBackground.light, darkHex: ColorConstants.summaryViewBackground.dark)
+        static let background: UIColor = UIColor.adaptiveColor(lightHex: ColorConstants.tertiaryBackground.light, darkHex: ColorConstants.tertiaryBackground.dark)
         static let border: UIColor = UIColor.adaptiveColor(lightHex: ColorConstants.summaryViewBorder.light, darkHex: ColorConstants.summaryViewBorder.dark)
-        static let text: UIColor = UIColor.adaptiveColor(lightHex: ColorConstants.summaryViewText.light, darkHex: ColorConstants.summaryViewText.dark)
-        static let createButton: UIColor = UIColor(hex: ColorConstants.createButtonColor)
+        static let text: UIColor = UIColor.adaptiveColor(lightHex: ColorConstants.primaryText.light, darkHex: ColorConstants.primaryText.dark)
+        static let createButton: UIColor = UIColor.adaptiveColor(lightHex: ColorConstants.brandYellow.light, darkHex: ColorConstants.brandYellow.dark)
     }
     
     enum DoneButton {
-        static let normal: UIColor = UIColor(hex: ColorConstants.doneButtonNormal)
-        static let selected: UIColor = UIColor(hex: ColorConstants.doneButtonSelected)
+        static let normal: UIColor = UIColor.adaptiveColor(lightHex: ColorConstants.brandYellow.light, darkHex: ColorConstants.brandYellow.dark)
+        static let selected: UIColor = UIColor.adaptiveColor(lightHex: ColorConstants.brandYellow.light, darkHex: ColorConstants.brandYellow.dark)
     }
     
     enum Text {
@@ -117,6 +93,10 @@ extension UIColor {
         static let date: UIColor = UIColor.systemGray
         static let completed: UIColor = UIColor.systemGray2
         static let completedSubtitle: UIColor = UIColor.systemGray3
+    }
+    
+    enum Brand {
+        static let yellow: UIColor = UIColor.adaptiveColor(lightHex: ColorConstants.brandYellow.light, darkHex: ColorConstants.brandYellow.dark)
     }
 }
 
@@ -148,17 +128,6 @@ extension Color {
         )
     }
     
-    init(uiColor: UIColor) {
-        self.init(UIColor { traitCollection -> UIColor in
-            switch traitCollection.userInterfaceStyle {
-            case .dark:
-                return uiColor
-            default:
-                return uiColor
-            }
-        })
-    }
-    
     // MARK: - Structured Color Access
     enum General {
         static let primary: Color = Color.adaptive(light: ColorConstants.primaryBackground.light, dark: ColorConstants.primaryBackground.dark)
@@ -172,6 +141,6 @@ extension Color {
     }
     
     enum Brand {
-        static let yellow: Color = Color(hex: ColorConstants.brandYellow)
+        static let yellow: Color = Color.adaptive(light: ColorConstants.brandYellow.light, dark: ColorConstants.brandYellow.dark)
     }
 }

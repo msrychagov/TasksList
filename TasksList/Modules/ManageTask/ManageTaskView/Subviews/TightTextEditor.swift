@@ -19,7 +19,7 @@ struct TightTextEditor: UIViewRepresentable {
         textView.textContainer.lineFragmentPadding = 0
         
         textView.font = font
-        textView.tintColor = .SummaryView.createButton
+        textView.tintColor = UIColor.Brand.yellow
         
         textView.delegate = context.coordinator
         return textView
