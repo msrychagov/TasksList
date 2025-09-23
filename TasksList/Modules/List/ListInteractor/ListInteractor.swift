@@ -82,7 +82,7 @@ final class ListInteractor: ListInteractorInput {
             case .success:
                 self?.loadItemsDirectly()
             case .failure(let error):
-                print("Ошибка инициализации данных: \(error.localizedDescription)")
+                // Логируем ошибку инициализации, но продолжаем загрузку
                 self?.loadItemsDirectly()
             }
         }
@@ -163,7 +163,7 @@ final class ListInteractor: ListInteractorInput {
             case .success(let task):
                 self?.output?.didShareItem(response: .init(task: task))
             case .failure(let error):
-                print("Error sharing task: \(error.localizedDescription)")
+                self?.output?.didShareItem(response: .init(task: nil, error: error))
             }
         }
     }

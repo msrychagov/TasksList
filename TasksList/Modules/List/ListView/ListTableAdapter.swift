@@ -119,7 +119,6 @@ final class ListTableAdapter: NSObject {
     }
     
     func insertItem(_ vm: ListModels.ListItemViewModel) {
-        print(vm)
         let item = Item(id: vm.id, title: vm.title, subtitle: vm.subTitle, isDone: vm.isDone, date: vm.date)
         
         itemsByID[item.id] = item

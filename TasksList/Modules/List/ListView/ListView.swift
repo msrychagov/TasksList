@@ -226,6 +226,14 @@ final class ListViewController: UIViewController, ListViewInput {
         summaryView.setTasksCount(0)
     }
     
+    func showError(message: String) {
+        DispatchQueue.main.async { [weak self] in
+            let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            self?.present(alert, animated: true)
+        }
+    }
+    
     func removeItem(viewModel: ListModels.DeleteTask.ViewModel) {
         tableAdapter.deleteItem(viewModel: viewModel)
         let currentRows = tableView.numberOfRows(inSection: 0)

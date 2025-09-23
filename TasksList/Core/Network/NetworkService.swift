@@ -42,7 +42,6 @@ final class NetworkService: NetworkServiceProtocol {
                 }
             case .failure:
                 // В случае неудачи, пробуем загрузить с локального файла
-                print("API недоступен, загружаем из локального файла...")
                 self?.fetchTodosFromLocalFile(completion: completion)
             }
         }

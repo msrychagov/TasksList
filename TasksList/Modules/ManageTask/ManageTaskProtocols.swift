@@ -8,10 +8,10 @@
 import Foundation
 
 protocol ManageTaskViewInput: AnyObject {
-    func setLoading(isLoading: Bool)
     func showTaskInfo(viewModel: ManageTaskModels.ShowInfo.ViewModel)
     func showUpdatedTitle(viewModel: ManageTaskModels.UpdateTitle.ViewModel)
     func showUpdatedDescription(viewModel: ManageTaskModels.UpdateDescription.ViewModel)
+    func showError(message: String)
 }
 
 protocol ManageTaskViewOutput {
@@ -34,6 +34,8 @@ protocol ManageTaskInteractorOutput: AnyObject {
     func didFailToLoadTaskInfo(error: Error)
     func didUpdateTitle(response: ManageTaskModels.UpdateTitle.Response)
     func didUpdateDescription(response: ManageTaskModels.UpdateDescription.Response)
+    func didFailToCreateTask(error: Error)
+    func didFailToUpdateTask(error: Error)
 }
 
 protocol ManageTaskRouterInput {

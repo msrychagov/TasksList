@@ -13,6 +13,7 @@ protocol ListViewInput: AnyObject {
     func reloadItem(viewModel: ListModels.EditTask.ViewModel)
     func insertItem(viewModel: ListModels.ListItemViewModel)
     func showEmpty()
+    func showError(message: String)
 }
 
 protocol ListViewOutput {

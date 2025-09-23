@@ -25,7 +25,7 @@ final class CoreDataStack {
 
         container.loadPersistentStores { _, error in
             if let error = error {
-                print("Core Data load error: \(error)")
+                // Критическая ошибка Core Data - пытаемся пересоздать хранилище
                 self.recreateStore()
             }
         }

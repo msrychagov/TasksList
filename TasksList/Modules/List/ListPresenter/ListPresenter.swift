@@ -70,7 +70,7 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
                 }
             }
         case .failure(let error):
-            print(error.localizedDescription)
+            view?.showError(message: "Ошибка фильтрации задач: \(error.localizedDescription)")
         }
     }
     
@@ -100,7 +100,7 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
                 self?.view?.removeItem(viewModel: .init(id: id))
             }
         case .failure(let error):
-            print(error.localizedDescription)
+            view?.showError(message: "Ошибка удаления задачи: \(error.localizedDescription)")
         }
     }
     
@@ -123,7 +123,7 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
                 }
             }
         case .failure(let error):
-            print(error.localizedDescription)
+            view?.showError(message: "Ошибка изменения статуса задачи: \(error.localizedDescription)")
         }
     }
     
@@ -162,11 +162,20 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
     }
     
     func didFaileToEditTask(error: Error) {
-        print(error.localizedDescription)
+        view?.showError(message: "Ошибка редактирования задачи: \(error.localizedDescription)")
     }
     
     func didShareItem(response: ListModels.ShareTask.Response) {
-        let task = response.task
+        if let error = response.error {
+            view?.showError(message: "Ошибка при подготовке задачи для шаринга: \(error.localizedDescription)")
+            return
+        }
+        
+        guard let task = response.task else {
+            view?.showError(message: "Задача не найдена")
+            return
+        }
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
