@@ -95,11 +95,13 @@ final class ListViewController: UIViewController, ListViewInput {
     }
     
     private func configureTable() {
-        tableView.backgroundColor = .clear
+        tableView.backgroundColor = .General.primary
         tableView.separatorColor = .systemGray
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 72
         tableView.allowsSelection = true
         tableView.allowsMultipleSelection = false
         

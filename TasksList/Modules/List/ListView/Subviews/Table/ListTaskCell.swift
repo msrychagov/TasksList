@@ -81,7 +81,8 @@ final class ListTaskCell: UITableViewCell {
 private extension ListTaskCell {
     func configureUI() {
         selectionStyle = .none
-        backgroundColor = .clear
+        backgroundColor = .General.primary
+        contentView.backgroundColor = .General.primary
         preservesSuperviewLayoutMargins = true
         contentView.preservesSuperviewLayoutMargins = true
         contentView.insetsLayoutMarginsFromSafeArea = false

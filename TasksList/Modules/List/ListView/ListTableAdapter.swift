@@ -24,6 +24,7 @@ final class ListTableAdapter: NSObject {
     private weak var tableView: UITableView?
     private var dataSource: UITableViewDiffableDataSource<Section, Item>!
     private var itemsByID: [UUID: Item] = [:]
+    private var pendingDeleteId: UUID?
     
     // MARK: Actions
     var onShare: ((UUID) -> Void)?
@@ -37,21 +38,22 @@ final class ListTableAdapter: NSObject {
     func bind(tableView: UITableView) {
         self.tableView = tableView
         tableView.register(ListTaskCell.self, forCellReuseIdentifier: ListTaskCell.reuseId)
-        dataSource = .init(tableView: tableView) {tableView, indexPath, item in
-            guard let vm = self.itemsByID[item.id] else { return UITableViewCell() }
+        dataSource = .init(tableView: tableView) { [weak self] tableView, indexPath, item in
             let cell = tableView.dequeueReusableCell(withIdentifier: ListTaskCell.reuseId, for: indexPath) as! ListTaskCell
+            // Use the latest data from itemsByID to ensure reconfigure reflects updates
+            let model = self?.itemsByID[item.id] ?? item
             cell.configure(
-                title: vm.title,
-                subtitle: vm.subtitle,
-                isDone: vm.isDone,
-                date: vm.date
+                title: model.title,
+                subtitle: model.subtitle,
+                isDone: model.isDone,
+                date: model.date
             )
-            
             cell.onToggleTask = { [weak self] in
-                self?.onToggleTask?(vm.id)
+                self?.onToggleTask?(item.id)
             }
             return cell
         }
+        dataSource.defaultRowAnimation = .fade
         tableView.delegate = self
     }
     
@@ -79,13 +81,14 @@ final class ListTableAdapter: NSObject {
     func deleteItem(viewModel: ListModels.DeleteTask.ViewModel) {
         let id = viewModel.id
         
-        itemsByID.removeValue(forKey: id)
-        
         var snapshot = dataSource.snapshot()
         if let item = snapshot.itemIdentifiers.first(where: { $0.id == id }) {
             snapshot.deleteItems([item])
             DispatchQueue.main.async { [weak self] in
-                self?.dataSource.apply(snapshot, animatingDifferences: true)
+                guard let self else { return }
+                self.dataSource.apply(snapshot, animatingDifferences: true) { [weak self] in
+                    self?.itemsByID.removeValue(forKey: id)
+                }
             }
         }
     }
@@ -146,11 +149,12 @@ extension ListTableAdapter: UITableViewDelegate {
                    point: CGPoint) -> UIContextMenuConfiguration? {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
         let id = item.id
-        let menu = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+        let menu = UIContextMenuConfiguration(identifier: item.id as NSUUID, previewProvider: nil) { _ in
             let share = UIAction(
                 title: "Поделиться",
                 image: UIImage(systemName: "square.and.arrow.up"),
                 handler: { [weak self] _ in
+                    self?.pendingDeleteId = nil
                     self?.onShare?(id)
                 }
             )
@@ -159,17 +163,37 @@ extension ListTableAdapter: UITableViewDelegate {
                 title: "Редактировать",
                 image: UIImage(systemName: "pencil")
             ) { [weak self] _ in
+                self?.pendingDeleteId = nil
                 self?.onEdit?(id)
             }
             let delete = UIAction(
                 title: "Удалить",
                 image: UIImage(systemName: "trash"),
                 attributes: .destructive) { [weak self] _ in
-                    self?.onDelete?(id)
+                    guard let self else { return }
+                    self.pendingDeleteId = id
+                    self.tableView?.deselectRow(at: indexPath, animated: true)
                 }
             return UIMenu(title: "", children: [share, edit, delete])
         }
         
         return menu
+    }
+
+    func tableView(_ tableView: UITableView,
+                   willEndContextMenuInteraction configuration: UIContextMenuConfiguration,
+                   animator: UIContextMenuInteractionAnimating?) {
+        guard let nsuuid = configuration.identifier as? NSUUID,
+              let id = pendingDeleteId,
+              id == nsuuid as UUID else {
+            pendingDeleteId = nil
+            return
+        }
+        animator?.addCompletion { [weak self] in
+            guard let self else { return }
+            let deleteId = id
+            self.pendingDeleteId = nil
+            self.onDelete?(deleteId)
+        }
     }
 }
