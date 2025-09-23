@@ -7,7 +7,7 @@
 import UIKit
 enum ManageTaskAssembly {
     static func build(mode: ManageMode) -> UIViewController {
-        let storage = InMemoryStorage()
+        let storage = CoreDataStorage.shared
         let worker = ManageTaskWorker(storage: storage)
         let router = ManageTaskRouter()
         let interactor = ManageTaskInteractor(worker: worker, mode: mode)

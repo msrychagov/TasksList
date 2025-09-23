@@ -16,7 +16,7 @@ protocol ManageTaskViewInput: AnyObject {
 
 protocol ManageTaskViewOutput {
     func onAppear()
-    func onDisappear(title: String, description: String)
+    func onDisappear(title: String, details: String)
     func onTitleChange(_ text: String)
     func onDescriptionChange(_ text: String)
 }
@@ -42,6 +42,6 @@ protocol ManageTaskRouterInput {
 
 protocol ManageTaskWorkerInput {
     func loadTaskInfo(for id: UUID, completion: @escaping (Result<TaskItem, Error>) -> Void)
-    func updateTask(with id: UUID, title: String, description: String, completion: @escaping (Result<Void, Error>) -> Void)
-    func createTask(title: String, description: String, completion: @escaping (Result<Void, Error>) -> Void)
+    func updateTask(with id: UUID, title: String, details: String, completion: @escaping (Result<Void, Error>) -> Void)
+    func createTask(title: String, details: String, completion: @escaping (Result<Void, Error>) -> Void)
 }

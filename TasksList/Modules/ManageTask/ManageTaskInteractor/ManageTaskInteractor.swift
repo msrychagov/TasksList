@@ -46,19 +46,19 @@ extension ManageTaskInteractor: ManageTaskInteractorInput {
     func saveTaskInfo(request: ManageTaskModels.SaveTaskInfo.Request) {
         guard !request.title.isEmpty else { return }
         let title = request.title
-        let description = request.description
+        let details = request.details
         switch mode {
         case .create:
             worker.createTask(
                 title: title,
-                description: description,
+                details: details,
                 completion: {_ in print("createdTask")}
             )
         case .edit(let id):
             worker.updateTask(
                 with: id,
                 title: title,
-                description: description,
+                details: details,
                 completion: {_ in print("updatedTask")}
             )
         }

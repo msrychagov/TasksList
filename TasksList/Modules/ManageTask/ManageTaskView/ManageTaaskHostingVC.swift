@@ -31,7 +31,7 @@ final class ManageTaaskHostingVC: UIHostingController<ManageTaskView>, ManageTas
         super.viewWillDisappear(animated)
         
         if isMovingFromParent {
-            backTapHandler?.onBackCommit(title: state.title, description: state.note)
+            backTapHandler?.onBackCommit(title: state.title, details: state.note)
         }
     }
     

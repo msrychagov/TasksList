@@ -119,7 +119,7 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
                     viewModel: .init(
                         id: vm.id,
                         title: vm.title,
-                        description: vm.subTitle,
+                        details: vm.subTitle,
                         date: vm.date,
                         isDone: vm.isDone
                     )

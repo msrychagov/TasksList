@@ -13,25 +13,25 @@ final class ManageTaskWorker {
     
     // MARK: Lyfecycle
     init(storage: Storage) {
-        self.storage = InMemoryStorage.shared
+        self.storage = storage
     }
 }
 
 // MARK: ManageTaskWorkerInput Conforming
 extension ManageTaskWorker: ManageTaskWorkerInput {
-    func updateTask(with id: UUID, title: String, description: String, completion: @escaping (Result<Void, any Error>) -> Void) {
+    func updateTask(with id: UUID, title: String, details: String, completion: @escaping (Result<Void, any Error>) -> Void) {
         storage.updateTask(
             with: id,
             title: title,
-            description: description,
+            details: details,
             completion: completion
         )
     }
     
-    func createTask(title: String, description: String, completion: @escaping (Result<Void, any Error>) -> Void) {
+    func createTask(title: String, details: String, completion: @escaping (Result<Void, any Error>) -> Void) {
         storage.createTask(
             title: title,
-            description: description,
+            details: details,
             completion: completion
         )
     }

@@ -28,7 +28,7 @@ struct ManageTaskView: View {
         VStack(alignment: .leading) {
             titleTextField
             date
-            descriptionTextField
+            detailsTextField
         }
         .padding(.horizontal, 20)
         .onAppear {
@@ -54,7 +54,7 @@ struct ManageTaskView: View {
             .foregroundStyle(Color.dateText)
     }
     
-    private var descriptionTextField: some View {
+    private var detailsTextField: some View {
         ZStack(alignment: .topLeading) {
             TightTextEditor(
                 text: Binding(

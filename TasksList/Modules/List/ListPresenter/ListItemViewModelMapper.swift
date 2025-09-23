@@ -17,7 +17,7 @@ extension ListItemViewModelMapper {
         return ListModels.ListItemViewModel(
             id: item.id,
             title: item.title,
-            subTitle: item.description ?? "",
+            subTitle: item.details ?? "",
             isDone: item.isDone,
             date: item.date.dmyslash()
         )
