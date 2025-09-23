@@ -24,9 +24,7 @@ class CoreDataOperation: Operation, @unchecked Sendable {
         }
     }
     
-    func executeOperation() {
-        // Должен быть переопределен в подклассах
-    }
+    func executeOperation() {}
     
     func saveContext() throws {
         if context.hasChanges {

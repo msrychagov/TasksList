@@ -12,10 +12,6 @@ final class ListRouter: ListRouterInput {
     weak var viewController: UIViewController?
     
     // MARK: - ListRouterInput methods
-    func routeToCreate() {
-        print("hui")
-    }
-    
     func routeToManageTaskView(mode: ManageMode) {
         let editVC = ManageTaskAssembly.build(mode: mode)
         viewController?.navigationController?.pushViewController(editVC, animated: true)

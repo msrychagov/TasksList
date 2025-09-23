@@ -14,9 +14,7 @@ final class ListPresenterTests: XCTestCase {
 		func reloadItem(viewModel: TasksList.ListModels.EditTask.ViewModel) { lastOnMain = Thread.isMainThread; reloaded.append(viewModel) }
 		func insertItem(viewModel: TasksList.ListModels.ListItemViewModel) { lastOnMain = Thread.isMainThread; inserted.append(viewModel) }
 		func showEmpty() { lastOnMain = Thread.isMainThread; emptyShown = true }
-		func showPopup(for id: UUID) {}
-		func showIsLoading() {}
-		func showError() {}
+
 	}
 	final class StubRouter: ListRouterInput { func routeToManageTaskView(mode: ManageMode) {} ; func routeToShare(with text: String) {} }
 	final class StubInteractor: ListInteractorInput {

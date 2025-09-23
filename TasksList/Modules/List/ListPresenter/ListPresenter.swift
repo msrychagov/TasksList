@@ -37,9 +37,7 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
         interactor.createTask(request: .init(id: nil))
     }
     
-    func didSelectItem(with id: UUID) {
-        print("hui")
-    }
+    
     
     func didTapEditButton(for id: UUID) {
         interactor.editTask(request: .init(id: id))
@@ -57,9 +55,7 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
         interactor.toggleTaskState(request: .init(id: id))
     }
     
-    func didHoldTaskCell(for id: UUID) {
-        print("hui")
-    }
+    
     
     // MARK: - ListInteractorOutput methods
     func didLoadItems(response: ListModels.LoadTasks.Response) {

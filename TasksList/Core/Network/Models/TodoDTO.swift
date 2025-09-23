@@ -31,11 +31,11 @@ extension TodoDTO {
     /// Преобразует TodoDTO в доменную модель TaskItem
     func toDomainModel() -> TaskItem {
         return TaskItem(
-            id: UUID(), // Генерируем новый UUID, так как API возвращает Int
+            id: UUID(),
             title: self.todo,
-            details: nil, // API не предоставляет детали
+            details: nil,
             isDone: self.completed,
-            date: Date() // Используем текущую дату
+            date: Date()
         )
     }
 }

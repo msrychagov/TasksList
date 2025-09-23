@@ -250,17 +250,6 @@ final class ListViewController: UIViewController, ListViewInput {
         let currentRows = tableView.numberOfRows(inSection: 0)
         summaryView.setTasksCount(currentRows + 1)
     }
-    func showPopup(for id: UUID) {
-        print("hui")
-    }
-    
-    func showIsLoading() {
-        print("hui")
-    }
-    
-    func showError() {
-        print("hui")
-    }
 }
 
 // MARK: - SearchController Methods
