@@ -223,7 +223,7 @@ extension CoreDataStorage {
     /// Поиск задач по тексту
     func searchTasks(searchText: String, completion: @escaping (Result<[TaskItem], Error>) -> Void) {
         let predicate = NSPredicate(
-            format: "title CONTAINS[cd] %@ OR taskDescription CONTAINS[cd] %@",
+            format: "title CONTAINS[cd] %@ OR details CONTAINS[cd] %@",
             searchText, searchText
         )
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
