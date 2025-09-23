@@ -8,8 +8,6 @@
 import Foundation
 
 // MARK: - API Response Models
-
-/// Модель ответа от DummyJSON API
 struct TodosResponse: Codable {
     let todos: [TodoDTO]
     let total: Int
@@ -17,7 +15,6 @@ struct TodosResponse: Codable {
     let limit: Int
 }
 
-/// Модель задачи из DummyJSON API
 struct TodoDTO: Codable {
     let id: Int
     let todo: String
@@ -26,9 +23,7 @@ struct TodoDTO: Codable {
 }
 
 // MARK: - Domain Mapping Extension
-
 extension TodoDTO {
-    /// Преобразует TodoDTO в доменную модель TaskItem
     func toDomainModel() -> TaskItem {
         return TaskItem(
             id: UUID(),
@@ -41,7 +36,6 @@ extension TodoDTO {
 }
 
 extension Array where Element == TodoDTO {
-    /// Преобразует массив TodoDTO в массив TaskItem
     func toDomainModels() -> [TaskItem] {
         return self.map { $0.toDomainModel() }
     }

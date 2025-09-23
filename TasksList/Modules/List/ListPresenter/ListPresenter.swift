@@ -98,7 +98,9 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
     func didDeleteItem(response: ListModels.DeleteTask.Response) {
         switch response {
         case .success(let id):
-            view?.removeItem(viewModel: .init(id: id))
+            DispatchQueue.main.async { [weak self] in
+                self?.view?.removeItem(viewModel: .init(id: id))
+            }
         case .failure(let error):
             print(error.localizedDescription)
         }

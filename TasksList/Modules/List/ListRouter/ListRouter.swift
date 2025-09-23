@@ -14,7 +14,13 @@ final class ListRouter: ListRouterInput {
     // MARK: - ListRouterInput methods
     func routeToManageTaskView(mode: ManageMode) {
         let editVC = ManageTaskAssembly.build(mode: mode)
-        viewController?.navigationController?.pushViewController(editVC, animated: true)
+        if Thread.isMainThread {
+            viewController?.navigationController?.pushViewController(editVC, animated: true)
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                self?.viewController?.navigationController?.pushViewController(editVC, animated: true)
+            }
+        }
     }
     
     func routeToShare(with text: String) {
@@ -32,7 +38,13 @@ final class ListRouter: ListRouterInput {
             popover.permittedArrowDirections = []
         }
         
-        viewController?.present(activityViewController, animated: true)
+        if Thread.isMainThread {
+            viewController?.present(activityViewController, animated: true)
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                self?.viewController?.present(activityViewController, animated: true)
+            }
+        }
     }
 }
 
