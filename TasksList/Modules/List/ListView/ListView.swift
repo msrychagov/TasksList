@@ -227,11 +227,9 @@ final class ListViewController: UIViewController, ListViewInput {
     }
     
     func showError(message: String) {
-        DispatchQueue.main.async { [weak self] in
-            let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default))
-            self?.present(alert, animated: true)
-        }
+        let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
     
     func removeItem(viewModel: ListModels.DeleteTask.ViewModel) {
