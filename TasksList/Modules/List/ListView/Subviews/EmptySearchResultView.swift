@@ -39,23 +39,23 @@ final class EmptySearchResultView: UIView {
         image.tintColor = .systemGray
         stackView.addArrangedSubview(image)
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.setHeight(56)
-        image.setWidth(56)
+        image.setHeight(UIConstants.Sizing.emptyIconSize)
+        image.setWidth(UIConstants.Sizing.emptyIconSize)
     }
     
     private func configureTitleLabel() {
         titleLabel.text = "Нет результатов по запросу"
-        titleLabel.font = .systemFont(ofSize: 28, weight: .bold)
+        titleLabel.font = .systemFont(ofSize: UIConstants.Fonts.emptyTitle, weight: .bold)
         titleLabel.textColor = .General.secondary
         titleLabel.numberOfLines = 0
         titleLabel.textAlignment = .center
         stackView.addArrangedSubview(titleLabel)
-        stackView.setCustomSpacing(12, after: titleLabel)
+        stackView.setCustomSpacing(UIConstants.Stack.emptyTitleSpacingAfter, after: titleLabel)
     }
     
     private func configureSubtitleLabel() {
         subtitleLabel.text = "Проверьте написание или попробуйте изменить запрос"
-        subtitleLabel.font = .systemFont(ofSize: 16, weight: .regular)
+        subtitleLabel.font = .systemFont(ofSize: UIConstants.Fonts.bodySize, weight: .regular)
         subtitleLabel.textColor = .systemGray
         subtitleLabel.numberOfLines = 0
         subtitleLabel.textAlignment = .center
@@ -65,11 +65,11 @@ final class EmptySearchResultView: UIView {
     private func configureStackView() {
         stackView.axis = .vertical
         stackView.alignment = .center
-        stackView.spacing = 20
+        stackView.spacing = UIConstants.Stack.emptyStackSpacing
         self.addSubview(stackView)
         stackView.pinCenterX(to: self)
         stackView.pinCenterY(to: self)
-        stackView.pinLeft(to: self, 24)
-        stackView.pinRight(to: self, 24)
+        stackView.pinLeft(to: self, UIConstants.Spacing.emptyHorizontal)
+        stackView.pinRight(to: self, UIConstants.Spacing.emptyHorizontal)
     }
 }

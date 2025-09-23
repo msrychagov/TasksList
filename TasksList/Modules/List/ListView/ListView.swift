@@ -108,15 +108,15 @@ final class ListViewController: UIViewController, ListViewInput {
         tableView.backgroundColor = .General.primary
         tableView.separatorColor = .systemGray
         tableView.cellLayoutMarginsFollowReadableWidth = false
-        tableView.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        tableView.layoutMargins = UIEdgeInsets(top: 0, left: UIConstants.Spacing.horizontalPage, bottom: 0, right: UIConstants.Spacing.horizontalPage)
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: UIConstants.Spacing.horizontalPage, bottom: 0, right: UIConstants.Spacing.horizontalPage)
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 72
+        tableView.estimatedRowHeight = UIConstants.Sizing.tableEstimatedRowHeight
         tableView.allowsSelection = true
         tableView.allowsMultipleSelection = false
         
         /// Added header to hide up separator for first row
-        let header = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 1))
+        let header = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: UIConstants.Sizing.tableHeaderHeight))
         header.backgroundColor = .clear
         tableView.tableHeaderView = header
         
@@ -150,7 +150,7 @@ final class ListViewController: UIViewController, ListViewInput {
         summaryView.translatesAutoresizingMaskIntoConstraints = false
         summaryView.pinBottom(to: view.bottomAnchor)
         summaryView.pinHorizontal(to: view)
-        summaryView.setHeight(83)
+        summaryView.setHeight(UIConstants.Sizing.summaryViewHeight)
     }
     
     private func configureEmptyStateContainer() {
@@ -168,8 +168,8 @@ final class ListViewController: UIViewController, ListViewInput {
         emptySearchResultView.translatesAutoresizingMaskIntoConstraints = false
         emptySearchResultView.pinCenterX(to: emptyContainerView)
         emptySearchResultView.pinCenterY(to: emptyContainerView)
-        emptySearchResultView.pinLeft(to: emptyContainerView, 24)
-        emptySearchResultView.pinRight(to: emptyContainerView, 24)
+        emptySearchResultView.pinLeft(to: emptyContainerView, UIConstants.Spacing.emptyHorizontal)
+        emptySearchResultView.pinRight(to: emptyContainerView, UIConstants.Spacing.emptyHorizontal)
     }
     
     // MARK: - Keyboard Handling

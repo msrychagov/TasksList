@@ -10,7 +10,7 @@ import SwiftUI
 
 struct TightTextEditor: UIViewRepresentable {
     @Binding var text: String
-    var font: UIFont? = .systemFont(ofSize: 16, weight: .regular)
+    var font: UIFont? = .systemFont(ofSize: UIConstants.Fonts.bodySize, weight: .regular)
     
     func makeUIView(context: Context) -> UITextView {
         let textView = UITextView()
