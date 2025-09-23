@@ -12,6 +12,7 @@ protocol Storage {
     func delete(_ id: UUID, completion: @escaping (Result<Void, Error>) -> Void)
     func createTask(title: String, details: String?, completion: @escaping (Result<Void, Error>) -> Void)
     func updateTask(with id: UUID, title: String, details: String?, completion: @escaping (Result<Void, Error>) -> Void)
+    func toggleTaskStatus(withId id: UUID, completion: @escaping (Result<Void, Error>) -> Void)
     func initializeWithTasks(_ tasks: [TaskItem], completion: @escaping (Result<Void, Error>) -> Void)
 }
 final class InMemoryStorage: Storage {
@@ -79,6 +80,32 @@ final class InMemoryStorage: Storage {
     func fetchAll(completion: @escaping (Result<[TaskItem], any Error>) -> Void) {
         queue.async {
             completion(.success(self.tasks))
+        }
+    }
+    
+    func toggleTaskStatus(withId id: UUID, completion: @escaping (Result<Void, Error>) -> Void) {
+        queue.async {
+            guard let idx = self.tasks.firstIndex(where: { $0.id == id }) else {
+                completion(.failure(StorageError.taskNotFound))
+                return
+            }
+            
+            let currentTask = self.tasks[idx]
+            self.tasks[idx] = TaskItem(
+                id: currentTask.id,
+                title: currentTask.title,
+                details: currentTask.details,
+                isDone: !currentTask.isDone,
+                date: currentTask.date
+            )
+            
+            NotificationCenter.default.post(
+                name: TasksEvents.taskDidChange,
+                object: self,
+                userInfo: ["changedTask": TasksEvents.UpdatedPayload(id: id)]
+            )
+            
+            completion(.success(()))
         }
     }
     

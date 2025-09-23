@@ -147,7 +147,28 @@ final class ListInteractor: ListInteractorInput {
         self.output?.didRequestManageTask(response: .init(mode: .edit(id)))
     }
     
+    func toggleTaskState(request: ListModels.ToggleIsDone.Request) {
+        worker.toggleTaskState(with: request.id) { [weak self] result in
+            switch result {
+            case .success(let task):
+                if let index = self?.allTasks.firstIndex(where: { $0.id == task.id }) {
+                    self?.allTasks[index] = task
+                }
+                self?.output?.didToggleTaskState(response: .success(task))
+            case .failure(let error):
+                self?.output?.didToggleTaskState(response: .failure(error))
+            }
+        }
+    }
+    
     func shareItem(request: ListModels.ShareTask.Request) {
-        print("hui")
+        worker.shareItem(with: request.id) { [weak self] result in
+            switch result {
+            case .success(let task):
+                self?.output?.didShareItem(response: .init(task: task))
+            case .failure(let error):
+                print("Error sharing task: \(error.localizedDescription)")
+            }
+        }
     }
 }

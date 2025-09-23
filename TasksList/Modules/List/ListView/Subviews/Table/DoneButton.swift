@@ -8,6 +8,9 @@
 import UIKit
 
 final class DoneButton: UIButton {
+    // MARK: - Callback
+    var onTap: (() -> Void)?
+    
     // MARK: - Lyfecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,6 +33,6 @@ final class DoneButton: UIButton {
     // MARK: - Action
     @objc
     private func toggleSelected() {
-        isSelected.toggle()
+        onTap?()
     }
 }

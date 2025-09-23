@@ -5,12 +5,20 @@
 //  Created by Михаил Рычагов on 15.09.2025.
 //
 
+import Foundation
+
 extension ListModels {
     enum ShareTask {
-        struct Request {}
+        struct Request {
+            let id: UUID
+        }
         
-        struct Response {}
+        struct Response {
+            let task: TaskItem
+        }
         
-        struct ViewModel {}
+        struct ViewModel {
+            let shareText: String
+        }
     }
 }
