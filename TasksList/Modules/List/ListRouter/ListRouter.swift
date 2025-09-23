@@ -29,15 +29,6 @@ final class ListRouter: ListRouterInput {
             applicationActivities: nil
         )
         
-        // Настройка для iPad
-        if let popover = activityViewController.popoverPresentationController {
-            popover.sourceView = viewController?.view
-            popover.sourceRect = CGRect(x: viewController?.view.bounds.midX ?? 0,
-                                      y: viewController?.view.bounds.midY ?? 0,
-                                      width: 0, height: 0)
-            popover.permittedArrowDirections = []
-        }
-        
         if Thread.isMainThread {
             viewController?.present(activityViewController, animated: true)
         } else {

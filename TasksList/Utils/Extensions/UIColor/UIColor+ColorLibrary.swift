@@ -10,8 +10,8 @@ import SwiftUI
 
 extension UIColor {
     enum General {
-        static let secondary: UIColor = UIColor.adaptiveColor(lightHex: "040404", darkHex: "F4F4F4")
-        static let primary: UIColor = UIColor.adaptiveColor(lightHex: "#F4F4F4", darkHex: "#040404")
+        static let secondary: UIColor = UIColor.adaptiveColor(lightHex: "#040404", darkHex: "#FFFFFF")
+        static let primary: UIColor = UIColor.adaptiveColor(lightHex: "#FFFFFF", darkHex: "#040404")
     }
     enum DoneButton {
         static let normal: UIColor = UIColor.adaptiveColor(lightHex: "#FED702", darkHex: "#FED702")

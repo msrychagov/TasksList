@@ -8,6 +8,7 @@
 import Foundation
 
 final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewModelMapper {
+    
     // MARK: ListInteractorOutput Properties
     private let interactor: ListInteractorInput
     private let router: ListRouterInput
@@ -15,6 +16,7 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
     
     // MARK: Properties
     private let mappingQueue = DispatchQueue(label: "list.presenter.mapping", qos: .userInitiated)
+    
     // MARK: Lyfecycle
     init(
         interactor: ListInteractorInput,
@@ -36,8 +38,6 @@ final class ListPresenter: ListViewOutput, ListInteractorOutput, ListItemViewMod
     func didTapCreateButton() {
         interactor.createTask(request: .init(id: nil))
     }
-    
-    
     
     func didTapEditButton(for id: UUID) {
         interactor.editTask(request: .init(id: id))
