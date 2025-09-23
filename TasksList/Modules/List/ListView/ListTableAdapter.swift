@@ -184,6 +184,8 @@ extension ListTableAdapter: UITableViewDelegate {
                 image: UIImage(systemName: "trash"),
                 attributes: .destructive) { [weak self] _ in
                     guard let self else { return }
+                    // Ensure separator is visible during the return animation
+                    self.restoreSeparator(for: indexPath)
                     self.pendingDeleteId = id
                     self.tableView?.deselectRow(at: indexPath, animated: true)
                 }

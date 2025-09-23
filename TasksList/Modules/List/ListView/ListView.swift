@@ -17,9 +17,13 @@ final class ListViewController: UIViewController, ListViewInput {
     
     // MARK: - UIProperties
     private let tableView: UITableView = UITableView(frame: .zero, style: .plain)
-    private let summaryView: SummaryView = SummaryView(tasksCount: 5, frame: .zero)
+    private let summaryView: SummaryView = SummaryView(tasksCount: 0, frame: .zero)
     private let searchBarController = UISearchController(searchResultsController: nil)
     private let emptySearchResultView: EmptySearchResultView = EmptySearchResultView()
+    private let emptyContainerView: UIView = UIView()
+    
+    // MARK: - Keyboard
+    private var keyboardVisibleBottomInset: CGFloat = 0
     
     // MARK: - Lyfecycle
     init(
@@ -40,6 +44,11 @@ final class ListViewController: UIViewController, ListViewInput {
         super.viewDidLoad()
         output.viewDidLoad()
         configureUI()
+        observeKeyboard()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     
@@ -50,6 +59,7 @@ final class ListViewController: UIViewController, ListViewInput {
         configureSearch()
         configureSummaryView()
         configureTable()
+        configureEmptyStateContainer()
     }
     
     private func configureNavigationBar() {
@@ -143,20 +153,86 @@ final class ListViewController: UIViewController, ListViewInput {
         summaryView.setHeight(83)
     }
     
+    private func configureEmptyStateContainer() {
+        emptyContainerView.backgroundColor = .clear
+        emptyContainerView.isHidden = true
+        view.addSubview(emptyContainerView)
+        emptyContainerView.translatesAutoresizingMaskIntoConstraints = false
+        emptyContainerView.pinTop(to: view.safeAreaLayoutGuide.topAnchor)
+        // Keep the container above the keyboard at all times
+        emptyContainerView.pinBottom(to: view.keyboardLayoutGuide.topAnchor)
+        emptyContainerView.pinLeft(to: view)
+        emptyContainerView.pinRight(to: view)
+        
+        emptyContainerView.addSubview(emptySearchResultView)
+        emptySearchResultView.translatesAutoresizingMaskIntoConstraints = false
+        emptySearchResultView.pinCenterX(to: emptyContainerView)
+        emptySearchResultView.pinCenterY(to: emptyContainerView)
+        emptySearchResultView.pinLeft(to: emptyContainerView, 24)
+        emptySearchResultView.pinRight(to: emptyContainerView, 24)
+    }
+    
+    // MARK: - Keyboard Handling
+    private func observeKeyboard() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc private func keyboardWillChange(notification: Notification) {
+        guard
+            let userInfo = notification.userInfo,
+            let endFrameValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
+            let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
+            let curveRaw = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt
+        else { return }
+        let endFrame = endFrameValue.cgRectValue
+        let keyboardFrameInView = view.convert(endFrame, from: nil)
+        let intersection = view.bounds.intersection(keyboardFrameInView)
+        let bottomInset = max(0, intersection.height - view.safeAreaInsets.bottom)
+        keyboardVisibleBottomInset = bottomInset
+        let options = UIView.AnimationOptions(rawValue: curveRaw << 16)
+        UIView.animate(withDuration: duration, delay: 0, options: options, animations: { [weak self] in
+            // Empty view is managed by constraints; ensure no residual transform
+            self?.emptySearchResultView.transform = .identity
+        })
+    }
+    
+    @objc private func keyboardWillHide(notification: Notification) {
+        guard
+            let userInfo = notification.userInfo,
+            let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
+            let curveRaw = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt
+        else { return }
+        keyboardVisibleBottomInset = 0
+        let options = UIView.AnimationOptions(rawValue: curveRaw << 16)
+        UIView.animate(withDuration: duration, delay: 0, options: options, animations: { [weak self] in
+            self?.emptySearchResultView.transform = .identity
+        })
+    }
+    
     // MARK: - ListViewInput methods
     func show(viewModel: ListModels.LoadTasks.ViewModel) {
-        tableView.backgroundView = nil
+        emptyContainerView.isHidden = true
         tableView.separatorStyle = .singleLine
+        emptySearchResultView.transform = .identity
+        tableView.backgroundView = nil
         tableAdapter.apply(cellVM: viewModel)
+        summaryView.setTasksCount(viewModel.items.count)
     }
     
     func showEmpty() {
-        tableView.backgroundView = emptySearchResultView
+        emptyContainerView.isHidden = false
+        view.bringSubviewToFront(emptyContainerView)
         tableView.separatorStyle = .none
+        tableView.backgroundView = nil
+        summaryView.setTasksCount(0)
     }
     
     func removeItem(viewModel: ListModels.DeleteTask.ViewModel) {
         tableAdapter.deleteItem(viewModel: viewModel)
+        let currentRows = tableView.numberOfRows(inSection: 0)
+        let newCount = max(0, currentRows - 1)
+        summaryView.setTasksCount(newCount)
     }
     
     func reloadItem(viewModel: ListModels.EditTask.ViewModel) {
@@ -171,6 +247,8 @@ final class ListViewController: UIViewController, ListViewInput {
     
     func insertItem(viewModel: ListModels.ListItemViewModel) {
         tableAdapter.insertItem(viewModel)
+        let currentRows = tableView.numberOfRows(inSection: 0)
+        summaryView.setTasksCount(currentRows + 1)
     }
     func showPopup(for id: UUID) {
         print("hui")
